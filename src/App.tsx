@@ -2,6 +2,12 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import Nardis, { Resource, generateData } from 'nardis-game';
+
+console.log(generateData().resources.map(e => Resource.createFromModel(e)));
+
+console.log(Nardis);
+
 function App() {
   return (
     <div className="App">
