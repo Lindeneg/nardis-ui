@@ -1,0 +1,32 @@
+import { 
+    Fragment 
+} from 'react';
+ 
+import NavigationEntries from '../NavigationEntries/NavigationEntries';
+import Backdrop from '../../../utility/Backdrop/Backdrop';
+import styles from './SideBar.module.css';
+import { SideBarProps } from '../../../types';
+
+
+/**
+ * 
+ */
+const sideBar = (props: SideBarProps): JSX.Element => {
+    const classes: string[] = [
+        styles.SideBar, 
+        props.show ? styles.Open : styles.Close
+    ];
+
+    return (
+        <Fragment>
+            <Backdrop clicked={props.onClose} show={props.show} />
+            <div className={classes.join(' ')}>
+                <nav>
+                    <NavigationEntries />
+                </nav>
+            </div>
+        </Fragment>
+    );
+};
+
+export default sideBar;
