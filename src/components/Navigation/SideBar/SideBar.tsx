@@ -1,16 +1,19 @@
-import { 
-    Fragment 
-} from 'react';
+import { Fragment } from 'react';
  
 import NavigationEntries from '../NavigationEntries/NavigationEntries';
 import Backdrop from '../../../utility/Backdrop/Backdrop';
+
 import styles from './SideBar.module.css';
-import { SideBarProps } from '../../../types';
+
+import { 
+    SideBarProps 
+} from '../../../types';
 
 
 /**
- * 
+ * SideBar is a component suitable for showing the menu entries for a mobile device.
  */
+
 const sideBar = (props: SideBarProps): JSX.Element => {
     const classes: string[] = [
         styles.SideBar, 
@@ -28,5 +31,6 @@ const sideBar = (props: SideBarProps): JSX.Element => {
         </Fragment>
     );
 };
+
 
 export default sideBar;

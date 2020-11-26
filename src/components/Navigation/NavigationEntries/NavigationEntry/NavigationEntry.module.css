@@ -2,6 +2,7 @@
     margin: 10px 0;
     box-sizing: border-box;
     display: block;
+    background-color: inherit;
     width: 100%;
 }
 
@@ -16,7 +17,7 @@
 .NavigationEntry a:hover,
 .NavigationEntry a.active,
 .NavigationEntry a:active {
-    color: #40a4c8 !important;
+    color: #40a4c8;
 }
 
 @media (min-width: 500px) {
@@ -39,8 +40,7 @@
     .NavigationEntry a:hover,
     .NavigationEntry a.active,
     .NavigationEntry a:active {
-        background-color: #8f5c2c;
-        border-bottom: 4px solid #40a4c8;
-        color: white
+        background-color: inherit;
+        color: #f64c72;
     }
 }

@@ -4,7 +4,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #703b09;
+    background-color: #242582;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -15,6 +15,7 @@
 
 .Navigation nav {
     height: 100%;
+    width: 100%;
 }
 
 @media (max-width: 499px) {

@@ -2,20 +2,23 @@ import React, { Component, Fragment } from 'react';
 
 import Navigation from '../../components/Navigation/Navigation';
 import SideBar from '../../components/Navigation/SideBar/SideBar';
-import { LayoutState } from '../../types';
 
 import styles from './Layout.module.css';
 
+import { 
+    LayoutState 
+} from '../../types';
+
+
+/**
+ * Layout contains navigational related components and should be present on all routes.
+ */
 
 class Layout extends Component {
 
     state: LayoutState = {
         showSideBar: false
     };
-
-    /**
-     * Close SideBar in a Navigation component.
-     */
 
     closeSideBarHandler = (): void => {
         this.setState({
@@ -24,17 +27,13 @@ class Layout extends Component {
         });
     };
 
-    /**
-     * Toggle SideBar in a Navigation component.
-     */
-
     toggleSideBarHandler = (): void => {
         const showSideBar: boolean = !this.state.showSideBar;
         this.setState({
             ...this.state,
             showSideBar
         });
-    }
+    };
 
     render() {
         return (
@@ -48,5 +47,6 @@ class Layout extends Component {
         );
     }
 }
+
 
 export default Layout;

@@ -1,7 +1,10 @@
 import { NavLink } from 'react-router-dom';
 
-import { NavigationItemProp } from "../../../../types";
 import styles from './NavigationEntry.module.css';
+
+import { 
+    NavigationItemProp 
+} from "../../../../types";
 
 
 /**
@@ -19,5 +22,6 @@ const navigationEntry = (props: NavigationItemProp): JSX.Element => (
         </NavLink>
     </li>
 );
+
 
 export default navigationEntry;
