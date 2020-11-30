@@ -3,11 +3,9 @@ import { Fragment } from 'react';
 import NavigationEntries from '../NavigationEntries/NavigationEntries';
 import Backdrop from '../../../utility/Backdrop/Backdrop';
 
-import styles from './SideBar.module.css';
+import SideBarProps from './SideBar.props';
 
-import { 
-    SideBarProps 
-} from '../../../types';
+import styles from './SideBar.module.css';
 
 
 /**

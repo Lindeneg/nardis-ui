@@ -1,15 +1,13 @@
-import styles from './Backdrop.module.css';
+import BackdropProps from './Backdrop.props';
 
-import { 
-    BackdropProp
-} from '../../types';
+import styles from './Backdrop.module.css';
 
 
 /**
  * Backdrop used to mask elements with z-index < 100 behind elements with z-index > 100.
  */
 
-const backdrop = (props: BackdropProp): JSX.Element | null => (
+const backdrop = (props: BackdropProps): JSX.Element | null => (
     props.show ? <div onClick={props.clicked} className={styles.Backdrop}></div> : null
 );
 

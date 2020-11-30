@@ -1,18 +1,16 @@
 import NavigationEntries from './NavigationEntries/NavigationEntries';
 import SideBarToggle from './SideBar/SideBarToggle/SideBarToggle';
 
-import styles from './Navigation.module.css';
+import { ClickedProps } from '../../common/props';
 
-import { 
-    ClickedProp 
-} from '../../types';
+import styles from './Navigation.module.css';
 
 
 /**
  * Navigation holds two components for SideBar control and the actual menu items.
  */
 
-const navigation = (props: ClickedProp): JSX.Element => (
+const navigation = (props: ClickedProps): JSX.Element => (
     <header className={styles.Navigation}>
         <SideBarToggle clicked={props.clicked} />
         <nav className={styles.DesktopExclusive}>

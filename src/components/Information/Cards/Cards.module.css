@@ -1,0 +1,19 @@
+
+
+@media (min-width: 600px) {
+    .Cards {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        list-style: none;
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        height: 100%;
+        justify-content: space-around;
+    }
+
+    li {
+        width: 100%;
+    }
+}

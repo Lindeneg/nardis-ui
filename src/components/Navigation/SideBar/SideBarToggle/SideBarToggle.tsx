@@ -1,15 +1,13 @@
-import styles from './SideBarToggle.module.css';
+import { ClickedProps } from '../../../../common/props';
 
-import {
-    ClickedProp
-} from '../../../../types';
+import styles from './SideBarToggle.module.css';
 
 
 /**
  * Component that imitates a "burger-menu" button for mobile devices. 
  */
 
- const sidebarToggle = (props: ClickedProp): JSX.Element => (
+ const sidebarToggle = (props: ClickedProps): JSX.Element => (
     <div className={styles.SidebarToggle} onClick={props.clicked}>
         <div></div>
         <div></div>

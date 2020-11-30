@@ -2,16 +2,14 @@ import { NavLink } from 'react-router-dom';
 
 import styles from './NavigationEntry.module.css';
 
-import { 
-    NavigationItemProp 
-} from "../../../../types";
+import NavigationItemProps from "./NavigationEntry.props";
 
 
 /**
  * Component for a single entry in a list of navigation items. 
  */
 
-const navigationEntry = (props: NavigationItemProp): JSX.Element => (
+const navigationEntry = (props: NavigationItemProps): JSX.Element => (
     <li className={styles.NavigationEntry}>
         <NavLink
             exact={props.exact}

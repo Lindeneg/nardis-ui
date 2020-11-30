@@ -1,0 +1,25 @@
+
+
+@media (min-width: 500px) {
+    .Card {
+        display: flex;
+        box-sizing: border-box;
+        width: 100%;
+        padding: 10px;
+        border: solid 1px #3e5fc2;
+        margin-top: 50px;
+        color: #eee;
+        background-color: #3356bf;
+        border-radius: 15px;
+   }
+   div p {
+       width: 100%;
+       text-transform: uppercase;
+       font-weight: 500;
+   }
+   div p span {
+       float: right;
+       font-weight: 100;
+       text-decoration: underline #ccc;
+   }
+}
