@@ -1,10 +1,12 @@
 import NavigationEntry from './NavigationEntry/NavigationEntry';
+import { ButtonType } from '../../../common/buttonType';
+import Button from '../../Utility/Button/Button';
 
 import { NoProps } from '../../../common/props';
 
 import styles from './NavigationEntries.module.css';
 
-// TODO add end turn button, take function as prop
+// TODO finish button whenClicked function
 
 /**
  * Wrapper to capture a list of NavigationEntry components.
@@ -27,7 +29,9 @@ const navigationEntries = (props: NoProps): JSX.Element => (
         <NavigationEntry link="/opponents">
             OPPONENTS
         </NavigationEntry>
-        <button >NEXT TURN</button>
+        <Button whenClicked={() => console.log('end turn')} disabled={false} buttonType={ButtonType.END_TURN}> 
+            NEXT TURN
+        </Button>
     </ul>
 );
 

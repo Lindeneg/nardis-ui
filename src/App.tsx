@@ -1,14 +1,14 @@
+import { Route, Switch } from 'react-router-dom'; 
+
 import Layout from './containers/Layout/Layout';
-
-import { generateData } from 'nardis-game';
-
-
-console.log(generateData());
+import Management from './containers/Management/Management';
 
 const app = (): JSX.Element => (
 	<div>
 		<Layout>
-			
+			<Switch>
+				<Route exact path="/" component={Management} />	
+			</Switch>
 		</Layout>
 	</div>
 );

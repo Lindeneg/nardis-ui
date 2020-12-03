@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
+
 import { connect } from 'react-redux';
 
 import Navigation from '../../components/Navigation/Navigation';
 import SideBar from '../../components/Navigation/SideBar/SideBar';
 import Cards from '../../components/Information/Cards/Cards';
+import CreateGame from '../CreateGame/CreateGame';
 
 import { NardisState } from '../../common/state';
 
@@ -25,6 +27,8 @@ const cardLabels: string[] = [
 
 /**
  * Layout contains navigational related components and should be present on all routes.
+ * 
+ * If no game has created yet, Layout instead routes to /create-game for creation.
  */
 
 class Layout extends Component<LayoutProps> {
@@ -48,30 +52,35 @@ class Layout extends Component<LayoutProps> {
         });
     };
 
-    render() {
+    render (): JSX.Element {
 
-        const playerCards = cardLabels.map(label => {
-            return {
-                label,
-                value: this.props[label]?.toString() || ''
-            };
-        });
+        let jsx = <CreateGame />
 
-        return (
-            <Fragment>
-                <Navigation clicked={this.toggleSideBarHandler} />
-                <SideBar show={this.state.showSideBar} onClose={this.closeSideBarHandler} />
-                <Cards cards={playerCards} />
-                <main className={styles.Content}>
-                    {this.props.children}
-                </main>
-            </Fragment>
-        );
+        if (this.props.gameCreated) {
+            const playerCards = cardLabels.map(label => {
+                return {
+                    label,
+                    value: this.props[label]?.toString() || ''
+                };
+            });
+            jsx = (
+                <Fragment>
+                    <Navigation clicked={this.toggleSideBarHandler} />
+                    <SideBar show={this.state.showSideBar} onClose={this.closeSideBarHandler} />
+                    <Cards cards={playerCards} />
+                    <main className={styles.Content}>
+                        {this.props.children}
+                    </main>
+                </Fragment>
+            );
+        }
+        return jsx;
     }
 }
 
 
 const mapStateToProps = (state: NardisState): LayoutMappedProps => ({
+    gameCreated: state.gameCreated,
     money: state.money,
     level: state.level,
     turn: state.turn,

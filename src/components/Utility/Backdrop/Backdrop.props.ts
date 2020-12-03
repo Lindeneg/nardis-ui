@@ -1,4 +1,4 @@
-import { ClickedProps } from '../../common/props';
+import { ClickedProps } from '../../../common/props';
 
 
 export default interface BackdropProps extends ClickedProps {

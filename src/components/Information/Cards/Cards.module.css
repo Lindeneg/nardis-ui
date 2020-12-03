@@ -2,7 +2,7 @@
 
 @media (min-width: 600px) {
     .Cards {
-        margin: 0;
+        margin: auto;
         padding: 0;
         width: 100%;
         list-style: none;
@@ -10,7 +10,7 @@
         flex-flow: row;
         align-items: center;
         height: 100%;
-        justify-content: space-around;
+        justify-content: space-between;
     }
 
     li {

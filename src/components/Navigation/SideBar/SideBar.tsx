@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
  
 import NavigationEntries from '../NavigationEntries/NavigationEntries';
-import Backdrop from '../../../utility/Backdrop/Backdrop';
+import Backdrop from '../../Utility/Backdrop/Backdrop';
 
 import SideBarProps from './SideBar.props';
 

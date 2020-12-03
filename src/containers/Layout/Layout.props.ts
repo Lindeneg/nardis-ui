@@ -3,6 +3,7 @@ import { BaseProps } from '../../common/props';
 
 
 export interface LayoutMappedProps {
+    gameCreated: boolean,
     money: number,
     level: number,
     turn: number,
