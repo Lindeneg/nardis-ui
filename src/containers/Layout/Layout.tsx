@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-
 import { connect } from 'react-redux';
 
 import Navigation from '../../components/Navigation/Navigation';
@@ -11,7 +10,6 @@ import { NardisState } from '../../common/state';
 
 import LayoutProps, { LayoutMappedProps } from './Layout.props';
 import LayoutState from './Layout.state';
-
 import styles from './Layout.module.css';
 
 
@@ -54,7 +52,7 @@ class Layout extends Component<LayoutProps> {
 
     render (): JSX.Element {
 
-        let jsx = <CreateGame />
+        let jsx: JSX.Element = <CreateGame />
 
         if (this.props.gameCreated) {
             const playerCards = cardLabels.map(label => {
@@ -81,12 +79,12 @@ class Layout extends Component<LayoutProps> {
 
 const mapStateToProps = (state: NardisState): LayoutMappedProps => ({
     gameCreated: state.gameCreated,
-    money: state.money,
-    level: state.level,
-    turn: state.turn,
-    routes: state.routes.length,
-    queue: state.queue.length,
-    opponents: state.opponents.length,
+    money      : state.money,
+    level      : state.level,
+    turn       : state.turn,
+    routes     : state.routes.length,
+    queue      : state.queue.length,
+    opponents  : state.opponents.length,
 });
 
 

@@ -1,13 +1,8 @@
+import CardProps from './Card.props';
 import styles from './Card.module.css';
 
 
-interface CardProp {
-    label: string,
-    value: string
-};
-
-
-const card = (props: CardProp): JSX.Element => {
+const card = (props: CardProps): JSX.Element => {
     return (
         <div className={styles.Card}>
             <p>

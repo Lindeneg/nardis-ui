@@ -1,5 +1,5 @@
 import NavigationEntry from './NavigationEntry/NavigationEntry';
-import { ButtonType } from '../../../common/buttonType';
+import { ButtonType } from '../../Utility/Button/buttonType';
 import Button from '../../Utility/Button/Button';
 
 import { NoProps } from '../../../common/props';

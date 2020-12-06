@@ -1,5 +1,5 @@
 import ButtonProps from './Button.props';
-import { buttonTypeToClassName } from '../../../common/buttonType';
+import { buttonTypeToClassName } from './buttonType';
 
 import styles from './Button.module.css';
 

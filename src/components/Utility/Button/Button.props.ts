@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ButtonType } from '../../../common/buttonType';
+import { ButtonType } from './buttonType';
 
 
 export default interface ButtonProps {

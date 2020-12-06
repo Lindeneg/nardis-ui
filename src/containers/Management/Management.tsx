@@ -1,7 +1,7 @@
 import { Component } from 'react';
-import { connect } from 'react-redux';
 
-import { NardisState } from '../../common/state';
+
+import styles from './Management.module.css';
 
 
 class Management extends Component {
@@ -12,13 +12,11 @@ class Management extends Component {
 
     render() {
         return (
-            <div>Management</div>
+            <div className={styles.Management}>
+
+            </div>
         );
     }
 }
-
-const mapStateToProps = (state: NardisState): {gameCreated: boolean} => ({
-    gameCreated: state.gameCreated
-});
 
 export default Management;

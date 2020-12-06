@@ -1,8 +1,9 @@
 import { Action } from 'redux';
-import { Route, QueuedRouteItem, Upgrade, Player } from 'nardis-game';
+import { Nardis, Route, QueuedRouteItem, Upgrade, Player } from 'nardis-game';
 
 
 export interface NardisState {
+    _game?: Nardis,
     gameCreated: boolean,
     money: number,
     turn: number,
@@ -24,7 +25,11 @@ export enum NardisAction {
 }
 
 export interface ReducerPayload {
-
+    initGame?: {
+        name: string,
+        money: number,
+        opponents: number
+    }
 }
 
 export interface ReducerAction extends Action<NardisAction> {
