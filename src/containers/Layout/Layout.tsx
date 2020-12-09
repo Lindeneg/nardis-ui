@@ -5,10 +5,8 @@ import Navigation from '../../components/Navigation/Navigation';
 import SideBar from '../../components/Navigation/SideBar/SideBar';
 import Cards from '../../components/Information/Cards/Cards';
 import CreateGame from '../CreateGame/CreateGame';
-
-import { NardisState } from '../../common/state';
-
-import LayoutProps, { LayoutMappedProps } from './Layout.props';
+import { INardisState } from '../../common/state';
+import LayoutProps, { ILayoutMappedProps } from './Layout.props';
 import LayoutState from './Layout.state';
 import styles from './Layout.module.css';
 
@@ -77,7 +75,7 @@ class Layout extends Component<LayoutProps> {
 }
 
 
-const mapStateToProps = (state: NardisState): LayoutMappedProps => ({
+const mapStateToProps = (state: INardisState): ILayoutMappedProps => ({
     gameCreated: state.gameCreated,
     money      : state.money,
     level      : state.level,

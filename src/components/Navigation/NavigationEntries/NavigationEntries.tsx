@@ -1,9 +1,7 @@
 import NavigationEntry from './NavigationEntry/NavigationEntry';
-import { ButtonType } from '../../Utility/Button/buttonType';
 import Button from '../../Utility/Button/Button';
-
+import { ButtonType } from '../../Utility/Button/buttonType';
 import { NoProps } from '../../../common/props';
-
 import styles from './NavigationEntries.module.css';
 
 // TODO finish button whenClicked function
@@ -14,7 +12,7 @@ import styles from './NavigationEntries.module.css';
 
 const navigationEntries = (props: NoProps): JSX.Element => (
     <ul className={styles.NavigationEntries}>
-        <NavigationEntry link="/" active exact>
+        <NavigationEntry link="/" active>
             MANAGEMENT
         </NavigationEntry>
         <NavigationEntry link="/finance">
@@ -29,7 +27,7 @@ const navigationEntries = (props: NoProps): JSX.Element => (
         <NavigationEntry link="/opponents">
             OPPONENTS
         </NavigationEntry>
-        <Button whenClicked={() => console.log('end turn')} disabled={false} buttonType={ButtonType.END_TURN}> 
+        <Button style={{paddingTop: "5px"}} whenClicked={() => console.log('end turn')} disabled={false} buttonType={ButtonType.END_TURN}> 
             NEXT TURN
         </Button>
     </ul>

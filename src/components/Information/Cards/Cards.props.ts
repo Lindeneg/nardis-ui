@@ -1,6 +1,6 @@
-import CardProps from './Card/Card.props';
+import ICardProps from './Card/Card.props';
 
 
-export default interface CardsProps {
-    cards: CardProps[]
+export default interface ICardsProps {
+    cards: ICardProps[]
 }

@@ -1,6 +1,6 @@
-import { ClickedProps } from '../../../common/props';
+import { IClickedProps } from '../../../common/props';
 
 
-export default interface BackdropProps extends ClickedProps {
+export default interface IBackdropProps extends IClickedProps {
     show: boolean
 }

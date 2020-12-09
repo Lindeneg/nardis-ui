@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
-import { BaseProps } from '../../common/props';
+import { IBaseProps } from '../../common/props';
 
 
-export interface LayoutMappedProps {
+export interface ILayoutMappedProps {
     gameCreated: boolean,
     money      : number,
     level      : number,
@@ -12,6 +12,6 @@ export interface LayoutMappedProps {
     opponents  : number
 }
 
-export default interface LayoutProps extends LayoutMappedProps, BaseProps {
+export default interface LayoutProps extends ILayoutMappedProps, IBaseProps {
     [key: string]: number | string | ReactNode
 }

@@ -7,6 +7,8 @@ const app = (): JSX.Element => (
 	<div>
 		<Layout>
 			<Switch>
+				<Route path="/management" component={Management} />	
+
 				<Route exact path="/" component={Management} />	
 			</Switch>
 		</Layout>

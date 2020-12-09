@@ -1,8 +1,8 @@
 import { Nardis, Player } from 'nardis-game';
-import { NardisState, ReducerPayload } from '../common/state';
+import { INardisState, IReducerPayload } from '../common/state';
 
 
-const initialize = (state: NardisState, payload: ReducerPayload): NardisState => {
+const initialize = (state: INardisState, payload: IReducerPayload): INardisState => {
     if (payload.initGame) {
         const game: Nardis = Nardis.createFromPlayer(payload.initGame.name);
         const player: Player = game.getCurrentPlayer();

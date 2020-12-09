@@ -1,8 +1,9 @@
-import { BaseProps } from '../../../../common/props';
+import { IBaseProps } from '../../../../common/props';
 
 
-export default interface NavigationItemProp extends BaseProps {
+export default interface INavigationItemProp extends IBaseProps {
     link: string,
+    style?: {[key: string]: string},
     active?: boolean,
     exact?: boolean
 }

@@ -1,14 +1,14 @@
 import initialize from './initialize';
 import { 
     NardisAction,
-    NardisState, 
-    ReducerAction, 
-    ReducerPayload
+    INardisState, 
+    IReducerAction, 
+    IReducerPayload
 } from '../common/state';
 
 
-const initialState: NardisState = {
-    gameCreated: false,
+const initialState: INardisState = {
+    gameCreated: true,
     money      : 0,
     turn       : 0,
     level      : 0,
@@ -19,10 +19,10 @@ const initialState: NardisState = {
 };
 
 const reducer = (
-    state : NardisState = initialState, 
-    action: ReducerAction
-): NardisState => {
-    let returnFunc: (state: NardisState, payload: ReducerPayload) => NardisState = (state, payload) => state;
+    state : INardisState = initialState, 
+    action: IReducerAction
+): INardisState => {
+    let returnFunc: (state: INardisState, payload: IReducerPayload) => INardisState = (state, payload) => state;
     switch (action.type) {
         case NardisAction.INITIALIZE_GAME:
             returnFunc = initialize;

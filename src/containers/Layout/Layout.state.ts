@@ -1,3 +1,3 @@
-export default interface LayoutState {
+export default interface ILayoutState {
     showSideBar: boolean
 }

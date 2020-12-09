@@ -1,11 +1,17 @@
 import { ReactNode } from 'react';
 
-export interface BaseProps {
+export type TStyle = {[key: string]: string}
+
+export type NoProps = any;
+
+export interface IBaseProps {
     children: ReactNode
 }
 
-export interface ClickedProps {
-    clicked: () => void
+export interface IStyle {
+    style?: TStyle
 }
 
-export type NoProps = any;
+export interface IClickedProps {
+    clicked: () => void
+}

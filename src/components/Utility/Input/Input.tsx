@@ -1,10 +1,10 @@
-import InputProps from './Input.props';
+import IInputProps from './Input.props';
 import { InputType } from './inputType';
 
 import styles from './Input.module.css';
 
 
-const input = (props: InputProps): JSX.Element => {
+const input = (props: IInputProps): JSX.Element => {
 
     const tempClasses: string[] = [styles.InputElement];
     if (!props.valid && props.touched) { 

@@ -1,8 +1,8 @@
-import CardProps from './Card.props';
+import ICardProps from './Card.props';
 import styles from './Card.module.css';
 
 
-const card = (props: CardProps): JSX.Element => {
+const card = (props: ICardProps): JSX.Element => {
     return (
         <div className={styles.Card}>
             <p>

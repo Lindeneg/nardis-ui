@@ -4,7 +4,7 @@ export enum ButtonType {
     END_TURN
 }
 
-export const buttonTypeToClassName = {
+export const buttonTypeToClassName: {[key: number]: string} = {
     [ButtonType.SUCCESS]: 'Success',
     [ButtonType.DANGER]: 'Danger',
     [ButtonType.END_TURN]: 'EndTurn'

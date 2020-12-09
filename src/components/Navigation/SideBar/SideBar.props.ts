@@ -1,4 +1,4 @@
-export default interface SideBarProps {
+export default interface ISideBarProps {
     show: boolean,
     onClose: () => void
 }

@@ -2,15 +2,13 @@ import { Component, FormEvent } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-import CreateGameState, { CreateGameInputConfig, BaseState } from './CreateGame.state';
+import CreateGameState, { ICreateGameInputConfig, IBaseState } from './CreateGame.state';
 import Input from '../../components/Utility/Input/Input';
 import Button from '../../components/Utility/Button/Button';
 import { ButtonType } from '../../components/Utility/Button/buttonType';
-import { InputChangeEvent } from '../../components/Utility/Input/Input.props';
-
-import { NardisAction, ReducerAction } from '../../common/state';
-
-import CreateGameProps, { InitGame } from './CreateGame.props';
+import { TInputChangeEvent } from '../../components/Utility/Input/Input.props';
+import { NardisAction, IReducerAction } from '../../common/state';
+import CreateGameProps, { TInitGame } from './CreateGame.props';
 import styles from './CreateGame.module.css';
 
 
@@ -68,9 +66,9 @@ class CreateGame extends Component<CreateGameProps> {
         console.log(this.props);
     }
 
-    onChangeHandler = (event: InputChangeEvent, key: string): void => {
-        const base: BaseState = { ...this.state.base };
-        const newTargetState: CreateGameInputConfig = { ...base[key] };
+    onChangeHandler = (event: TInputChangeEvent, key: string): void => {
+        const base: IBaseState = { ...this.state.base };
+        const newTargetState: ICreateGameInputConfig = { ...base[key] };
 
         newTargetState.touched = true;
         newTargetState.value = event.target.value;
@@ -101,11 +99,11 @@ class CreateGame extends Component<CreateGameProps> {
                     {
                         Object.keys(this.state.base)
                         .map((key: string) => {
-                            const entry: CreateGameInputConfig = this.state.base[key];
+                            const entry: ICreateGameInputConfig = this.state.base[key];
                             return (
                                 <Input 
                                     key={key}
-                                    changed={(event: InputChangeEvent) => this.onChangeHandler(event, key)}
+                                    changed={(event: TInputChangeEvent) => this.onChangeHandler(event, key)}
                                     inputConfig={entry.inputConfig}
                                     value={entry.value}
                                     touched={entry.touched}
@@ -126,7 +124,7 @@ class CreateGame extends Component<CreateGameProps> {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<ReducerAction>): {initGame: InitGame} => {
+const mapDispatchToProps = (dispatch: Dispatch<IReducerAction>): {initGame: TInitGame} => {
     return {
         initGame: (name: string, money: number, opponents: number) => dispatch(
             {

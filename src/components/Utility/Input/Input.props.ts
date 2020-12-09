@@ -3,9 +3,9 @@ import { ChangeEvent } from 'react';
 import { InputType } from './inputType';
 
 
-export type InputChangeEvent = ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>;
+export type TInputChangeEvent = ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>;
 
-export interface InputConfig {
+export interface IInputConfig {
     type: string,
     placeholder: string,
     selectOptions?: {
@@ -16,10 +16,10 @@ export interface InputConfig {
     inputType?: InputType
 }
 
-export default interface InputProps {
-    changed: (event: InputChangeEvent) => void,
+export default interface IInputProps {
+    changed: (event: TInputChangeEvent) => void,
     key: string,
-    inputConfig: InputConfig,
+    inputConfig: IInputConfig,
     value: string,
     touched: boolean,
     valid: boolean,

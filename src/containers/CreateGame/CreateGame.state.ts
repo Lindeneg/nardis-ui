@@ -1,26 +1,26 @@
 import { 
-    InputConfig 
+    IInputConfig 
 } from '../../components/Utility/Input/Input.props';
 
 
-export interface CreateGameInputConfig {
-    inputConfig  : InputConfig,
+export interface ICreateGameInputConfig {
+    inputConfig  : IInputConfig,
     validation   : (value: string) => boolean,
     valid        : boolean,
     touched      : boolean,
     value        : string
 }
 
-export interface BaseState {
-    [key: string]: CreateGameInputConfig,
-    name         : CreateGameInputConfig,
-    startMoney   : CreateGameInputConfig,
-    opponents    : CreateGameInputConfig,
+export interface IBaseState {
+    [key: string]: ICreateGameInputConfig,
+    name         : ICreateGameInputConfig,
+    startMoney   : ICreateGameInputConfig,
+    opponents    : ICreateGameInputConfig,
 }
 
 
-export default interface CreateGameState {
-    [key: string]: BaseState | boolean,
-    base         : BaseState,
+export default interface ICreateGameState {
+    [key: string]: IBaseState | boolean,
+    base         : IBaseState,
     isValid      : boolean
 }
