@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 import NavigationEntries from '../NavigationEntries/NavigationEntries';
 import Backdrop from '../../Utility/Backdrop/Backdrop';
 import ISideBarProps from './SideBar.props';
+import { mainNavigationBarEntries } from '../../../common/constants';
 import styles from './SideBar.module.css';
 
 
@@ -21,7 +22,7 @@ const sideBar = (props: ISideBarProps): JSX.Element => {
             <Backdrop clicked={props.onClose} show={props.show} />
             <div className={classes.join(' ')}>
                 <nav>
-                    <NavigationEntries />
+                    <NavigationEntries {...mainNavigationBarEntries} />
                 </nav>
             </div>
         </Fragment>

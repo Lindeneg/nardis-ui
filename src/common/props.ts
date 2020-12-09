@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-export type TStyle = {[key: string]: string}
+export type TStyle = {[key: string]: string | any}
 
 export type NoProps = any;
 

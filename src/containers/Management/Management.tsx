@@ -2,8 +2,8 @@ import { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import NewRoute from './NewRoute/NewRoute';
-import ManagementSelector from '../../components/Navigation/ManagementSelector/ManagementSelector';
-
+import NavigationEntries from '../../components/Navigation/NavigationEntries/NavigationEntries';
+import { managementNavigationBarEntries } from '../../common/constants';
 
 import styles from './Management.module.css';
 
@@ -17,7 +17,7 @@ class Management extends Component {
     render() {
         return (
             <div className={styles.Management}>
-                <ManagementSelector />
+                <NavigationEntries {...managementNavigationBarEntries} />
                 <Switch>
                     <Route exact path="/management/new-route" component={NewRoute}/>
                 </Switch>
