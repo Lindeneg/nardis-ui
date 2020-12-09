@@ -15,8 +15,9 @@ const navigationEntries = (props: INavigationEntriesProps): JSX.Element => {
     return (
         <ul className={styles.NavigationEntries}>
             {
-                props.entries.map((entry) => (
+                props.entries.map((entry, index) => (
                     <NavigationEntry 
+                        key={index}
                         link={entry.link}
                         style={entry.style}
                         active={entry.active}
