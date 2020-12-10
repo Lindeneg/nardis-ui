@@ -4,7 +4,7 @@ import INavigationEntriesProps from '../components/Navigation/NavigationEntries/
 export const mainNavigationBarEntries: INavigationEntriesProps = {
     entries: [
         {
-            link: '/',
+            link: '/management',
             active: true,
             content: 'MANAGEMENT'
         },
@@ -55,3 +55,10 @@ export const managementNavigationBarEntries: INavigationEntriesProps = {
     ],
     showEndTurnButton: false
 };
+
+export const cityResourceTableHeaderNames: string[] = [
+    'NAME',
+    'VALUE',
+    'WEIGHT',
+    'AVAILABLE'
+];

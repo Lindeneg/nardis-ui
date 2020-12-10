@@ -1,0 +1,15 @@
+.Header {
+    text-align: left;
+    text-decoration: underline;
+    color: white
+}
+
+.Table {
+    width: 100%
+}
+
+.RowEntry {
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #97a832;
+}
