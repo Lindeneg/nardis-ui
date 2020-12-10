@@ -8,7 +8,7 @@ import {
 
 
 const initialState: INardisState = {
-    gameCreated: true,
+    gameCreated: false,
     money      : 0,
     turn       : 0,
     level      : 0,

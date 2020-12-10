@@ -8,6 +8,7 @@ const initialize = (state: INardisState, payload: IReducerPayload): INardisState
         const player: Player = game.getCurrentPlayer();
         return {
             gameCreated: true,
+            _game      : game,
             money      : player.gold,
             turn       : game.getCurrentTurn(),
             level      : player.getLevel(),
