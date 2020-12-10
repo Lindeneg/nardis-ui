@@ -1,0 +1,14 @@
+
+
+
+
+@media (min-width: 600px) {
+    .CityRect {
+        color: white;
+        padding: 10px;
+        width: 50%;
+    }
+    .CityName {
+        padding-left: 3px;
+    }
+}
