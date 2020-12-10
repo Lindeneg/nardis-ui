@@ -62,10 +62,6 @@ class CreateGame extends Component<CreateGameProps> {
         isValid: true //false
     };
 
-    componentDidMount = () => {
-        console.log(this.props);
-    }
-
     onChangeHandler = (event: TInputChangeEvent, key: string): void => {
         const base: IBaseState = { ...this.state.base };
         const newTargetState: ICreateGameInputConfig = { ...base[key] };
