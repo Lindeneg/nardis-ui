@@ -9,7 +9,6 @@ const app = (): JSX.Element => (
 			<Switch>
 				<Route path="/management" component={Management} />	
 
-				<Route exact path="/" component={Management} />	
 			</Switch>
 		</Layout>
 	</div>
