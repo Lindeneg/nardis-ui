@@ -33,7 +33,7 @@ class CreateGame extends Component<CreateGameProps> {
             startMoney: {
                 inputConfig: {
                     type: 'number',
-                    label: 'Money',
+                    label: 'Money (TODO does nothing atm)',
                     placeholder: '800' //'min 800, max 3500'
                 },
                 validation: (inp: string): boolean => {
@@ -47,7 +47,7 @@ class CreateGame extends Component<CreateGameProps> {
             opponents: {
                 inputConfig: {
                     type: 'number',
-                    label: 'Opponents',
+                    label: 'Opponents (TODO does nothing atm)',
                     placeholder: '3' //'min 1, max 4'
                 },
                 validation: (inp: string): boolean => {
