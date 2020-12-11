@@ -1,12 +1,10 @@
 import { CityResource } from "nardis-game";
 import Table from '../../../Utility/Table/Table';
 import { cityResourceTableHeaderNames } from "../../../../common/constants";
+import ICityResourcesProps from "./CityResources.props";
 
-interface Props {
-    resources: CityResource[]
-}
 
-const cityResources = (props: Props): JSX.Element => {
+const cityResources = (props: ICityResourcesProps): JSX.Element => {
     const rows: string[][] = props.resources.map((r: CityResource) => (
         [
             r.resource.name, 
