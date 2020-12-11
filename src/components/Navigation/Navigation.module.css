@@ -18,7 +18,7 @@
     width: 100%;
 }
 
-@media (max-width: 599px) {
+@media (max-width: 799px) {
     .DesktopExclusive {
         display: none;
     }

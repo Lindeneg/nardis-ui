@@ -1,0 +1,10 @@
+.CityRects {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 800px) {
+    .CityRects {
+        flex-direction: row;
+    }
+}

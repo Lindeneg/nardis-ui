@@ -20,7 +20,7 @@
     color: #40a4c8;
 }
 
-@media (min-width: 500px) {
+@media (min-width: 800px) {
     .NavigationEntry {
         margin: 0;
         display: flex;

@@ -27,6 +27,18 @@
     color: #7bafba;
 }
 
+.ChangeOrigin {
+    padding-left: 10px !important;
+    height: 0;
+    color: darkorange;
+}
+
+.ChangeDestination {
+    padding-left: inherit;
+    height: 0;
+    color: darkorange;
+}
+
 .Button:hover {
     color: #f64c72 !important;
 }
@@ -34,4 +46,14 @@
 .Button:disabled {
     color: rgb(113, 105, 96) !important;
     cursor: not-allowed;
+}
+
+@media (min-width: 800px) {
+    .ChangeOrigin {
+        padding-left: 13px !important;
+    }
+    
+    .ChangeDestination {
+        padding-left: 3px !important;
+    }
 }
