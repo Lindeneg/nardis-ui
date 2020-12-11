@@ -1,4 +1,5 @@
-import { City, PotentialRoute, Train } from "nardis-game";
+import { City, PotentialRoute } from "nardis-game";
+import { PossibleTrain } from './NewRoute.props';
 
 
 export default interface INewRouteState {
@@ -8,8 +9,5 @@ export default interface INewRouteState {
     purchasedOnTurn: number,
     turnCost: number,
     otherRoutes: PotentialRoute[],
-    possibleTrains: {
-        train: Train;
-        cost: number;
-    }[]
+    possibleTrains: PossibleTrain[]
 }

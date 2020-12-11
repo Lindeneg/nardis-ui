@@ -1,12 +1,10 @@
-import { City, PotentialRoute } from 'nardis-game';
-import { Component, Fragment } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 
-
-import OneWayRoute from '../../../components/Information/OneWayRoute/OneWayRoute';
-import { ButtonType } from '../../../components/Utility/Button/buttonType';
+import { City, PotentialRoute } from 'nardis-game';
+import TwoWayRoute from '../../../components/Information/MetaRoute/TwoWayRoute/TwoWayRoute';
 import { INardisState } from '../../../common/state';
-import INewRouteProps from './NewRoute.props';
+import INewRouteProps, { RouteInfo } from './NewRoute.props';
 import INewRouteState from './NewRoute.state';
 
 
@@ -20,82 +18,80 @@ class NewRoute extends Component<INewRouteProps> {
         turnCost: 0,
         otherRoutes: [],
         possibleTrains: []
-    }
+    };
 
-    componentDidMount = () => {
+    componentDidMount = (): void => {
         if (!this.state.cityOne && this.props.game) {
             const startCity: City = this.props.game.getCurrentPlayer().getStartCity();
-            const possibleRoutes: PotentialRoute[] = this.props.game.getArrayOfPossibleRoutes(startCity);
-            if (possibleRoutes.length > 0) {
+            const possibleRoutes: RouteInfo = this.getPossibleRouteInfo(startCity);
+            if (possibleRoutes.routes.length > 0) {
                 this.setState({
-                    cityOne: startCity,
-                    cityTwo: possibleRoutes[0].cityTwo,
-                    distance: possibleRoutes[0].distance,
-                    purchasedOnTurn: possibleRoutes[0].purchasedOnTurn,
-                    turnCost: possibleRoutes[0].turnCost,
-                    otherRoutes: possibleRoutes.filter((_, i: number) => i !== 0),
-                    possibleTrains: this.props.game.getArrayOfAdjustedTrains()
+                    ...this.getStateFromPotentialRoute(possibleRoutes.routes[0]),
+                    otherRoutes: possibleRoutes.otherRoutes,
+                    possibleTrains: possibleRoutes.trains
+                });
+            } else {
+                this.setState({
+                    ...this.state,
+                    cityOne: startCity
                 });
             }
         }
     }
 
-    getPossibleRoutes = () => {
+    getStateFromPotentialRoute = (route: PotentialRoute): INewRouteState => ({
+        ...this.state,
+        cityOne: route.cityOne,
+        cityTwo: route.cityTwo,
+        distance: route.distance,
+        purchasedOnTurn: route.purchasedOnTurn,
+        turnCost: route.turnCost
+    })
+
+    getPossibleRouteInfo = (city: City): RouteInfo => {
+        const result: RouteInfo = {routes: [], otherRoutes: [], trains: []};
+        if (this.props.game) {
+            const routes: PotentialRoute[] = this.props.game.getArrayOfPossibleRoutes(city);
+            if (routes.length > 0) {
+                routes.sort((a, b) => a.distance - b.distance);
+                result.routes = routes;
+                result.otherRoutes = routes.filter((_, i: number) => i !== 0);
+                result.trains = this.props.game.getArrayOfAdjustedTrains();
+            }
+        }
+        return result;
+    }
+
+    onOriginChangeHandler = (): void => {
+        console.log("change origin");
+    }
+
+    onDestinationChangeHandler = (): void => {
+        console.log(this.state.otherRoutes);
+        this.setState({
+            ...this.getStateFromPotentialRoute(this.state.otherRoutes[0])
+        });
 
     }
 
-    render() {
+    render(): JSX.Element {
         return (
-            <Fragment>
-                <OneWayRoute 
-                    button={{
-                        disabled: this.props.game ? this.props.game.getCurrentPlayer().getRoutes().length <= 0 : true,
-                        buttonType: ButtonType.DANGER,
-                        whenClicked: () => console.log("change initial depart city"),
-                        style: {color: 'darkorange', height: '0', paddingLeft: '14px'},
-                        content: 'CHANGE ORIGIN'
-                    }}
-                    cityOne={{
-                        showSize: true,
-                        from: true,
-                        city: this.state.cityOne,
-                        cityNameColor: '#ffff00'
-                    }}
-                    cityTwo={{
-                        showSize: true,
-                        from: false,
-                        city: this.state.cityTwo,
-                        cityNameColor: '#008000'
-                    }}
-                />
-                <OneWayRoute 
-                    button={{
-                        disabled: this.state.otherRoutes.length > 0,
-                        buttonType: ButtonType.DANGER,
-                        whenClicked: () => console.log("change initial arrival city"),
-                        style: {color: 'darkorange', height: '0', paddingLeft: '3px'},
-                        content: 'CHANGE DESTINATION'
-                    }}
-                    cityOne={{
-                        showSize: false,
-                        from: true,
-                        city: this.state.cityTwo,
-                        cityNameColor: '#008000'
-                    }}
-                    cityTwo={{
-                        showSize: false,
-                        from: false,
-                        city: this.state.cityOne,
-                        cityNameColor: '#ffff00'
-                    }}
-                />
-            </Fragment>
+            <TwoWayRoute 
+                cityOne={this.state.cityOne}
+                cityTwo={this.state.cityTwo}
+                routesLength={this.props.game?.getCurrentPlayer().getRoutes().length || 0}
+                otherRoutesLength={this.state.otherRoutes.length}
+                whenClickOrigin={this.onOriginChangeHandler}
+                whenClickDestination={this.onDestinationChangeHandler}
+            />
         );
     }
 }
 
+
 const mapStateToProps = (state: INardisState): INewRouteProps => ({
     game: state._game
 });
+
 
 export default connect(mapStateToProps)(NewRoute);
