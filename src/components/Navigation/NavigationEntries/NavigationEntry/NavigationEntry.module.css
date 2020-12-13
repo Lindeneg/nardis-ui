@@ -7,7 +7,7 @@
 }
 
 .NavigationEntry a {
-    color: #8f5c2c;
+    color: white;
     text-decoration: none;
     width: 100%;
     box-sizing: border-box;
@@ -17,7 +17,7 @@
 .NavigationEntry a:hover,
 .NavigationEntry a.active,
 .NavigationEntry a:active {
-    color: #40a4c8;
+    color: #f64c72;
 }
 
 @media (min-width: 800px) {
@@ -30,9 +30,6 @@
     }
     
     .NavigationEntry a {
-        color: white;
-        text-decoration: none;
-        height: 100%;
         padding: 16px 10px;
         border-bottom: 4px solid transparent;
     }
@@ -41,6 +38,5 @@
     .NavigationEntry a.active,
     .NavigationEntry a:active {
         background-color: inherit;
-        color: #f64c72;
     }
 }

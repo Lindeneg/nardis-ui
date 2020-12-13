@@ -30,17 +30,21 @@
 .ChangeOrigin {
     padding-left: 10px !important;
     height: 0;
-    color: darkorange;
+    color: #f64c72;
 }
 
 .ChangeDestination {
     padding-left: inherit;
     height: 0;
-    color: darkorange;
+    color: #f64c72;
+}
+
+.ChangeOrigin:hover, .ChangeDestination:hover {
+    color: white !important;
 }
 
 .Button:hover {
-    color: #f64c72 !important;
+    color: #f64c72;
 }
 
 .Button:disabled {

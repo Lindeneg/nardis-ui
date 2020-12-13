@@ -1,5 +1,5 @@
 .Cards {
-    margin-top: 50px;
+    margin-top: 70px;
     padding: 0;
     width: 100%;
     list-style: none;
@@ -13,7 +13,7 @@ li {
 
 @media (min-width: 800px) {
     .Cards {
-        margin: auto;
+        margin-top: 35px;
         flex-flow: row;
         align-items: center;
         height: 100%;
