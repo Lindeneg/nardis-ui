@@ -1,8 +1,9 @@
-import { Component } from 'react';
+import { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import { City, PotentialRoute } from 'nardis-game';
 import TwoWayRoute from '../../../components/Information/MetaRoute/TwoWayRoute/TwoWayRoute';
+import Modal from '../../../components/Utility/Modal/Modal';
 import { INardisState } from '../../../common/state';
 import INewRouteProps, { RouteInfo } from './NewRoute.props';
 import INewRouteState from './NewRoute.state';
@@ -17,7 +18,9 @@ class NewRoute extends Component<INewRouteProps> {
         purchasedOnTurn: 0,
         turnCost: 0,
         otherRoutes: [],
-        possibleTrains: []
+        possibleTrains: [],
+        showModal: false,
+        modalContent: []
     };
 
     componentDidMount = (): void => {
@@ -67,23 +70,41 @@ class NewRoute extends Component<INewRouteProps> {
     }
 
     onDestinationChangeHandler = (): void => {
-        console.log(this.state.otherRoutes);
         this.setState({
-            ...this.getStateFromPotentialRoute(this.state.otherRoutes[0])
+            ...this.state,
+            showModal: true,
+            modalContent: this.state.otherRoutes
         });
+    }
 
+    onCloseModalHandler = (): void => {
+        this.setState({
+            ...this.state,
+            showModal: false
+        });
     }
 
     render(): JSX.Element {
+        let modalContent: JSX.Element | null = null;
+
+        if (this.state.showModal && this.state.modalContent.length > 0) {
+            modalContent = <div>CONTENT</div>
+        }
+
         return (
-            <TwoWayRoute 
-                cityOne={this.state.cityOne}
-                cityTwo={this.state.cityTwo}
-                routesLength={this.props.game?.getCurrentPlayer().getRoutes().length || 0}
-                otherRoutesLength={this.state.otherRoutes.length}
-                whenClickOrigin={this.onOriginChangeHandler}
-                whenClickDestination={this.onDestinationChangeHandler}
-            />
+            <Fragment>
+                <Modal show={this.state.showModal} onClose={this.onCloseModalHandler} >
+                    {modalContent}
+                </Modal>
+                <TwoWayRoute 
+                    cityOne={this.state.cityOne}
+                    cityTwo={this.state.cityTwo}
+                    routesLength={this.props.game?.getCurrentPlayer().getRoutes().length || 0}
+                    otherRoutesLength={this.state.otherRoutes.length}
+                    whenClickOrigin={this.onOriginChangeHandler}
+                    whenClickDestination={this.onDestinationChangeHandler}
+                />
+            </Fragment>
         );
     }
 }

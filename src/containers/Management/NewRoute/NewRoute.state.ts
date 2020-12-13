@@ -9,5 +9,7 @@ export default interface INewRouteState {
     purchasedOnTurn: number,
     turnCost: number,
     otherRoutes: PotentialRoute[],
-    possibleTrains: PossibleTrain[]
+    possibleTrains: PossibleTrain[],
+    showModal: boolean,
+    modalContent: PotentialRoute[] | PossibleTrain[]
 }
