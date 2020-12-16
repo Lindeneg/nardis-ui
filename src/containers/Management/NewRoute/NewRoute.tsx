@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { City, PotentialRoute } from 'nardis-game';
 import TwoWayRoute from '../../../components/Information/MetaRoute/TwoWayRoute/TwoWayRoute';
+import PotentialRoutes from '../../../components/Information/MetaRoute/PotentialRoutes/PotentialRoutes';
 import Modal from '../../../components/Utility/Modal/Modal';
 import { INardisState } from '../../../common/state';
 import INewRouteProps, { RouteInfo } from './NewRoute.props';
@@ -12,11 +13,9 @@ import INewRouteState from './NewRoute.state';
 class NewRoute extends Component<INewRouteProps> {
 
     state: INewRouteState = {
-        cityOne: null,
-        cityTwo: null,
-        distance: 0,
-        purchasedOnTurn: 0,
-        turnCost: 0,
+        startCity: null,
+        chosenTrain: null,
+        chosenRoute: [],
         otherRoutes: [],
         possibleTrains: [],
         showModal: false,
@@ -24,32 +23,23 @@ class NewRoute extends Component<INewRouteProps> {
     };
 
     componentDidMount = (): void => {
-        if (!this.state.cityOne && this.props.game) {
+        if (!this.state.startCity && this.props.game) {
             const startCity: City = this.props.game.getCurrentPlayer().getStartCity();
             const possibleRoutes: RouteInfo = this.getPossibleRouteInfo(startCity);
             if (possibleRoutes.routes.length > 0) {
                 this.setState({
-                    ...this.getStateFromPotentialRoute(possibleRoutes.routes[0]),
+                    chosenRoute: [possibleRoutes.routes[0]],
                     otherRoutes: possibleRoutes.otherRoutes,
                     possibleTrains: possibleRoutes.trains
                 });
             } else {
                 this.setState({
                     ...this.state,
-                    cityOne: startCity
+                    startCity
                 });
             }
         }
     }
-
-    getStateFromPotentialRoute = (route: PotentialRoute): INewRouteState => ({
-        ...this.state,
-        cityOne: route.cityOne,
-        cityTwo: route.cityTwo,
-        distance: route.distance,
-        purchasedOnTurn: route.purchasedOnTurn,
-        turnCost: route.turnCost
-    })
 
     getPossibleRouteInfo = (city: City): RouteInfo => {
         const result: RouteInfo = {routes: [], otherRoutes: [], trains: []};
@@ -73,7 +63,23 @@ class NewRoute extends Component<INewRouteProps> {
         this.setState({
             ...this.state,
             showModal: true,
-            modalContent: this.state.otherRoutes
+            modalContent: [...this.state.otherRoutes]
+        });
+    }
+
+    destinationChangeHandler = (cityId: string): void => {
+        const otherRoutes = [
+            ...this.state.otherRoutes, 
+            ...this.state.chosenRoute
+        ]
+        .filter(e => e.cityTwo.id !== cityId)
+        .sort((a, b) => a.distance - b.distance);
+        const chosenRoute = this.state.otherRoutes.filter(e => e.cityTwo.id === cityId);
+        this.setState({
+            ...this.state,
+            otherRoutes,
+            chosenRoute,
+            showModal: false
         });
     }
 
@@ -86,9 +92,19 @@ class NewRoute extends Component<INewRouteProps> {
 
     render(): JSX.Element {
         let modalContent: JSX.Element | null = null;
-
+        let [distance, goldCost, turnCost]: [number, number, number] = [0, 0, 0];
         if (this.state.showModal && this.state.modalContent.length > 0) {
-            modalContent = <div>CONTENT</div>
+            modalContent = (
+                <PotentialRoutes 
+                    whenClicked={this.destinationChangeHandler} 
+                    potentialRoutes={this.state.modalContent} 
+                />
+            );
+        }
+
+        if (this.state.chosenRoute.length > 0) {
+            const route: PotentialRoute = this.state.chosenRoute[0];
+            [distance, goldCost, turnCost] = [route.distance, route.goldCost, route.turnCost]; 
         }
 
         return (
@@ -97,13 +113,28 @@ class NewRoute extends Component<INewRouteProps> {
                     {modalContent}
                 </Modal>
                 <TwoWayRoute 
-                    cityOne={this.state.cityOne}
-                    cityTwo={this.state.cityTwo}
+                    cityOne={this.state.chosenRoute.length > 0 ? this.state.chosenRoute[0].cityOne : this.state.startCity}
+                    cityTwo={this.state.chosenRoute.length > 0 ? this.state.chosenRoute[0].cityTwo : null}
                     routesLength={this.props.game?.getCurrentPlayer().getRoutes().length || 0}
                     otherRoutesLength={this.state.otherRoutes.length}
                     whenClickOrigin={this.onOriginChangeHandler}
                     whenClickDestination={this.onDestinationChangeHandler}
                 />
+                {this.state.chosenRoute.length > 0 ? 
+                <div>
+                    <ul>
+                        <li>
+                            Distance: {distance}km
+                        </li>
+                        <li>
+                            Gold Cost: {goldCost}g
+                        </li>
+                        <li>
+                            Turn Cost: {turnCost}t
+                        </li>
+                    </ul>
+                    <button>SET TRAIN</button>
+                </div> : null}
             </Fragment>
         );
     }
