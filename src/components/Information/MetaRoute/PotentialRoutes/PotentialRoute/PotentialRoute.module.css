@@ -1,0 +1,37 @@
+.PotentialRoute {
+    background-color: gainsboro;
+    border: 2px solid black;
+    margin-top: 15px;
+}
+
+.PotentialRoute:hover, .PotentialRoute:active {
+    background-color: green;
+    color: white;
+}
+
+.PotentialRouteInvalid {
+    background-color: rgb(142, 25, 25);
+    border: 2px solid black;
+    margin-top: 15px;
+    color: white;
+}
+
+.CityNameInvalid, .PotentialRouteInvalid pre {
+    color: white;
+    text-decoration: line-through;
+}
+
+.CityName {
+    color: darkgoldenrod;
+}
+
+.pre {
+    padding-left: 15px;
+}
+
+.PotentialRoute pre,
+.PotentialRouteInvalid pre,
+.CityName,
+.CityNameInvalid {
+    margin-left: 20px;
+}
