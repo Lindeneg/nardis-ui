@@ -27,6 +27,18 @@
     color: #7bafba;
 }
 
+.SetTrain {
+    background-color: #3e5fc2;
+    margin: 0;
+    margin-top: 25px;
+    width: 100%
+}
+
+.SetTrain:hover {
+    background-color: green;
+    color: white !important;
+}
+
 .ChangeOrigin {
     padding-left: 10px !important;
     height: 0;

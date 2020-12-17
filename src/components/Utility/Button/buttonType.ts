@@ -3,7 +3,8 @@ export enum ButtonType {
     DANGER,
     END_TURN,
     CHANGE_ORIGIN,
-    CHANGE_DESTINATION
+    CHANGE_DESTINATION,
+    SET_TRAIN
 }
 
 export const buttonTypeToClassName: {[key: number]: string} = {
@@ -11,5 +12,6 @@ export const buttonTypeToClassName: {[key: number]: string} = {
     [ButtonType.DANGER]: 'Danger',
     [ButtonType.END_TURN]: 'EndTurn',
     [ButtonType.CHANGE_ORIGIN]: 'ChangeOrigin',
-    [ButtonType.CHANGE_DESTINATION]: 'ChangeDestination'
+    [ButtonType.CHANGE_DESTINATION]: 'ChangeDestination',
+    [ButtonType.SET_TRAIN]: 'SetTrain'
 };
