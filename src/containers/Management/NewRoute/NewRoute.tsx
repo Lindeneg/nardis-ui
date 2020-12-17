@@ -2,15 +2,19 @@ import { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import { City, PotentialRoute } from 'nardis-game';
+import RouteSummary from '../../../components/Information/MetaRoute/RouteSummary/RouteSummary';
 import TwoWayRoute from '../../../components/Information/MetaRoute/TwoWayRoute/TwoWayRoute';
-import PotentialRoutes from '../../../components/Information/MetaRoute/PotentialRoutes/PotentialRoutes';
 import Modal from '../../../components/Utility/Modal/Modal';
 import { INardisState } from '../../../common/state';
 import INewRouteProps, { RouteInfo } from './NewRoute.props';
 import INewRouteState from './NewRoute.state';
+import Button from '../../../components/Utility/Button/Button';
+import { ButtonType } from '../../../components/Utility/Button/buttonType';
+import ListItems from '../../../components/Information/ListItems/ListItems';
+import { ListType } from '../../../components/Information/ListItems/listType';
 
 
-class NewRoute extends Component<INewRouteProps> {
+class NewRoute extends Component<INewRouteProps, INewRouteState> {
 
     state: INewRouteState = {
         startCity: null,
@@ -28,6 +32,7 @@ class NewRoute extends Component<INewRouteProps> {
             const possibleRoutes: RouteInfo = this.getPossibleRouteInfo(startCity);
             if (possibleRoutes.routes.length > 0) {
                 this.setState({
+                    ...this.state,
                     chosenRoute: [possibleRoutes.routes[0]],
                     otherRoutes: possibleRoutes.otherRoutes,
                     possibleTrains: possibleRoutes.trains
@@ -79,6 +84,7 @@ class NewRoute extends Component<INewRouteProps> {
             ...this.state,
             otherRoutes,
             chosenRoute,
+            chosenTrain: null,
             showModal: false
         });
     }
@@ -95,9 +101,10 @@ class NewRoute extends Component<INewRouteProps> {
         let [distance, goldCost, turnCost]: [number, number, number] = [0, 0, 0];
         if (this.state.showModal && this.state.modalContent.length > 0) {
             modalContent = (
-                <PotentialRoutes 
+                <ListItems 
+                    listType={ListType.POTENTIAL_ROUTE_DESTINATION}
                     whenClicked={this.destinationChangeHandler} 
-                    potentialRoutes={this.state.modalContent} 
+                    content={{potentialRoutes: this.state.modalContent}} 
                 />
             );
         }
@@ -112,6 +119,8 @@ class NewRoute extends Component<INewRouteProps> {
                 <Modal show={this.state.showModal} onClose={this.onCloseModalHandler} >
                     {modalContent}
                 </Modal>
+                {this.state.chosenRoute.length > 0 ? 
+                <RouteSummary distance={distance} goldCost={goldCost} turnCost={turnCost} /> : null}
                 <TwoWayRoute 
                     cityOne={this.state.chosenRoute.length > 0 ? this.state.chosenRoute[0].cityOne : this.state.startCity}
                     cityTwo={this.state.chosenRoute.length > 0 ? this.state.chosenRoute[0].cityTwo : null}
@@ -120,21 +129,13 @@ class NewRoute extends Component<INewRouteProps> {
                     whenClickOrigin={this.onOriginChangeHandler}
                     whenClickDestination={this.onDestinationChangeHandler}
                 />
-                {this.state.chosenRoute.length > 0 ? 
-                <div>
-                    <ul>
-                        <li>
-                            Distance: {distance}km
-                        </li>
-                        <li>
-                            Gold Cost: {goldCost}g
-                        </li>
-                        <li>
-                            Turn Cost: {turnCost}t
-                        </li>
-                    </ul>
-                    <button>SET TRAIN</button>
-                </div> : null}
+                {!this.state.chosenTrain ? 
+                <Button 
+                    disabled={false} 
+                    whenClicked={() => null} 
+                    buttonType={ButtonType.SET_TRAIN}>
+                        CHOOSE TRAIN
+                </Button> : null}
             </Fragment>
         );
     }
