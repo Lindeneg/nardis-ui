@@ -1,27 +1,27 @@
-.PotentialRoute {
+.ListItem {
     background-color: gainsboro;
     border: 2px solid black;
     margin-top: 15px;
 }
 
-.PotentialRoute:hover, .PotentialRoute:active {
+.ListItem:hover, .ListItem:active {
     background-color: green;
     color: white;
 }
 
-.PotentialRouteInvalid {
+.ListItemInvalid {
     background-color: rgb(142, 25, 25);
     border: 2px solid black;
     margin-top: 15px;
     color: white;
 }
 
-.CityNameInvalid, .PotentialRouteInvalid pre {
+.HeaderInvalid, .ListItemInvalid pre {
     color: white;
     text-decoration: line-through;
 }
 
-.CityName {
+.Header {
     color: darkgoldenrod;
 }
 
@@ -29,9 +29,9 @@
     padding-left: 15px;
 }
 
-.PotentialRoute pre,
-.PotentialRouteInvalid pre,
-.CityName,
-.CityNameInvalid {
+.ListItem pre,
+.ListItemInvalid pre,
+.Header,
+.HeaderInvalid {
     margin-left: 20px;
 }
