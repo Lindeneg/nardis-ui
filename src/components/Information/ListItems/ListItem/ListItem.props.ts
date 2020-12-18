@@ -5,9 +5,10 @@ import { ListType } from "../listType";
 
 export default interface IListItemProps {
     money: number,
+    level: number,
     listType: ListType,
     whenClicked: (cityId: string) => void,
-    possibleTrains?: PossibleTrain,
-    potentialRoutes?: PotentialRoute,
-    playerRoutes?: Route
+    possibleTrain?: PossibleTrain,
+    potentialRoute?: PotentialRoute,
+    playerRoute?: Route
 }

@@ -1,15 +1,18 @@
 .CreateGame {
-    margin: 20px auto;
-    width: 80%;
-    text-align: center;
-    box-shadow: 0 2px 3px #ccc;
-    border: 1px solid #eee;
+    position: fixed;
+    width: 250px;;
+    height: 350px;
+    right: calc(50% - 125px);
+    bottom: calc(50% - 175px);
     padding: 10px;
     box-sizing: border-box;
 }
 
 @media (min-width: 800px) {
     .CreateGame {
+        box-shadow: 0 2px 3px #ccc;
+        border: 1px solid #eee;
         width: 500px;
+        right: calc(50% - 250px);
     }
 }

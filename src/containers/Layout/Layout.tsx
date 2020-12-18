@@ -67,6 +67,7 @@ class Layout extends Component<LayoutProps> {
                     <main className={styles.Content}>
                         {this.props.children}
                     </main>
+                    <footer>Footer</footer>
                 </Fragment>
             );
         }

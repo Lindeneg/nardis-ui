@@ -27,32 +27,33 @@
     color: #7bafba;
 }
 
-.SetTrain {
+.CreateGame {
+    color: #5C9210;
+    width: 100%;
+    text-align: center;  
+}
+
+.SetTrain, .ChangeDestination, .ChangeOrigin {
     background-color: #3e5fc2;
     margin: 0;
-    margin-top: 25px;
     width: 100%
 }
 
-.SetTrain:hover {
+.ChangeDestination {
+    color: lightgreen;
+}
+
+.ChangeOrigin {
+    color: rgb(255, 255, 0);
+}
+
+.SetTrain:hover, .ChangeOrigin:hover, .ChangeDestination:hover {
     background-color: green;
     color: white !important;
 }
 
-.ChangeOrigin {
-    padding-left: 10px !important;
-    height: 0;
-    color: #f64c72;
-}
-
-.ChangeDestination {
-    padding-left: inherit;
-    height: 0;
-    color: #f64c72;
-}
-
-.ChangeOrigin:hover, .ChangeDestination:hover {
-    color: white !important;
+.SetTrain:disabled:hover, .ChangeOrigin:disabled:hover, .ChangeDestination:disabled:hover {
+    background-color: #3e5fc2;
 }
 
 .Button:hover {
@@ -62,14 +63,4 @@
 .Button:disabled {
     color: rgb(113, 105, 96) !important;
     cursor: not-allowed;
-}
-
-@media (min-width: 800px) {
-    .ChangeOrigin {
-        padding-left: 13px !important;
-    }
-    
-    .ChangeDestination {
-        padding-left: 3px !important;
-    }
 }

@@ -17,7 +17,7 @@ const listItems = (props: IListItemsProps): JSX.Element => {
                     whenClicked={props.whenClicked}
                     key={index}
                     listType={props.listType}
-                    {...{[key]: item}}
+                    {...{[key.substr(0, key.length - 1)]: item}}
                 />
             )));
             break;

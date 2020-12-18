@@ -11,7 +11,7 @@
     margin: auto;
     margin-left: 0;
     list-style: none;
-    padding-inline-start: 13px;
+    padding-inline-start: 10px;
 }
 
 .RouteSummary li {
@@ -20,4 +20,10 @@
 
 .RouteSummary pre {
     font-family: inherit;
+}
+
+@media (min-width: 800px) {
+    .RouteSummary ul {
+        padding-inline-start: 13px;
+    }
 }

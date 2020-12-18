@@ -1,4 +1,4 @@
-import { Component, FormEvent } from 'react';
+import { Component, FormEvent, Fragment } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
@@ -90,32 +90,35 @@ class CreateGame extends Component<CreateGameProps> {
 
     render (): JSX.Element {
         return (
-            <div className={styles.CreateGame}>
-                <form onSubmit={this.initGame}>
-                    {
-                        Object.keys(this.state.base)
-                        .map((key: string) => {
-                            const entry: ICreateGameInputConfig = this.state.base[key];
-                            return (
-                                <Input 
-                                    key={key}
-                                    changed={(event: TInputChangeEvent) => this.onChangeHandler(event, key)}
-                                    inputConfig={entry.inputConfig}
-                                    value={entry.value}
-                                    touched={entry.touched}
-                                    valid={entry.valid}
-                                />
-                            );
-                        })
-                    }
-                    <Button 
-                        whenClicked={() => null} 
-                        disabled={!this.state.isValid} 
-                        buttonType={ButtonType.SUCCESS} >
-                            Start Game
-                    </Button> 
-                </form>
-            </div>
+            <Fragment>
+                <div className={styles.CreateGame}>
+                    <form onSubmit={this.initGame}>
+                        {
+                            Object.keys(this.state.base)
+                            .map((key: string) => {
+                                const entry: ICreateGameInputConfig = this.state.base[key];
+                                return (
+                                    <Input 
+                                        key={key}
+                                        changed={(event: TInputChangeEvent) => this.onChangeHandler(event, key)}
+                                        inputConfig={entry.inputConfig}
+                                        value={entry.value}
+                                        touched={entry.touched}
+                                        valid={entry.valid}
+                                    />
+                                );
+                            })
+                        }
+                        <Button 
+                            whenClicked={() => null} 
+                            disabled={!this.state.isValid} 
+                            buttonType={ButtonType.CREATE_GAME} >
+                                Start Game
+                        </Button>
+                    </form>
+                </div>
+                <footer>Footer</footer>
+            </Fragment>
         );
     }
 }

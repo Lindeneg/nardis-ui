@@ -25,8 +25,17 @@
     color: darkgoldenrod;
 }
 
+.Header, .HeaderInvalid {
+    text-align: center;;
+}
+
 .pre {
     padding-left: 15px;
+}
+
+.ListItemValue {
+    float: right;
+    margin-right: 30px;
 }
 
 .ListItem pre,
