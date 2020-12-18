@@ -12,6 +12,7 @@ const initialize = (state: INardisState, payload: IReducerPayload): INardisState
             money      : player.gold,
             turn       : game.getCurrentTurn(),
             level      : player.getLevel(),
+            range      : player.getRange(),
             routes     : player.getRoutes(),
             queue      : player.getQueue(),
             upgrades   : player.getUpgrades(),

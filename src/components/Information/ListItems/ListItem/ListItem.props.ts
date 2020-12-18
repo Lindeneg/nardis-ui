@@ -6,6 +6,7 @@ import { ListType } from "../listType";
 export default interface IListItemProps {
     money: number,
     level: number,
+    range: number,
     listType: ListType,
     whenClicked: (cityId: string) => void,
     possibleTrain?: PossibleTrain,

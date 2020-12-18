@@ -14,9 +14,9 @@ import styles from './Layout.module.css';
 const cardLabels: [string, string][] = [
     ['money', 'g'],
     ['level', ''],
+    ['range', 'km'],
     ['routes', ''],
     ['queue', ''],
-    ['opponents', ''],
     ['turn', '']
 ];
 
@@ -82,6 +82,7 @@ const mapStateToProps = (state: INardisState): ILayoutMappedProps => ({
     money      : state.money,
     level      : state.level,
     turn       : state.turn,
+    range      : state.range,
     routes     : state.routes.length,
     queue      : state.queue.length,
     opponents  : state.opponents.length,

@@ -28,14 +28,20 @@ const listItem = (props: IListItemProps): JSX.Element => {
     switch (props.listType) {
         case ListType.POTENTIAL_ROUTE_DESTINATION:
             if (props.potentialRoute) {
-                isValid = props.potentialRoute.distance <= 100; // TODO props.money >= props.potentialRoute.goldCost && !props.potentialRoute.cityTwo.isFull();
+                isValid = (
+                    props.money >= props.potentialRoute.goldCost && 
+                    props.range >= props.potentialRoute.distance && 
+                    !props.potentialRoute.cityTwo.isFull()
+                );
                 target = props.potentialRoute.cityTwo.id;
                 header = props.potentialRoute.cityTwo.name.toUpperCase();
                 contentJSX = getContent([
                     ['SIZE', props.potentialRoute.cityTwo.getSize()],
                     ['DISTANCE', props.potentialRoute.distance + 'KM'],
                     ['GOLD COST', props.potentialRoute.goldCost + 'G'],
-                    ['TURN COST', props.potentialRoute.turnCost]
+                    ['TURN COST', props.potentialRoute.turnCost],
+                    ['ACTIVE ROUTES', props.potentialRoute.cityTwo.getCurrentRouteCount()],
+                    ['MAX ROUTES', 5]
                 ]);
             }
             break;
@@ -74,9 +80,10 @@ const listItem = (props: IListItemProps): JSX.Element => {
     );
 };
 
-const mapStateToProps = (state: INardisState): {money: number, level: number} => ({
+const mapStateToProps = (state: INardisState): {money: number, level: number, range: number} => ({
     money: state.money,
-    level: state.level
+    level: state.level,
+    range: state.range
 });
 
 export default connect(mapStateToProps)(listItem);

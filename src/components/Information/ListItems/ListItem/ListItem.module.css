@@ -16,7 +16,7 @@
     color: white;
 }
 
-.HeaderInvalid, .ListItemInvalid pre {
+.HeaderInvalid, .ListItemInvalid pre, .ListItemInvalid span {
     color: white;
     text-decoration: line-through;
 }

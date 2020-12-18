@@ -12,6 +12,7 @@ const initialState: INardisState = {
     money      : 0,
     turn       : 0,
     level      : 0,
+    range   : 0,
     routes     : [],
     queue      : [],
     upgrades   : [],

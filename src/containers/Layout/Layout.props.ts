@@ -7,6 +7,7 @@ export interface ILayoutMappedProps {
     money      : number,
     level      : number,
     turn       : number,
+    range      : number,
     routes     : number,
     queue      : number,
     opponents  : number

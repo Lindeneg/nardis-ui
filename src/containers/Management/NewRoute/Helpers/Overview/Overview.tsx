@@ -21,7 +21,7 @@ const overview = (props: Props): JSX.Element => (
     <Fragment>
         <TwoWayRoute {...props.route} />
         <Cards 
-            style={{margin: '0'}}
+            style={style}
             cards={[
                 {label: 'DISTANCE', value: props.distance + 'KM', style},
                 {label: 'GOLD COST', value: props.cost + 'G', style},

@@ -17,6 +17,7 @@ export interface INardisState {
     money: number,
     turn: number,
     level: number,
+    range: number,
     routes: Route[],
     queue: QueuedRouteItem[],
     upgrades: Upgrade[],

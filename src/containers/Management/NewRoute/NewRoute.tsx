@@ -192,7 +192,6 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
                     break;
             }
         }
-        // TODO INITIAL TRAIN NOT READDED 
         return (
             <Fragment>
                 <Modal show={this.state.modal.show} onClose={this.onCloseModalHandler} >
@@ -209,7 +208,7 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
                             cityOne: chosenRoute ? chosenRoute.cityOne : this.state.startCity,
                             cityTwo: chosenRoute?.cityTwo || null
                         },
-                        button: {disabled: false, whenClicked: this.onSetTrainChange, buttonType: ButtonType.SET_TRAIN},
+                        button: {disabled: chosenRoute === null, whenClicked: this.onSetTrainChange, buttonType: ButtonType.SET_TRAIN},
                         distance: chosenRoute ? chosenRoute.distance : 0,
                         cost: chosenRoute ? chosenRoute.goldCost : 0,
                         turnCost: chosenRoute ? chosenRoute.turnCost : 0
