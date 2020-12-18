@@ -2,17 +2,16 @@ import { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import { City, PotentialRoute } from 'nardis-game';
-import RouteSummary from '../../../components/Information/MetaRoute/RouteSummary/RouteSummary';
-import TwoWayRoute from '../../../components/Information/MetaRoute/TwoWayRoute/TwoWayRoute';
 import Modal from '../../../components/Utility/Modal/Modal';
 import { INardisState } from '../../../common/state';
 import INewRouteProps, { PossibleTrain, RouteInfo } from './NewRoute.props';
 import INewRouteState from './NewRoute.state';
-import Button from '../../../components/Utility/Button/Button';
 import { ButtonType } from '../../../components/Utility/Button/buttonType';
 import ListItems from '../../../components/Information/ListItems/ListItems';
 import { ListType } from '../../../components/Information/ListItems/listType';
 
+import Overview from './Helpers/Overview/Overview';
+import Selector, { ISelectorProp } from './Helpers/Selector/Selector';
 
 class NewRoute extends Component<INewRouteProps, INewRouteState> {
 
@@ -32,12 +31,14 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
         if (!this.state.startCity && this.props.game) {
             const startCity: City = this.props.game.getCurrentPlayer().getStartCity();
             const possibleRoutes: RouteInfo = this.getPossibleRouteInfo(startCity);
+            const train: PossibleTrain = possibleRoutes.trains[0];
             if (possibleRoutes.routes.length > 0) {
                 this.setState({
                     ...this.state,
                     chosenRoute: [possibleRoutes.routes[0]],
+                    chosenTrain: train,
                     otherRoutes: possibleRoutes.otherRoutes,
-                    possibleTrains: possibleRoutes.trains
+                    possibleTrains: possibleRoutes.trains.filter(e => e.train.id !== train.train.id)
                 });
             } else {
                 this.setState({
@@ -90,8 +91,8 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
     trainChangeHandler = (trainId: string): void => {
         const train: PossibleTrain = this.state.possibleTrains.filter(e => e.train.id === trainId)[0];
         const possibleTrains: PossibleTrain[] = [...this.state.possibleTrains];
-        if (this.state.chosenTrain && this.state.chosenTrain.train && this.state.chosenTrain.trainCost) {
-            possibleTrains.push({train: this.state.chosenTrain.train, cost: this.state.chosenTrain.trainCost});
+        if (this.state.chosenTrain && this.state.chosenTrain.train && this.state.chosenTrain.cost) {
+            possibleTrains.push({train: this.state.chosenTrain.train, cost: this.state.chosenTrain.cost});
         }
         this.setState({
             ...this.state,
@@ -100,7 +101,7 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
             .sort((a, b) => (a.train.levelRequired - b.train.levelRequired) - (b.cost - a.cost)),
             chosenTrain: {
                 train: train.train,
-                trainCost: train.cost
+                cost: train.cost
             },
             modal: {
                 show: false,
@@ -140,6 +141,25 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
         });
     }
 
+    getSelectorButtonProps = (): ISelectorProp[] => [
+        {
+            props: {
+                disabled: (this.props.game?.getCurrentPlayer().getRoutes().length || 0) <= 0,
+                whenClicked: this.onOriginChange,
+                buttonType: ButtonType.CHANGE_ORIGIN
+            },
+            content: 'CHANGE ORIGIN'
+        },
+        {
+            props: {
+                disabled: this.state.otherRoutes.length <= 0,
+                whenClicked: this.onDestinationChange,
+                buttonType: ButtonType.CHANGE_DESTINATION
+            },
+            content: 'CHANGE DESTINATION'
+        }
+    ];
+
     render(): JSX.Element {
         let modalContent: JSX.Element | null = null;
         if (this.state.modal.show) {
@@ -172,43 +192,32 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
                     break;
             }
         }
+        // TODO INITIAL TRAIN NOT READDED 
         return (
             <Fragment>
                 <Modal show={this.state.modal.show} onClose={this.onCloseModalHandler} >
                     {modalContent}
                 </Modal>
-                {this.state.chosenRoute.length > 0 && 1 > 2 ? 
-                <RouteSummary 
-                    distance={this.state.chosenRoute[0].distance} 
-                    goldCost={this.state.chosenRoute[0].goldCost} 
-                    turnCost={this.state.chosenRoute[0].turnCost} /> 
-                    : null}
                 <hr/>
-                <Button 
-                    disabled={(this.props.game?.getCurrentPlayer().getRoutes().length || 0) <= 0} 
-                    whenClicked={this.onOriginChange} 
-                    buttonType={ButtonType.CHANGE_ORIGIN}
-                    style={{marginTop: '5px'}}>
-                        CHANGE ORIGIN
-                </Button>
-                <Button 
-                    disabled={this.state.otherRoutes.length <= 0} 
-                    whenClicked={this.onDestinationChange} 
-                    buttonType={ButtonType.CHANGE_DESTINATION}
-                    style={{marginTop: '5px'}}>
-                        CHANGE DESTINATION
-                </Button>
+                <Selector buttons={this.getSelectorButtonProps()} />
                 <hr/>
-                <TwoWayRoute 
-                    cityOne={this.state.chosenRoute.length > 0 ? this.state.chosenRoute[0].cityOne : this.state.startCity}
-                    cityTwo={this.state.chosenRoute.length > 0 ? this.state.chosenRoute[0].cityTwo : null}
+                <Overview 
+                    {...(() => {
+                        const chosenRoute = this.state.chosenRoute.length > 0 ? this.state.chosenRoute[0] : null;
+                        return {
+                        route: {
+                            cityOne: chosenRoute ? chosenRoute.cityOne : this.state.startCity,
+                            cityTwo: chosenRoute?.cityTwo || null
+                        },
+                        button: {disabled: false, whenClicked: this.onSetTrainChange, buttonType: ButtonType.SET_TRAIN},
+                        distance: chosenRoute ? chosenRoute.distance : 0,
+                        cost: chosenRoute ? chosenRoute.goldCost : 0,
+                        turnCost: chosenRoute ? chosenRoute.turnCost : 0
+                    }})()
+                    }       
                 />
-                <Button 
-                    disabled={false} 
-                    whenClicked={this.onSetTrainChange} 
-                    buttonType={ButtonType.SET_TRAIN}>
-                        CHANGE TRAIN
-                </Button>
+                {/* Summary */}
+                <p>{this.state.chosenTrain?.train.name}</p>
             </Fragment>
         );
     }

@@ -5,7 +5,7 @@ import { PossibleTrain } from './NewRoute.props';
 
 export interface IChosenTrain {
     train: Train,
-    trainCost: number,
+    cost: number,
     routePlanCargo?: RoutePlanCargo
 }
 

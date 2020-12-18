@@ -8,13 +8,13 @@ const cards = (props: ICardsProps): JSX.Element => {
     const jsx: JSX.Element[] = props.cards.map((card: ICardProps, index: number): JSX.Element => {
         return (
             <li key={index}>
-                <Card label={card.label} value={card.value} />
+                <Card {...card} />
             </li>
         );
     });
     return (
         <div>
-            <ul className={styles.Cards}>
+            <ul style={props.style} className={styles.Cards}>
                 {jsx}
             </ul>
         </div>

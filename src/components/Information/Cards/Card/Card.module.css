@@ -4,18 +4,18 @@
     width: 100%;
     border: solid 1px #3e5fc2;
     margin-top: 0;
-    color: #eee;
     background-color: #3356bf;
 }
 div p {
    width: 100%;
+   font-weight: 400;
    text-transform: uppercase;
-   font-weight: 500;
+   color: #eee;
 }
 div p span {
    float: right;
-   font-weight: 100;
-   text-decoration: underline #ccc;
+   font-weight: 500;
+   color: white;
 }
 
 @media (min-width: 800px) {

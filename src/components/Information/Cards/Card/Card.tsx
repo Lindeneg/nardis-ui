@@ -4,7 +4,7 @@ import styles from './Card.module.css';
 
 const card = (props: ICardProps): JSX.Element => {
     return (
-        <div className={styles.Card}>
+        <div className={styles.Card} style={props.style ? props.style : {}} >
             <p>
                 {props.label}
                 <span>

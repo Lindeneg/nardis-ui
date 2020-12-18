@@ -1,6 +1,4 @@
-import { ReactNode } from 'react';
-
-export type TStyle = {[key: string]: string | any}
+import { CSSProperties, ReactNode } from 'react';
 
 export type NoProps = any;
 
@@ -9,7 +7,7 @@ export interface IBaseProps {
 }
 
 export interface IStyle {
-    style?: TStyle
+    style?: CSSProperties
 }
 
 export interface IClickedProps {
