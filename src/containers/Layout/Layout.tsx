@@ -11,13 +11,13 @@ import LayoutState from './Layout.state';
 import styles from './Layout.module.css';
 
 
-const cardLabels: string[] = [
-    'money',
-    'level',
-    'routes',
-    'queue',
-    'opponents',
-    'turn'
+const cardLabels: [string, string][] = [
+    ['money', 'g'],
+    ['level', ''],
+    ['routes', ''],
+    ['queue', ''],
+    ['opponents', ''],
+    ['turn', '']
 ];
 
 
@@ -53,10 +53,11 @@ class Layout extends Component<LayoutProps> {
         let jsx: JSX.Element = <CreateGame />
 
         if (this.props.gameCreated) {
-            const playerCards = cardLabels.map(label => {
+            const playerCards = cardLabels.map(cards => {
+                const [label, suffix] = cards;
                 return {
                     label,
-                    value: this.props[label]?.toString() || ''
+                    value: (this.props[label]?.toString() || '') + suffix
                 };
             });
             jsx = (
