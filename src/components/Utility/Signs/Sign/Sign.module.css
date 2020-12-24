@@ -1,0 +1,48 @@
+.Sign {
+    border-left: 1px solid #3e5fc2;
+    background-color: inherit;
+    width: 49%;
+    height: unset;
+    color: white;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.Minus {
+    margin-top: 0;
+    border-right: 1px solid #3e5fc2;
+    position: absolute;
+    right: 8px;
+}
+
+.Sign div {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+.NotAccess {
+    color: gray;
+}
+
+.Access:hover {
+    background-color: green;
+    cursor: pointer;
+}
+
+.NotAccess:hover {
+    cursor: not-allowed;
+}
+
+@media (min-width: 800px) {
+    .Sign {
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+    }
+
+    .Minus {
+        position: relative;
+        right: unset;
+    }
+}
