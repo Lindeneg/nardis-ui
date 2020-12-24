@@ -33,11 +33,15 @@
     text-align: center;  
 }
 
-.SetTrain, .ChangeDestination, .ChangeOrigin {
+.SetTrain, .ChangeDestination, .ChangeOrigin, .BuyRoute {
     background-color: #3e5fc2;
     margin: 0;
     margin-top: 5px;
     width: 100%
+}
+
+.BuyRoute {
+    background-color: rebeccapurple;
 }
 
 .ChangeDestination {
@@ -48,7 +52,7 @@
     color: rgb(255, 255, 0);
 }
 
-.SetTrain:hover, .ChangeOrigin:hover, .ChangeDestination:hover {
+.SetTrain:hover, .ChangeOrigin:hover, .ChangeDestination:hover, .BuyRoute:hover {
     background-color: green;
     color: white !important;
 }

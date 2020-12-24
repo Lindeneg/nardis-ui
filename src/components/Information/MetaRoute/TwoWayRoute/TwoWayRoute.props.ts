@@ -1,7 +1,7 @@
-import { City } from 'nardis-game';
+import { City, RouteCargo } from 'nardis-game';
 
 
 export default interface ITwoWayRouteProps {
-    cityOne: City | null,
-    cityTwo: City | null
+    cityOne: {city: City | null, routeCargo: RouteCargo[] | null},
+    cityTwo: {city: City | null, routeCargo: RouteCargo[] | null}
 }

@@ -1,23 +1,32 @@
 import { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import { City, PotentialRoute } from 'nardis-game';
+import { City, PotentialRoute, Resource, RouteCargo } from 'nardis-game';
 import Modal from '../../../components/Utility/Modal/Modal';
 import { INardisState } from '../../../common/state';
 import INewRouteProps, { PossibleTrain, RouteInfo } from './NewRoute.props';
-import INewRouteState from './NewRoute.state';
+import INewRouteState, { CargoChange, RouteRevolution } from './NewRoute.state';
 import { ButtonType } from '../../../components/Utility/Button/buttonType';
 import ListItems from '../../../components/Information/ListItems/ListItems';
 import { ListType } from '../../../components/Information/ListItems/listType';
 
 import Overview from './Helpers/Overview/Overview';
-import Selector, { ISelectorProp } from './Helpers/Selector/Selector';
+import CitySelector, { ISelectorProp } from './Helpers/Selector/CitySelector';
+import CargoSelector from './Helpers/Selector/CargoSelector';
+
+import { getCargoCards } from './Helpers/Selector/getCargoCards';
+
+
 
 class NewRoute extends Component<INewRouteProps, INewRouteState> {
 
     state: INewRouteState = {
         startCity: null,
-        chosenTrain: null,
+        chosenTrain: {
+            train: null,
+            cost: null,
+            routePlanCargo: null
+        },
         chosenRoute: [],
         otherRoutes: [],
         possibleTrains: [],
@@ -32,11 +41,12 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
             const startCity: City = this.props.game.getCurrentPlayer().getStartCity();
             const possibleRoutes: RouteInfo = this.getPossibleRouteInfo(startCity);
             const train: PossibleTrain = possibleRoutes.trains[0];
-            if (possibleRoutes.routes.length > 0) {
+            if (possibleRoutes.routes.length > 0 /* && 1 > 2 */) {
                 this.setState({
                     ...this.state,
+                    startCity,
                     chosenRoute: [possibleRoutes.routes[0]],
-                    chosenTrain: train,
+                    chosenTrain: {...train, routePlanCargo: null},
                     otherRoutes: possibleRoutes.otherRoutes,
                     possibleTrains: possibleRoutes.trains.filter(e => e.train.id !== train.train.id)
                 });
@@ -101,7 +111,8 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
             .sort((a, b) => (a.train.levelRequired - b.train.levelRequired) - (b.cost - a.cost)),
             chosenTrain: {
                 train: train.train,
-                cost: train.cost
+                cost: train.cost,
+                routePlanCargo: null
             },
             modal: {
                 show: false,
@@ -121,9 +132,12 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
 
         this.setState({
             ...this.state,
+            chosenTrain: {
+                ...this.state.chosenTrain,
+                routePlanCargo: null
+            },
             otherRoutes,
             chosenRoute,
-            chosenTrain: null,
             modal: {
                 show: false,
                 type: null
@@ -139,6 +153,66 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
                 type: null
             }
         });
+    }
+
+    onCargoAdd: CargoChange = (resource: Resource, revolution: RouteRevolution): void => {
+        const cityOne = [...this.state.chosenTrain.routePlanCargo?.cityOne || []];
+        const cityTwo = [...this.state.chosenTrain.routePlanCargo?.cityTwo || []];
+        const targetCity = revolution === RouteRevolution.NONE ? cityOne : cityTwo;
+        const targetResource = targetCity.filter(target => target.resource.equals(resource));
+
+        if (targetResource.length > 0) {
+            targetResource[0].targetAmount++;
+        } else {
+            targetCity.push({
+                resource,
+                actualAmount: 0,
+                targetAmount: 1
+            });
+        }
+
+        this.setState({
+            ...this.state,
+            chosenTrain: {
+                ...this.state.chosenTrain,
+                routePlanCargo: {
+                    cityOne,
+                    cityTwo
+                }
+            }
+        });
+    }
+
+    onCargoRemove: CargoChange = (resource: Resource, revolution: RouteRevolution): void => {
+        const cityOne = [...this.state.chosenTrain.routePlanCargo?.cityOne || []];
+        const cityTwo = [...this.state.chosenTrain.routePlanCargo?.cityTwo || []];
+        const targetCity = revolution === RouteRevolution.NONE ? cityOne : cityTwo;
+
+        for (let i = 0; i < targetCity.length; i++) {
+            if (targetCity[i].resource.equals(resource)) {
+                if (targetCity[i].targetAmount - 1 <= 0) {
+                    targetCity.splice(i, 1);
+                } else {
+                    targetCity[i].targetAmount--;
+                }
+            }
+        }
+
+        this.setState({
+            ...this.state,
+            chosenTrain: {
+                ...this.state.chosenTrain,
+                routePlanCargo: {
+                    cityOne,
+                    cityTwo
+                }
+            }
+        });
+    }
+
+    onRouteBuy = () => {
+        console.log("BUY");
+        console.log(this.state);
     }
 
     getSelectorButtonProps = (): ISelectorProp[] => [
@@ -160,8 +234,28 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
         }
     ];
 
+    getCargoSelector = (): JSX.Element | null => {
+        const cityOneCargo: RouteCargo[] = this.state.chosenTrain.routePlanCargo?.cityOne || [];
+        const cityTwoCargo:  RouteCargo[] = this.state.chosenTrain.routePlanCargo?.cityTwo || [];
+        const availableCargo: number = this.state.chosenTrain.train?.cargoSpace || 0;
+        const cards = getCargoCards(cityOneCargo, cityTwoCargo, this.state.chosenRoute, availableCargo, this.onCargoAdd, this.onCargoRemove);
+
+        let jsx: JSX.Element | null = null;
+
+        if (cards.first !== null && cards.second !== null) {
+            jsx = <CargoSelector 
+                first={{...cards.first}}
+                second={{...cards.second}}
+                changeTrainButton={{disabled: false, whenClicked: this.onSetTrainChange, buttonType: ButtonType.SET_TRAIN}}
+                buyRouteButton={{disabled: false, whenClicked: this.onRouteBuy, buttonType: ButtonType.BUY_ROUTE}}
+            />
+        }
+        return jsx;
+    }
+
     render(): JSX.Element {
         let modalContent: JSX.Element | null = null;
+        // TODO redo
         if (this.state.modal.show) {
             switch (this.state.modal.type) {
                 case ListType.POTENTIAL_ROUTE_DESTINATION:
@@ -198,25 +292,14 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
                     {modalContent}
                 </Modal>
                 <hr/>
-                <Selector buttons={this.getSelectorButtonProps()} />
+                <CitySelector buttons={this.getSelectorButtonProps()} />
                 <hr/>
                 <Overview 
-                    {...(() => {
-                        const chosenRoute = this.state.chosenRoute.length > 0 ? this.state.chosenRoute[0] : null;
-                        return {
-                        route: {
-                            cityOne: chosenRoute ? chosenRoute.cityOne : this.state.startCity,
-                            cityTwo: chosenRoute?.cityTwo || null
-                        },
-                        button: {disabled: chosenRoute === null, whenClicked: this.onSetTrainChange, buttonType: ButtonType.SET_TRAIN},
-                        distance: chosenRoute ? chosenRoute.distance : 0,
-                        cost: chosenRoute ? chosenRoute.goldCost : 0,
-                        turnCost: chosenRoute ? chosenRoute.turnCost : 0
-                    }})()
-                    }       
+                    chosenRoute={this.state.chosenRoute.length > 0 ? this.state.chosenRoute[0] : null}
+                    chosenTrain={this.state.chosenTrain}
+                    startCity={this.state.startCity} 
                 />
-                {/* Summary */}
-                <p>{this.state.chosenTrain?.train.name}</p>
+                {this.getCargoSelector()}
             </Fragment>
         );
     }

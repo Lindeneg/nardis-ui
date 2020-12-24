@@ -1,8 +1,9 @@
-import { City } from "nardis-game";
+import { City, RouteCargo } from "nardis-game";
 
 export default interface ICityRectProps {
     from: boolean,
     city: City | null
     cityNameColor: string,
-    showSize: boolean
+    showSize: boolean,
+    routeCargo: RouteCargo[]
 }

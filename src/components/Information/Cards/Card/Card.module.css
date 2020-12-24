@@ -18,6 +18,10 @@ div p span {
    color: white;
 }
 
+.Hoverable:hover {
+   background-color: green !important;
+}
+
 @media (min-width: 800px) {
     .Card {
         padding: 10px;

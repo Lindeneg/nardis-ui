@@ -1,6 +1,12 @@
 import INavigationEntriesProps from '../components/Navigation/NavigationEntries/NavigationEntries.props';
 
 
+export enum Direction {
+    Arrival,
+    Departure
+};
+
+
 export const mainNavigationBarEntries: INavigationEntriesProps = {
     entries: [
         {

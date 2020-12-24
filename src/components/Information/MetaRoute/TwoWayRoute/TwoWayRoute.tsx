@@ -9,14 +9,16 @@ const twoWayRoute = (props: ITwoWayRouteProps): JSX.Element => (
             cityOne={{
                 showSize: true,
                 from: true,
-                city: props.cityOne,
-                cityNameColor: 'yellow'
+                city: props.cityOne.city,
+                cityNameColor: 'yellow',
+                routeCargo: props.cityOne.routeCargo || []
             }}
             cityTwo={{
                 showSize: true,
                 from: false,
-                city: props.cityTwo,
-                cityNameColor: 'lightgreen'
+                city: props.cityTwo.city,
+                cityNameColor: 'lightgreen',
+                routeCargo: props.cityTwo.routeCargo || []
             }}
         />
         <hr/>
@@ -24,17 +26,18 @@ const twoWayRoute = (props: ITwoWayRouteProps): JSX.Element => (
             cityOne={{
                 showSize: false,
                 from: true,
-                city: props.cityTwo,
-                cityNameColor: 'lightgreen'
+                city: props.cityTwo.city,
+                cityNameColor: 'lightgreen',
+                routeCargo: props.cityTwo.routeCargo || []
             }}
             cityTwo={{
                 showSize: false,
                 from: false,
-                city: props.cityOne,
-                cityNameColor: 'yellow'
+                city: props.cityOne.city,
+                cityNameColor: 'yellow',
+                routeCargo: props.cityOne.routeCargo || []
             }}
         />
-        <hr/>
     </div>
 );
 
