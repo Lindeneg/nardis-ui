@@ -1,18 +1,25 @@
 import { Fragment } from "react";
-import Button from '../../../../../components/Utility/Button/Button';
-import IButtonProps from "../../../../../components/Utility/Button/Button.props";
+
+import { Functional, Props } from "../../../../../common/props";
+import Button, { ButtonProps } from '../../../../../components/Utility/Button/Button';
 
 
-export interface ISelectorProp {
-    props: IButtonProps,
+export interface SelectorProp {
+    props: ButtonProps,
     content: string
 }
 
-interface ISelectorProps {
-    buttons: ISelectorProp[]
+interface SelectorProps extends Props {
+    buttons: SelectorProp[]
 }
 
-const citySelector = (props: ISelectorProps): JSX.Element => (
+
+/**
+ * 
+ */
+const citySelector: Functional<SelectorProps> = (
+    props: SelectorProps
+): JSX.Element => (
     <Fragment>
         {props.buttons.map((e, i) => (
             <Button
@@ -24,5 +31,6 @@ const citySelector = (props: ISelectorProps): JSX.Element => (
         ))}
     </Fragment>
 );
+
 
 export default citySelector;

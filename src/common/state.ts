@@ -35,3 +35,7 @@ export interface IReducerPayload {
 export interface IReducerAction extends Action<NardisAction> {
     payload: IReducerPayload
 }
+
+export interface ReducerAction extends Action<NardisAction> {
+    payload: IReducerPayload
+}

@@ -1,20 +1,26 @@
 import { City, CityResource, PotentialRoute, RouteCargo } from "nardis-game";
 import { CardProps } from "../../../../../components/Information/Cards/Card/Card";
 import { CardsProps } from "../../../../../components/Information/Cards/Cards";
-import { SignType } from "../../../../../components/Utility/Signs/Sign/Sign";
-import { CargoChange, RouteRevolution } from "../../NewRoute.state";
-import {ISelection} from './CargoSelector';
+import SignType from "../../../../../components/Utility/Signs/Sign/signType";
+import { CargoChange } from "../../NewRoute";
+import { RouteRevolution } from '../../../../../common/constants';
+import {Selection} from './CargoSelector';
+import { NIndexable } from "../../../../../common/props";
 
-interface AvailableCargo {
-    [key: number]: number,
+
+interface AvailableCargo extends NIndexable<number> {
     [RouteRevolution.NONE]: number,
     [RouteRevolution.SINGLE]: number
-}
+};
 
 const headerStyle = {margin: '0', backgroundColor: 'darkblue'};
 const contentStyle = {margin: '0', backgroundColor: '#212fa2'};
 const cardSStyle = {margin: '0'};
 
+
+/**
+ * 
+ */
 const getCardHeader = (from: string, to: string, availableCargo: AvailableCargo, key: RouteRevolution): CardsProps => ({
     cards: [
         {
@@ -40,6 +46,9 @@ const getCardHeader = (from: string, to: string, availableCargo: AvailableCargo,
 });
 
 
+/**
+ * 
+ */
 const getCardContent = (
         city: City, 
         cityCargo: RouteCargo[],
@@ -78,6 +87,10 @@ const getCardContent = (
     style: cardSStyle
 });
 
+
+/**
+ * 
+ */
 export const getCargoCards = (
     cityOneCargo: RouteCargo[],
     cityTwoCargo: RouteCargo[],
@@ -85,15 +98,15 @@ export const getCargoCards = (
     availableCargo: number,
     whenClickedAdd: CargoChange,
     whenClickedRemoved: CargoChange
-): {first: ISelection | null, second: ISelection | null} => {
+): {first: Selection | null, second: Selection | null} => {
 
     const available: AvailableCargo = {
         [RouteRevolution.NONE]: availableCargo - cityOneCargo.map(e => e.targetAmount * e.resource.getWeight()).reduce((a, b) => a + b, 0),
         [RouteRevolution.SINGLE]: availableCargo - cityTwoCargo.map(e => e.targetAmount * e.resource.getWeight()).reduce((a, b) => a + b, 0)
     };
 
-    let first: ISelection | null = null;
-    let second: ISelection | null = null;
+    let first: Selection | null = null;
+    let second: Selection | null = null;
 
     if (chosenRoute.length > 0) {
         const [cityOne, cityTwo] = [chosenRoute[0].cityOne, chosenRoute[0].cityTwo];

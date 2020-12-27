@@ -1,18 +1,22 @@
+import { Clickable, Functional, OnClickFunc, Props } from '../../../../common/props';
+import SignType from './signType';
 import styles from './Sign.module.css';
 
 
-export enum SignType {
-    PLUS,
-    MINUS
-}
-
-export interface ISignProps {
+export interface SignProps extends Props, Clickable<OnClickFunc> {
     signType: SignType,
     disabled?: boolean,
-    whenClicked?: () => void
-}
+};
 
-const sign = (props: ISignProps): JSX.Element => {
+
+/**
+ * Clickable plus ('+') or minus ('-') sign.
+ * Desktop: transparent circle with background color on hover. circles are vertically aligned, 
+ * Mobile : transparent rectangle with background color on hover. rectangles are horizontally aligned, 
+ */
+const sign: Functional<SignProps> = (
+    props: SignProps
+): JSX.Element => {
     const isPlus: boolean = props.signType === SignType.PLUS
     return (
     <div 
@@ -25,5 +29,6 @@ const sign = (props: ISignProps): JSX.Element => {
     </div>
     );
 };
+
 
 export default sign;

@@ -1,11 +1,19 @@
+import { Functional, Props } from '../../../common/props';
 import styles from './Table.module.css';
 
-interface Props {
+
+interface TableProps extends Props {
     headers: string[],
     rows: string[][]
-}
+};
 
-const table = (props: Props) => (
+
+/**
+ * Simple Table component that offers the same styling for mobile/desktop. Should be wrapped in another component.
+ */
+const table: Functional<TableProps> = (
+    props: TableProps
+): JSX.Element => (
     <table className={styles.Table}>
         <tbody>
             <tr>
@@ -16,7 +24,7 @@ const table = (props: Props) => (
                 ))}
             </tr>
             {props.rows.map((row: string[], i: number): JSX.Element => (
-                <tr key={i * 10}>
+                <tr key={row[0] + i}>
                     {row.map((entry: string): JSX.Element => (
                         <td key={entry} className={styles.RowEntry}>
                             {entry}
@@ -26,6 +34,7 @@ const table = (props: Props) => (
             ))}
         </tbody>
     </table>
-)
+);
+
 
 export default table;

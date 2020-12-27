@@ -6,14 +6,13 @@ import { Direction } from '../../../common/constants'
 import styles from './CityRect.module.css';
 
 
-interface CityRectProps extends Props {
-    from         : boolean, // TODO DELETE
-    direction   ?: Direction, // FROM === DIRECTION.DEPARTURE
-    city         : City | null
+export interface CityRectProps extends Props {
+    direction    : Direction,
+    city         : City | null,
     cityNameColor: string,
     showSize     : boolean,
     routeCargo   : RouteCargo[]
-}
+};
 
 
 /**
@@ -23,13 +22,14 @@ const cityRect: Functional<CityRectProps> = (
     props: CityRectProps
 ): JSX.Element => {
 
-    let name     : string             = 'NO DESTINATION COULD BE FOUND';
-    let resources: CityResource[]     = [];
-    let sizeJSX  : JSX.Element | null = null;
+    const isDeparture: boolean            = props.direction === Direction.Departure;
+    let name         : string             = 'NO DESTINATION COULD BE FOUND';
+    let resources    : CityResource[]     = [];
+    let sizeJSX      : JSX.Element | null = null;
 
     if (props.city) {
         name      = props.city.name;
-        resources = props.from ? props.city.getSupply() : props.city.getDemand();
+        resources = isDeparture ? props.city.getSupply() : props.city.getDemand();
         sizeJSX   = props.showSize ? <span> | SIZE {props.city.getSize()}</span> : null;
     }
 
@@ -39,7 +39,9 @@ const cityRect: Functional<CityRectProps> = (
                 className={styles.CityName}
                 style={{color: props.cityNameColor}}
             >
-                {name.toUpperCase()} {props.city ? (props.from ? 'SUPPLY' : 'DEMAND') : null} {sizeJSX}
+                {name.toUpperCase()} 
+                {props.city ? (isDeparture ? ' SUPPLY' : ' DEMAND') : null} 
+                {sizeJSX}
             </h4>
             <CityResources routeCargo={props.routeCargo} resources={resources} />
         </div>

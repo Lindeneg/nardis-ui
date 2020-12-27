@@ -1,14 +1,14 @@
 import { CSSProperties } from 'react';
 
 import { Functional, Props } from '../../../../common/props';
-import { ISignProps } from '../../../Utility/Signs/Sign/Sign';
+import { SignProps } from '../../../Utility/Signs/Sign/Sign';
 import styles from './Card.module.css';
 
 
 export interface CardProps extends Props {
     label     : string,
     value     : string,
-    signs    ?: ISignProps[],
+    signs    ?: SignProps[],
     spanStyle?: CSSProperties
 };
 

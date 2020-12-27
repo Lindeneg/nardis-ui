@@ -1,24 +1,29 @@
-import Cards, { CardsProps } from '../../../../../components/Information/Cards/Cards';
-
-import Button from '../../../../../components/Utility/Button/Button';
-import IButtonProps from "../../../../../components/Utility/Button/Button.props";
-
 import { Fragment } from "react";
 
+import Cards, { CardsProps } from '../../../../../components/Information/Cards/Cards';
+import Button, { ButtonProps } from '../../../../../components/Utility/Button/Button';
+import { Functional, Props } from "../../../../../common/props";
 
-export interface ISelection {
+
+export interface Selection {
     header: CardsProps,
     cargo: CardsProps
-}
+};
 
-interface ICargoSelectorProps {
-    first: ISelection
-    second: ISelection
-    changeTrainButton: IButtonProps,
-    buyRouteButton: IButtonProps
-}
+interface CargoSelectorProps extends Props {
+    first: Selection
+    second: Selection
+    changeTrainButton: ButtonProps,
+    buyRouteButton: ButtonProps
+};
 
-const cargoSelector = (props: ICargoSelectorProps) => (
+
+/**
+ * 
+ */
+const cargoSelector: Functional<CargoSelectorProps> = (
+    props: CargoSelectorProps
+): JSX.Element => (
     <Fragment>
         <Button {...props.changeTrainButton} >
             CHANGE TRAIN
@@ -36,7 +41,7 @@ const cargoSelector = (props: ICargoSelectorProps) => (
             BUY ROUTE
         </Button>
     </Fragment>
-)
+);
 
 
 export default cargoSelector;

@@ -1,21 +1,35 @@
+import { City, RouteCargo } from 'nardis-game';
+
 import OneWayRoute from './../OneWayRoute/OneWayRoute';
-import ITwoWayRouteProps from './TwoWayRoute.props';
+import { Direction } from '../../../../common/constants';
+import { Functional, Props } from '../../../../common/props';
 import styles from './TwoWayRoute.module.css';
 
 
-const twoWayRoute = (props: ITwoWayRouteProps): JSX.Element => (
+interface TwoWayRouteProps extends Props {
+    cityOne: {city: City | null, routeCargo: RouteCargo[] | null},
+    cityTwo: {city: City | null, routeCargo: RouteCargo[] | null}
+};
+
+
+/**
+ * Component to display a potential route in both directions.
+ */
+const twoWayRoute: Functional<TwoWayRouteProps> = (
+    props: TwoWayRouteProps
+): JSX.Element => (
     <div className={styles.TwoWayRoute}>
         <OneWayRoute 
             cityOne={{
                 showSize: true,
-                from: true,
+                direction: Direction.Departure,
                 city: props.cityOne.city,
                 cityNameColor: 'yellow',
                 routeCargo: props.cityOne.routeCargo || []
             }}
             cityTwo={{
                 showSize: true,
-                from: false,
+                direction: Direction.Arrival,
                 city: props.cityTwo.city,
                 cityNameColor: 'lightgreen',
                 routeCargo: props.cityTwo.routeCargo || []
@@ -25,14 +39,14 @@ const twoWayRoute = (props: ITwoWayRouteProps): JSX.Element => (
         <OneWayRoute 
             cityOne={{
                 showSize: false,
-                from: true,
+                direction: Direction.Departure,
                 city: props.cityTwo.city,
                 cityNameColor: 'lightgreen',
                 routeCargo: props.cityTwo.routeCargo || []
             }}
             cityTwo={{
                 showSize: false,
-                from: false,
+                direction: Direction.Arrival,
                 city: props.cityOne.city,
                 cityNameColor: 'yellow',
                 routeCargo: props.cityOne.routeCargo || []
@@ -40,5 +54,6 @@ const twoWayRoute = (props: ITwoWayRouteProps): JSX.Element => (
         />
     </div>
 );
+
 
 export default twoWayRoute;

@@ -1,20 +1,29 @@
 import { Fragment } from "react";
 
+import { City, PotentialRoute, Train } from "nardis-game";
+
 import TwoWayRoute from '../../../../../components/Information/MetaRoute/TwoWayRoute/TwoWayRoute';
 import Cards from '../../../../../components/Information/Cards/Cards';
-import { City, PotentialRoute, Train } from "nardis-game";
-import { IChosenTrain } from "../../NewRoute.state";
+import { ChosenTrain } from "../../NewRoute";
+import { marginZ } from "../../../../../common/constants";
+import { Functional, Props } from "../../../../../common/props";
 
 
-interface Props {
+interface OverviewProps extends Props {
     chosenRoute: PotentialRoute | null,
-    chosenTrain: IChosenTrain,
+    chosenTrain: ChosenTrain,
     startCity: City | null
-}
+};
 
-const style = {margin: '0'};
+const style = marginZ;
 
-const overview = (props: Props): JSX.Element => {
+
+/**
+ * 
+ */
+const overview: Functional<OverviewProps> = (
+    props: OverviewProps
+): JSX.Element => {
     const train: Train | null = props.chosenTrain.train;
     const cost: number = (props.chosenRoute?.goldCost || 0) + (train?.cost || 0);
     const twoWayRoute: JSX.Element = <TwoWayRoute 
@@ -49,5 +58,6 @@ const overview = (props: Props): JSX.Element => {
         </Fragment>
     );
 }
+
 
 export default overview;

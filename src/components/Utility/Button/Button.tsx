@@ -1,10 +1,20 @@
-import IButtonProps from './Button.props';
-import { buttonTypeToClassName } from './buttonType';
-
+import { ButtonType, buttonTypeToClassName } from './buttonType';
+import { Clickable, Functional, OnClickFunc, Props } from '../../../common/props';
 import styles from './Button.module.css';
 
 
-const button = (props: IButtonProps): JSX.Element => (
+export interface ButtonProps extends Props, Clickable<OnClickFunc> {
+    disabled  : boolean,
+    buttonType: ButtonType,
+};
+
+
+/**
+ * Simple button component with no background or borders by default.
+ */
+const button: Functional<ButtonProps> = (
+    props: ButtonProps
+): JSX.Element => (
     <button
         onClick={props.whenClicked}
         disabled={props.disabled}
@@ -14,5 +24,6 @@ const button = (props: IButtonProps): JSX.Element => (
         {props.children}
     </button>
 );
+
 
 export default button;

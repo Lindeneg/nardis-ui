@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import { Component, CSSProperties, Fragment, ReactNode } from 'react';
 import { connect } from 'react-redux';
 
 import Navigation from '../../components/Navigation/Navigation';
@@ -6,19 +6,29 @@ import SideBar from '../../components/Navigation/SideBar/SideBar';
 import Cards from '../../components/Information/Cards/Cards';
 import CreateGame from '../CreateGame/CreateGame';
 import { INardisState } from '../../common/state';
-import LayoutProps, { ILayoutMappedProps } from './Layout.props';
-import LayoutState from './Layout.state';
+import { layoutCardLabels } from '../../common/constants';
+import { Indexable, MapState, Props } from '../../common/props';
 import styles from './Layout.module.css';
 
 
-const cardLabels: [string, string][] = [
-    ['money', 'g'],
-    ['level', ''],
-    ['range', 'km'],
-    ['routes', ''],
-    ['queue', ''],
-    ['turn', '']
-];
+interface LayoutState {
+    showSideBar: boolean
+};
+
+interface LayoutMappedProps {
+    gameCreated: boolean,
+    money      : number,
+    level      : number,
+    turn       : number,
+    range      : number,
+    routes     : number,
+    queue      : number,
+    opponents  : number
+};
+
+type Union = number | string | CSSProperties | ReactNode;
+
+interface LayoutProps extends Props, LayoutMappedProps, Indexable<Union> {};
 
 
 /**
@@ -26,8 +36,7 @@ const cardLabels: [string, string][] = [
  * 
  * If no game has created yet, Layout instead routes to /create-game for creation.
  */
-
-class Layout extends Component<LayoutProps> {
+class Layout extends Component<LayoutProps, LayoutState> {
 
     state: LayoutState = {
         showSideBar: false
@@ -53,7 +62,7 @@ class Layout extends Component<LayoutProps> {
         let jsx: JSX.Element = <CreateGame />
 
         if (this.props.gameCreated) {
-            const playerCards = cardLabels.map(cards => {
+            const playerCards = layoutCardLabels.map(cards => {
                 const [label, suffix] = cards;
                 return {
                     label,
@@ -62,8 +71,8 @@ class Layout extends Component<LayoutProps> {
             });
             jsx = (
                 <Fragment>
-                    <Navigation clicked={this.toggleSideBarHandler} />
-                    <SideBar show={this.state.showSideBar} onClose={this.closeSideBarHandler} />
+                    <Navigation whenClicked={this.toggleSideBarHandler} />
+                    <SideBar show={this.state.showSideBar} whenClicked={this.closeSideBarHandler} />
                     <Cards cards={playerCards} />
                     <main className={styles.Content}>
                         {this.props.children}
@@ -77,7 +86,9 @@ class Layout extends Component<LayoutProps> {
 }
 
 
-const mapStateToProps = (state: INardisState): ILayoutMappedProps => ({
+const mapStateToProps: MapState<INardisState, LayoutMappedProps> = (
+    state: INardisState
+): LayoutMappedProps => ({
     gameCreated: state.gameCreated,
     money      : state.money,
     level      : state.level,

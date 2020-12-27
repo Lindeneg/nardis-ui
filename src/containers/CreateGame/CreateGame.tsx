@@ -1,18 +1,53 @@
-import { Component, FormEvent, Fragment } from 'react';
-import { Dispatch } from 'redux';
+import { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import CreateGameState, { ICreateGameInputConfig, IBaseState } from './CreateGame.state';
-import Input from '../../components/Utility/Input/Input';
+import Input, { InputConfig } from '../../components/Utility/Input/Input';
 import Button from '../../components/Utility/Button/Button';
 import { ButtonType } from '../../components/Utility/Button/buttonType';
-import { TInputChangeEvent } from '../../components/Utility/Input/Input.props';
-import { NardisAction, IReducerAction } from '../../common/state';
-import CreateGameProps, { TInitGame } from './CreateGame.props';
+import { NardisAction } from '../../common/state';
+import {  
+    Func, 
+    Props,
+    Indexable,
+    FormEvent, 
+    OnDispatch, 
+    MapDispatch, 
+    OnFormEventFunc,
+    ChangedEventElement, 
+} from '../../common/props';
 import styles from './CreateGame.module.css';
 
 
-class CreateGame extends Component<CreateGameProps> {
+type InitGameFunc = (name: string, money: number, opponents: number) => void; 
+
+interface CreateGameInputConfig {
+    inputConfig  : InputConfig,
+    validation   : Func<string, boolean>,
+    valid        : boolean,
+    touched      : boolean,
+    value        : string
+};
+
+interface BaseState extends Indexable<CreateGameInputConfig> {
+    name         : CreateGameInputConfig,
+    startMoney   : CreateGameInputConfig,
+    opponents    : CreateGameInputConfig,
+};
+
+interface CreateGameState extends Indexable<BaseState | boolean> {
+    base         : BaseState,
+    isValid      : boolean
+};
+
+interface CreateGameProps extends Props {
+    initGame     : InitGameFunc
+};
+
+
+/**
+ * 
+ */
+class CreateGame extends Component<CreateGameProps, CreateGameState> {
 
     state: CreateGameState = {
         base: {
@@ -24,7 +59,7 @@ class CreateGame extends Component<CreateGameProps> {
                 },
                 validation: (inp: string): boolean => {
                     const length: number = inp.length;
-                    return length >= 2 && length < 11;
+                    return length >= 2 && length <= 11;
                 },
                 valid: true,
                 touched: false,
@@ -62,9 +97,9 @@ class CreateGame extends Component<CreateGameProps> {
         isValid: true //false
     };
 
-    onChangeHandler = (event: TInputChangeEvent, key: string): void => {
-        const base: IBaseState = { ...this.state.base };
-        const newTargetState: ICreateGameInputConfig = { ...base[key] };
+    onChangeHandler = (event: ChangedEventElement, key: string): void => {
+        const base: BaseState = { ...this.state.base };
+        const newTargetState: CreateGameInputConfig = { ...base[key] };
 
         newTargetState.touched = true;
         newTargetState.value = event.target.value;
@@ -79,7 +114,7 @@ class CreateGame extends Component<CreateGameProps> {
         this.setState({base, isValid});   
     }
 
-    initGame = (event: FormEvent<HTMLFormElement>): void => {
+    initGame: OnFormEventFunc = (event: FormEvent): void => {
         event.preventDefault();
         this.props.initGame(
             this.state.base.name.value, 
@@ -96,11 +131,11 @@ class CreateGame extends Component<CreateGameProps> {
                         {
                             Object.keys(this.state.base)
                             .map((key: string) => {
-                                const entry: ICreateGameInputConfig = this.state.base[key];
+                                const entry: CreateGameInputConfig = this.state.base[key];
                                 return (
                                     <Input 
                                         key={key}
-                                        changed={(event: TInputChangeEvent) => this.onChangeHandler(event, key)}
+                                        changed={(event: ChangedEventElement) => this.onChangeHandler(event, key)}
                                         inputConfig={entry.inputConfig}
                                         value={entry.value}
                                         touched={entry.touched}
@@ -121,10 +156,11 @@ class CreateGame extends Component<CreateGameProps> {
             </Fragment>
         );
     }
-}
+};
 
-const mapDispatchToProps = (dispatch: Dispatch<IReducerAction>): {initGame: TInitGame} => {
-    return {
+
+const mapDispatchToProps: MapDispatch<{initGame: InitGameFunc}> = (dispatch: OnDispatch): {initGame: InitGameFunc} => (
+    {
         initGame: (name: string, money: number, opponents: number) => dispatch(
             {
                 type: NardisAction.INITIALIZE_GAME,
@@ -138,6 +174,7 @@ const mapDispatchToProps = (dispatch: Dispatch<IReducerAction>): {initGame: TIni
             }
         )
     }
-};
+);
+
 
 export default connect(null, mapDispatchToProps)(CreateGame);

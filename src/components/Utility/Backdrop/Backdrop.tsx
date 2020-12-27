@@ -1,13 +1,20 @@
-import IBackdropProps from './Backdrop.props';
 import styles from './Backdrop.module.css';
+import { Clickable, Functional, OnClickFunc, Props } from '../../../common/props';
+
+
+interface BackdropProps extends Props, Clickable<OnClickFunc> {
+    show: boolean
+};
 
 
 /**
  * Backdrop used to mask elements with z-index < 100 behind elements with z-index > 100.
  */
 
-const backdrop = (props: IBackdropProps): JSX.Element | null => (
-    props.show ? <div onClick={props.clicked} className={styles.Backdrop}></div> : null
+const backdrop: Functional<BackdropProps, JSX.Element | null> = (
+    props: BackdropProps
+): JSX.Element | null => (
+    props.show ? <div onClick={props.whenClicked} className={styles.Backdrop}></div> : null
 );
 
 

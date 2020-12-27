@@ -1,13 +1,25 @@
-import CityRect from '../../CityRect/CityRect';
-import IOneWayRoute from "./OneWayRoute.props";
+import CityRect, { CityRectProps } from '../../CityRect/CityRect';
+import { Functional, Props } from '../../../../common/props';
 import styles from './OneWayRoute.module.css';
 
 
-const oneWayRoute = (props: IOneWayRoute) => (
+interface OneWayRouteProps extends Props {
+    cityOne: CityRectProps,
+    cityTwo: CityRectProps,
+};
+
+
+/**
+ * Component to display a potential route in a single direction.
+ */
+const oneWayRoute: Functional<OneWayRouteProps> = (
+    props: OneWayRouteProps
+): JSX.Element => (
     <div className={styles.CityRects}>
         <CityRect {...props.cityOne} />
         <CityRect {...props.cityTwo} />
     </div>
-)
+);
+
 
 export default oneWayRoute;

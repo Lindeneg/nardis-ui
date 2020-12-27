@@ -1,26 +1,63 @@
 import { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import { City, PotentialRoute, Resource, RouteCargo } from 'nardis-game';
+import { City, Nardis, PotentialRoute, Resource, RouteCargo, RoutePlanCargo, Train } from 'nardis-game';
+
 import Modal from '../../../components/Utility/Modal/Modal';
 import { INardisState } from '../../../common/state';
-import INewRouteProps, { PossibleTrain, RouteInfo } from './NewRoute.props';
-import INewRouteState, { CargoChange, RouteRevolution } from './NewRoute.state';
 import { ButtonType } from '../../../components/Utility/Button/buttonType';
 import ListItems from '../../../components/Information/ListItems/ListItems';
 import { ListType } from '../../../components/Information/ListItems/listType';
-
 import Overview from './Helpers/Overview/Overview';
-import CitySelector, { ISelectorProp } from './Helpers/Selector/CitySelector';
+import CitySelector, { SelectorProp } from './Helpers/Selector/CitySelector';
 import CargoSelector from './Helpers/Selector/CargoSelector';
-
 import { getCargoCards } from './Helpers/Selector/getCargoCards';
+import { PossibleTrain, RouteRevolution } from '../../../common/constants';
 
 
+// State
 
-class NewRoute extends Component<INewRouteProps, INewRouteState> {
+export interface ChosenTrain {
+    train: Train | null,
+    cost: number | null,
+    routePlanCargo: RoutePlanCargo | null
+};
 
-    state: INewRouteState = {
+export type CargoChange = (resource: Resource, revolution: RouteRevolution) => void;
+
+interface NewRouteModal {
+    show: boolean,
+    type: ListType | null
+};
+
+interface NewRouteState {
+    startCity: City | null,
+    chosenTrain: ChosenTrain,
+    chosenRoute: PotentialRoute[],
+    otherRoutes: PotentialRoute[],
+    possibleTrains: PossibleTrain[],
+    modal: NewRouteModal
+};
+
+// Props
+
+interface RouteInfo {
+    routes: PotentialRoute[], 
+    otherRoutes: PotentialRoute[], 
+    trains: PossibleTrain[]
+};
+
+interface NewRouteProps {
+    game: Nardis | undefined
+}
+
+
+/**
+ * 
+ */
+class NewRoute extends Component<NewRouteProps, NewRouteState> {
+
+    state: NewRouteState = {
         startCity: null,
         chosenTrain: {
             train: null,
@@ -215,7 +252,7 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
         console.log(this.state);
     }
 
-    getSelectorButtonProps = (): ISelectorProp[] => [
+    getSelectorButtonProps = (): SelectorProp[] => [
         {
             props: {
                 disabled: (this.props.game?.getCurrentPlayer().getRoutes().length || 0) <= 0,
@@ -255,7 +292,7 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
 
     render(): JSX.Element {
         let modalContent: JSX.Element | null = null;
-        // TODO redo
+        // TODO redo or outsource this
         if (this.state.modal.show) {
             switch (this.state.modal.type) {
                 case ListType.POTENTIAL_ROUTE_DESTINATION:
@@ -288,7 +325,7 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
         }
         return (
             <Fragment>
-                <Modal show={this.state.modal.show} onClose={this.onCloseModalHandler} >
+                <Modal show={this.state.modal.show} whenClicked={this.onCloseModalHandler} >
                     {modalContent}
                 </Modal>
                 <hr/>
@@ -306,7 +343,7 @@ class NewRoute extends Component<INewRouteProps, INewRouteState> {
 }
 
 
-const mapStateToProps = (state: INardisState): INewRouteProps => ({
+const mapStateToProps = (state: INardisState): NewRouteProps => ({
     game: state._game
 });
 

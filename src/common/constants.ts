@@ -1,4 +1,5 @@
-import INavigationEntriesProps from '../components/Navigation/NavigationEntries/NavigationEntries.props';
+import { Train } from 'nardis-game';
+import { NavigationEntriesProps } from '../components/Navigation/NavigationEntries/NavigationEntries';
 
 
 export enum Direction {
@@ -6,8 +7,19 @@ export enum Direction {
     Departure
 };
 
+export enum RouteRevolution {
+    NONE,
+    SINGLE
+};
 
-export const mainNavigationBarEntries: INavigationEntriesProps = {
+export interface PossibleTrain {
+    train: Train,
+    cost: number
+};
+
+export const marginZ = {margin: '0'};
+
+export const mainNavigationBarEntries: NavigationEntriesProps = {
     entries: [
         {
             link: '/management',
@@ -38,7 +50,7 @@ export const mainNavigationBarEntries: INavigationEntriesProps = {
     showEndTurnButton: true
 };
 
-export const managementNavigationBarEntries: INavigationEntriesProps = {
+export const managementNavigationBarEntries: NavigationEntriesProps = {
     entries: [
         {
             link: '/management/new-route',
@@ -67,4 +79,13 @@ export const cityResourceTableHeaderNames: string[] = [
     'VALUE',
     'WEIGHT',
     'AVAILABLE'
+];
+
+export const layoutCardLabels: [string, string][] = [
+    ['money', 'g'],
+    ['level', ''],
+    ['range', 'km'],
+    ['routes', ''],
+    ['queue', ''],
+    ['turn', '']
 ];

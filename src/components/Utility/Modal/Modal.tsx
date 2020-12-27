@@ -1,25 +1,32 @@
 import { Fragment } from 'react';
 
+import { Clickable, OnClickFunc, Props } from '../../../common/props';
 import Backdrop from '../Backdrop/Backdrop';
 import styles from './Modal.module.css';
-import ModalProps from './Modal.props';
 
 
+interface ModalProps extends Props, Clickable<OnClickFunc> {
+    show: boolean,
+};
+
+
+/**
+ * Modal component animated when visibility change.
+ */
 const modal = (props: ModalProps): JSX.Element => (
     <Fragment>
-        <Backdrop show={props.show} clicked={props.onClose} />
+        <Backdrop {...props} />
         <div
             className={styles.Modal}
-            style={
-                {
-                    transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
-                    opacity: props.show ? '1' : '0'
-                }
-            }
+            style={{
+                transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
+                opacity: props.show ? '1' : '0'
+            }}
         >
             {props.children}
         </div>
     </Fragment>
-)
+);
+
 
 export default modal;
