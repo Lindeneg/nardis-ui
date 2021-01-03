@@ -1,5 +1,5 @@
+import Styles from './SideBarToggle.module.css';
 import { Clickable, Props, OnClickFunc, Functional } from '../../../../common/props';
-import styles from './SideBarToggle.module.css';
 
 
 interface SideBarToggleProps extends Props, Clickable<OnClickFunc> {};
@@ -11,7 +11,7 @@ interface SideBarToggleProps extends Props, Clickable<OnClickFunc> {};
  const sidebarToggle: Functional<SideBarToggleProps> = (
      props: SideBarToggleProps
 ): JSX.Element => (
-    <div className={styles.SidebarToggle} onClick={props.whenClicked}>
+    <div className={Styles.SidebarToggle} onClick={props.whenClicked}>
         <div></div>
         <div></div>
         <div></div>

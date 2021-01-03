@@ -5,10 +5,11 @@ import Navigation from '../../components/Navigation/Navigation';
 import SideBar from '../../components/Navigation/SideBar/SideBar';
 import Cards from '../../components/Information/Cards/Cards';
 import CreateGame from '../CreateGame/CreateGame';
-import { INardisState } from '../../common/state';
+import Spinner from '../../components/Utility/Spinner/Spinner';
+import Styles from './Layout.module.css';
+import { NardisState } from '../../common/state';
 import { layoutCardLabels } from '../../common/constants';
 import { Indexable, MapState, Props } from '../../common/props';
-import styles from './Layout.module.css';
 
 
 interface LayoutState {
@@ -17,6 +18,7 @@ interface LayoutState {
 
 interface LayoutMappedProps {
     gameCreated: boolean,
+    isLoading  : boolean,
     money      : number,
     level      : number,
     turn       : number,
@@ -29,6 +31,21 @@ interface LayoutMappedProps {
 type Union = number | string | CSSProperties | ReactNode;
 
 interface LayoutProps extends Props, LayoutMappedProps, Indexable<Union> {};
+
+
+const mapStateToProps: MapState<NardisState, LayoutMappedProps> = (
+    state: NardisState
+): LayoutMappedProps => ({
+    gameCreated: state.gameCreated,
+    isLoading  : state.isLoading,
+    money      : state.money,
+    level      : state.level,
+    turn       : state.turn,
+    range      : state.range,
+    routes     : state.routes.length,
+    queue      : state.queue.length,
+    opponents  : state.opponents.length,
+});
 
 
 /**
@@ -71,33 +88,22 @@ class Layout extends Component<LayoutProps, LayoutState> {
             });
             jsx = (
                 <Fragment>
-                    <Navigation whenClicked={this.toggleSideBarHandler} />
-                    <SideBar show={this.state.showSideBar} whenClicked={this.closeSideBarHandler} />
-                    <Cards cards={playerCards} />
-                    <main className={styles.Content}>
-                        {this.props.children}
-                    </main>
-                    <footer>Footer</footer>
+                    {!this.props.isLoading ?
+                    <div>
+                        <Navigation whenClicked={this.toggleSideBarHandler} />
+                        <SideBar show={this.state.showSideBar} whenClicked={this.closeSideBarHandler} />
+                        <Cards cards={playerCards} />
+                        <main className={Styles.Content}>
+                            {this.props.children}
+                        </main>
+                        <footer>Footer</footer>
+                    </div> : <Spinner redirectTo="/finance"/>}
                 </Fragment>
             );
         }
         return jsx;
     }
 }
-
-
-const mapStateToProps: MapState<INardisState, LayoutMappedProps> = (
-    state: INardisState
-): LayoutMappedProps => ({
-    gameCreated: state.gameCreated,
-    money      : state.money,
-    level      : state.level,
-    turn       : state.turn,
-    range      : state.range,
-    routes     : state.routes.length,
-    queue      : state.queue.length,
-    opponents  : state.opponents.length,
-});
 
 
 export default connect(mapStateToProps)(Layout);

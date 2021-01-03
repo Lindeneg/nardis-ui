@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
 
-import { Clickable, OnClickFunc, Props } from '../../../common/props';
 import Backdrop from '../Backdrop/Backdrop';
-import styles from './Modal.module.css';
+import Styles from './Modal.module.css';
+import { Clickable, Functional, OnClickFunc, Props } from '../../../common/props';
 
 
 interface ModalProps extends Props, Clickable<OnClickFunc> {
@@ -13,11 +13,13 @@ interface ModalProps extends Props, Clickable<OnClickFunc> {
 /**
  * Modal component animated when visibility change.
  */
-const modal = (props: ModalProps): JSX.Element => (
+const modal: Functional<ModalProps> = (
+    props: ModalProps
+): JSX.Element => (
     <Fragment>
         <Backdrop {...props} />
         <div
-            className={styles.Modal}
+            className={Styles.Modal}
             style={{
                 transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
                 opacity: props.show ? '1' : '0'

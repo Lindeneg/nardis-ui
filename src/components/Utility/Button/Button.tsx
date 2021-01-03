@@ -1,6 +1,6 @@
-import { ButtonType, buttonTypeToClassName } from './buttonType';
+import Styles from './Button.module.css';
+import { ButtonType, buttonTypeToClassName } from '../../../common/constants';
 import { Clickable, Functional, OnClickFunc, Props } from '../../../common/props';
-import styles from './Button.module.css';
 
 
 export interface ButtonProps extends Props, Clickable<OnClickFunc> {
@@ -18,7 +18,7 @@ const button: Functional<ButtonProps> = (
     <button
         onClick={props.whenClicked}
         disabled={props.disabled}
-        className={[styles.Button, styles[buttonTypeToClassName[props.buttonType]]].join(' ')}
+        className={[Styles.Button, Styles[buttonTypeToClassName[props.buttonType]]].join(' ')}
         style={props.style}
     >
         {props.children}

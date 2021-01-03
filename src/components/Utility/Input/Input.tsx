@@ -1,6 +1,6 @@
-import { InputType } from './inputType';
+import Styles from './Input.module.css';
+import { InputType } from '../../../common/constants';
 import { Changeable, Functional, Props } from '../../../common/props';
-import styles from './Input.module.css';
 
 
 interface Shared {
@@ -32,7 +32,7 @@ interface InputProps extends Props, Shared, Changeable {
 const input: Functional<InputProps> = (
     props: InputProps
 ): JSX.Element => {
-    const classes: string = [styles.InputElement, !props.valid && props.touched ? styles.Invalid : null].join(' ');
+    const classes: string = [Styles.InputElement, !props.valid && props.touched ? Styles.Invalid : null].join(' ');
     let element: JSX.Element = (
         <input 
             onChange={props.changed} 
@@ -44,7 +44,7 @@ const input: Functional<InputProps> = (
 
     if (!(typeof props.inputType === 'undefined')) {
         switch (props.inputType) {
-            case InputType.SELECT:
+            case InputType.Select:
                 element = (
                     <select 
                         onChange={props.changed}
@@ -56,7 +56,7 @@ const input: Functional<InputProps> = (
                     </select>
                 );
                 break;
-            case InputType.TEXTAREA:
+            case InputType.TextArea:
                 element = (
                     <textarea 
                         onChange={props.changed} 
@@ -72,8 +72,8 @@ const input: Functional<InputProps> = (
     }
 
     return (
-        <div className={styles.Input}>
-            <label className={styles.Label}>{props.inputConfig.label}</label>
+        <div className={Styles.Input}>
+            <label className={Styles.Label}>{props.inputConfig.label}</label>
             {element}
         </div>
     );

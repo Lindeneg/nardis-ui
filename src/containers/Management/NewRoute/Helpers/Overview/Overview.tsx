@@ -5,21 +5,20 @@ import { City, PotentialRoute, Train } from "nardis-game";
 import TwoWayRoute from '../../../../../components/Information/MetaRoute/TwoWayRoute/TwoWayRoute';
 import Cards from '../../../../../components/Information/Cards/Cards';
 import { ChosenTrain } from "../../NewRoute";
-import { marginZ } from "../../../../../common/constants";
 import { Functional, Props } from "../../../../../common/props";
 
 
 interface OverviewProps extends Props {
     chosenRoute: PotentialRoute | null,
     chosenTrain: ChosenTrain,
-    startCity: City | null
+    startCity  : City | null
 };
 
-const style = marginZ;
+const style = {margin: '0'};
 
 
 /**
- * 
+ * Component to display information of the current (potential) route chosen.
  */
 const overview: Functional<OverviewProps> = (
     props: OverviewProps

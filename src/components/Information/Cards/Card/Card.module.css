@@ -6,12 +6,14 @@
     margin-top: 0;
     background-color: #3356bf;
 }
+
 div p {
    width: 100%;
    font-weight: 400;
    text-transform: uppercase;
    color: #eee;
 }
+
 div p span {
    float: right;
    font-weight: 500;

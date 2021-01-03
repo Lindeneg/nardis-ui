@@ -1,6 +1,6 @@
+import Styles from './Sign.module.css';
+import { SignType } from '../../../../common/constants';
 import { Clickable, Functional, OnClickFunc, Props } from '../../../../common/props';
-import SignType from './signType';
-import styles from './Sign.module.css';
 
 
 export interface SignProps extends Props, Clickable<OnClickFunc> {
@@ -17,10 +17,10 @@ export interface SignProps extends Props, Clickable<OnClickFunc> {
 const sign: Functional<SignProps> = (
     props: SignProps
 ): JSX.Element => {
-    const isPlus: boolean = props.signType === SignType.PLUS
+    const isPlus: boolean = props.signType === SignType.Plus
     return (
     <div 
-        className={[styles.Sign, isPlus ? styles.Plus : styles.Minus, props.disabled ? styles.NotAccess : styles.Access].join(' ')}
+        className={[Styles.Sign, isPlus ? Styles.Plus : Styles.Minus, props.disabled ? Styles.NotAccess : Styles.Access].join(' ')}
         onClick={!props.disabled && props.whenClicked ? props.whenClicked : () => null}
     >
         <div>

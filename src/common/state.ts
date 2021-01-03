@@ -1,19 +1,12 @@
-import { Action } from 'redux';
-import { Nardis, Route, QueuedRouteItem, Upgrade, Player } from 'nardis-game';
+import { Route, QueuedRouteItem, Upgrade, Player, Nardis } from 'nardis-game';
 
-export enum NardisAction {
-    INITIALIZE_GAME,
-    START_PLAYER_TURN,
-    ADD_TO_PLAYER_QUEUE,
-    ADD_PLAYER_UPGRADE,
-    REMOVE_FROM_PLAYER_QUEUE,
-    REMOVE_FROM_PLAYER_ROUTE,
-    END_PLAYER_TURN
-}
+import { GetPossibleTrains, GetPotentialRoutes, GetStartCity } from './actions';
 
-export interface INardisState {
+
+export interface NardisState {
     _game?: Nardis,
     gameCreated: boolean,
+    isLoading: boolean,
     money: number,
     turn: number,
     level: number,
@@ -21,21 +14,13 @@ export interface INardisState {
     routes: Route[],
     queue: QueuedRouteItem[],
     upgrades: Upgrade[],
-    opponents: Player[]
-}
+    opponents: Player[],
 
-export interface IReducerPayload {
-    initGame?: {
-        name: string,
-        money: number,
-        opponents: number
-    }
-}
+    getStartCity: GetStartCity
+    getPotentialRoutes: GetPotentialRoutes,
+    getPossibleTrains: GetPossibleTrains,
 
-export interface IReducerAction extends Action<NardisAction> {
-    payload: IReducerPayload
-}
+};
 
-export interface ReducerAction extends Action<NardisAction> {
-    payload: IReducerPayload
-}
+
+export default NardisState;

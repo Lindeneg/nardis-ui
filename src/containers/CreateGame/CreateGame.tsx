@@ -1,10 +1,13 @@
 import { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import Input, { InputConfig } from '../../components/Utility/Input/Input';
+import { LocalKey, localKeys } from 'nardis-game';
+
 import Button from '../../components/Utility/Button/Button';
-import { ButtonType } from '../../components/Utility/Button/buttonType';
-import { NardisAction } from '../../common/state';
+import Styles from './CreateGame.module.css';
+import Input, { InputConfig } from '../../components/Utility/Input/Input';
+import { NardisAction } from '../../common/actions';
+import { ButtonType } from '../../common/constants';
 import {  
     Func, 
     Props,
@@ -13,12 +16,16 @@ import {
     OnDispatch, 
     MapDispatch, 
     OnFormEventFunc,
-    ChangedEventElement, 
+    ChangedEventElement,
+    OnFormChangeFunc, 
 } from '../../common/props';
-import styles from './CreateGame.module.css';
 
 
-type InitGameFunc = (name: string, money: number, opponents: number) => void; 
+export type InitGameFunc = (name: string, money: number, opponents: number) => void;
+
+interface MappedProps {
+    initGame     : InitGameFunc
+}
 
 interface CreateGameInputConfig {
     inputConfig  : InputConfig,
@@ -39,13 +46,31 @@ interface CreateGameState extends Indexable<BaseState | boolean> {
     isValid      : boolean
 };
 
-interface CreateGameProps extends Props {
-    initGame     : InitGameFunc
-};
+interface CreateGameProps extends Props, MappedProps {};
+
+
+const mapDispatchToProps: MapDispatch<MappedProps> = (
+    dispatch: OnDispatch
+): MappedProps => (
+    {
+        initGame: (name: string, money: number, opponents: number) => dispatch(
+            {
+                type: NardisAction.INITIALIZE_GAME,
+                payload: {
+                    initGame: {
+                        name,
+                        money,
+                        opponents
+                    }
+                }
+            }
+        )
+    }
+);
 
 
 /**
- * 
+ * Component to start a new game with a few changeable parameters.
  */
 class CreateGame extends Component<CreateGameProps, CreateGameState> {
 
@@ -97,7 +122,16 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
         isValid: true //false
     };
 
-    onChangeHandler = (event: ChangedEventElement, key: string): void => {
+    componentDidMount = (): void => {
+        if (!!window.localStorage[localKeys[LocalKey.HasActiveGame]]) {
+            //this.props.initGame('', 0, 0);
+        }
+    }
+
+    onChangeHandler: OnFormChangeFunc<string> = (
+        event: ChangedEventElement, 
+        key  : string
+    ): void => {
         const base: BaseState = { ...this.state.base };
         const newTargetState: CreateGameInputConfig = { ...base[key] };
 
@@ -114,7 +148,9 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
         this.setState({base, isValid});   
     }
 
-    initGame: OnFormEventFunc = (event: FormEvent): void => {
+    initGame: OnFormEventFunc = (
+        event: FormEvent
+    ): void => {
         event.preventDefault();
         this.props.initGame(
             this.state.base.name.value, 
@@ -126,28 +162,26 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
     render (): JSX.Element {
         return (
             <Fragment>
-                <div className={styles.CreateGame}>
+                <div className={Styles.CreateGame}>
                     <form onSubmit={this.initGame}>
-                        {
-                            Object.keys(this.state.base)
-                            .map((key: string) => {
-                                const entry: CreateGameInputConfig = this.state.base[key];
-                                return (
-                                    <Input 
-                                        key={key}
-                                        changed={(event: ChangedEventElement) => this.onChangeHandler(event, key)}
-                                        inputConfig={entry.inputConfig}
-                                        value={entry.value}
-                                        touched={entry.touched}
-                                        valid={entry.valid}
-                                    />
-                                );
-                            })
-                        }
+                        {Object.keys(this.state.base)
+                        .map((key: string): JSX.Element => {
+                            const entry: CreateGameInputConfig = this.state.base[key];
+                            return (
+                                <Input 
+                                    key={key}
+                                    changed={(event: ChangedEventElement) => this.onChangeHandler(event, key)}
+                                    inputConfig={entry.inputConfig}
+                                    value={entry.value}
+                                    touched={entry.touched}
+                                    valid={entry.valid}
+                                />
+                            );
+                        })}
                         <Button 
                             whenClicked={() => null} 
                             disabled={!this.state.isValid} 
-                            buttonType={ButtonType.CREATE_GAME} >
+                            buttonType={ButtonType.CreateGame} >
                                 Start Game
                         </Button>
                     </form>
@@ -157,24 +191,6 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
         );
     }
 };
-
-
-const mapDispatchToProps: MapDispatch<{initGame: InitGameFunc}> = (dispatch: OnDispatch): {initGame: InitGameFunc} => (
-    {
-        initGame: (name: string, money: number, opponents: number) => dispatch(
-            {
-                type: NardisAction.INITIALIZE_GAME,
-                payload: {
-                    initGame: {
-                        name,
-                        money,
-                        opponents
-                    }
-                }
-            }
-        )
-    }
-);
 
 
 export default connect(null, mapDispatchToProps)(CreateGame);

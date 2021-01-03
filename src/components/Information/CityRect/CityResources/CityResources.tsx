@@ -20,6 +20,7 @@ const cityResources: Functional<CityResourcesProps> = (
     <Table 
         headers={cityResourceTableHeaderNames} 
         rows={props.resources.map((row: CityResource): string[] => {
+            // match cargo with city resources and reduce to the selected amount
             const match: number = props.routeCargo
             .filter((entry: RouteCargo): boolean => entry.resource.equals(row.resource))
             .map((entry: RouteCargo): number => entry.targetAmount)
@@ -29,9 +30,11 @@ const cityResources: Functional<CityResourcesProps> = (
                 row.resource.name, 
                 row.resource.getValue() + 'g',
                 row.resource.getWeight().toString() + 't',
+                // subtract the matched cargo if applicable
                 row.available > -1 ? (row.available - match).toString() : '~'
             ]
         )})
+        // sort resources by ascending value
         .sort((a: string[], b: string[]): number => (
             parseInt(a[1].replace('g', '')) - parseInt(b[1].replace('g', ''))
         ))} 

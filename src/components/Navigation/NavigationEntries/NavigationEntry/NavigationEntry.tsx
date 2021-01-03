@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 
+import Styles from './NavigationEntry.module.css';
 import { Functional, RouterRouteLinkProps } from '../../../../common/props';
-import styles from './NavigationEntry.module.css';
 
 
 /**
@@ -10,10 +10,10 @@ import styles from './NavigationEntry.module.css';
 const navigationEntry: Functional<RouterRouteLinkProps> = (
     props: RouterRouteLinkProps
 ): JSX.Element => (
-    <li className={styles.NavigationEntry}>
+    <li className={Styles.NavigationEntry}>
         <NavLink
             exact={props.exact}
-            activeClassName={styles.active}
+            activeClassName={Styles.active}
             to={props.link}
             style={props.style}
         >

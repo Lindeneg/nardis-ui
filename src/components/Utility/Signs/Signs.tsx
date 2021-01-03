@@ -1,11 +1,11 @@
-import { Functional, Props } from '../../../common/props';
+import Styles from './Signs.module.css';
 import Sign, { SignProps } from './Sign/Sign';
-import styles from './Signs.module.css';
+import { Functional, Props } from '../../../common/props';
 
 
 interface SignsProps extends Props {
     signs: SignProps[]
-}
+};
 
 
 /**
@@ -14,7 +14,7 @@ interface SignsProps extends Props {
 const signs: Functional<SignsProps> = (
     props: SignsProps
 ): JSX.Element => (
-    <div className={styles.Signs}>
+    <div className={Styles.Signs}>
         {props.signs.map((sign: SignProps, index: number): JSX.Element => (
             <Sign key={index} {...sign} />
         ))}

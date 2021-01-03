@@ -1,9 +1,9 @@
 import { City, RouteCargo } from 'nardis-game';
 
 import OneWayRoute from './../OneWayRoute/OneWayRoute';
+import Styles from './TwoWayRoute.module.css';
 import { Direction } from '../../../../common/constants';
 import { Functional, Props } from '../../../../common/props';
-import styles from './TwoWayRoute.module.css';
 
 
 interface TwoWayRouteProps extends Props {
@@ -18,7 +18,7 @@ interface TwoWayRouteProps extends Props {
 const twoWayRoute: Functional<TwoWayRouteProps> = (
     props: TwoWayRouteProps
 ): JSX.Element => (
-    <div className={styles.TwoWayRoute}>
+    <div className={Styles.TwoWayRoute}>
         <OneWayRoute 
             cityOne={{
                 showSize: true,

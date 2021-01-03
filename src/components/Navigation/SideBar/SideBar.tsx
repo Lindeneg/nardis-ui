@@ -2,9 +2,9 @@ import { Fragment } from 'react';
  
 import NavigationEntries from '../NavigationEntries/NavigationEntries';
 import Backdrop from '../../Utility/Backdrop/Backdrop';
+import Styles from './SideBar.module.css';
 import { mainNavigationBarEntries } from '../../../common/constants';
 import { Clickable, Functional, OnClickFunc, Props } from '../../../common/props';
-import styles from './SideBar.module.css';
 
 
 interface SideBarProps extends Props, Clickable<OnClickFunc> {
@@ -20,7 +20,7 @@ const sideBar: Functional<SideBarProps> = (
 ): JSX.Element => (
     <Fragment>
         <Backdrop {...props} />
-        <div className={[styles.SideBar, props.show ? styles.Open : styles.Close].join(' ')}>
+        <div className={[Styles.SideBar, props.show ? Styles.Open : Styles.Close].join(' ')}>
             <nav>
                 <NavigationEntries {...mainNavigationBarEntries} />
             </nav>

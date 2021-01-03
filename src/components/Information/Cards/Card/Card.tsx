@@ -1,8 +1,8 @@
 import { CSSProperties } from 'react';
 
+import Styles from './Card.module.css';
 import { Functional, Props } from '../../../../common/props';
 import { SignProps } from '../../../Utility/Signs/Sign/Sign';
-import styles from './Card.module.css';
 
 
 export interface CardProps extends Props {
@@ -20,7 +20,7 @@ const card: Functional<CardProps> = (
     props: CardProps
 ): JSX.Element => (
     <div 
-        className={styles.Card} 
+        className={Styles.Card} 
         style={props.style ? props.style : {}} 
     >
         <p>

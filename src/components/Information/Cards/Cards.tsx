@@ -1,9 +1,9 @@
 import { Fragment } from 'react';
 
-import Card, { CardProps } from './Card/Card';
 import Signs from '../../Utility/Signs/Signs';
+import Styles from './Cards.module.css';
+import Card, { CardProps } from './Card/Card';
 import { Functional, Props } from '../../../common/props';
-import styles from './Cards.module.css';
 
 
 export interface CardsProps extends Props {
@@ -18,7 +18,7 @@ const cards: Functional<CardsProps> = (
     props: CardsProps
 ): JSX.Element => (
     <div>
-        <ul style={props.style} className={styles.Cards}>
+        <ul style={props.style} className={Styles.Cards}>
             {props.cards.map((card: CardProps, index: number): JSX.Element => (
             <Fragment key={index}>
                 <li>

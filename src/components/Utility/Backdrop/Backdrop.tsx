@@ -1,4 +1,4 @@
-import styles from './Backdrop.module.css';
+import Styles from './Backdrop.module.css';
 import { Clickable, Functional, OnClickFunc, Props } from '../../../common/props';
 
 
@@ -14,7 +14,7 @@ interface BackdropProps extends Props, Clickable<OnClickFunc> {
 const backdrop: Functional<BackdropProps, JSX.Element | null> = (
     props: BackdropProps
 ): JSX.Element | null => (
-    props.show ? <div onClick={props.whenClicked} className={styles.Backdrop}></div> : null
+    props.show ? <div onClick={props.whenClicked} className={Styles.Backdrop}></div> : null
 );
 
 

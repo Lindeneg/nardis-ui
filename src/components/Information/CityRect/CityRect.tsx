@@ -1,9 +1,9 @@
 import { City, CityResource, RouteCargo } from "nardis-game";
 
 import CityResources from './CityResources/CityResources';
+import Styles from './CityRect.module.css';
 import { Functional, Props } from "../../../common/props";
 import { Direction } from '../../../common/constants'
-import styles from './CityRect.module.css';
 
 
 export interface CityRectProps extends Props {
@@ -34,9 +34,9 @@ const cityRect: Functional<CityRectProps> = (
     }
 
     return (
-        <div className={styles.CityRect}>
+        <div className={Styles.CityRect}>
             <h4 
-                className={styles.CityName}
+                className={Styles.CityName}
                 style={{color: props.cityNameColor}}
             >
                 {name.toUpperCase()} 

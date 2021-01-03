@@ -1,5 +1,5 @@
+import Styles from './Table.module.css';
 import { Functional, Props } from '../../../common/props';
-import styles from './Table.module.css';
 
 
 interface TableProps extends Props {
@@ -14,11 +14,11 @@ interface TableProps extends Props {
 const table: Functional<TableProps> = (
     props: TableProps
 ): JSX.Element => (
-    <table className={styles.Table}>
+    <table className={Styles.Table}>
         <tbody>
             <tr>
                 {props.headers.map((content: string, i: number): JSX.Element => (
-                    <th key={i} className={styles.Header}>
+                    <th key={i} className={Styles.Header}>
                         {content}
                     </th>
                 ))}
@@ -26,7 +26,7 @@ const table: Functional<TableProps> = (
             {props.rows.map((row: string[], i: number): JSX.Element => (
                 <tr key={row[0] + i}>
                     {row.map((entry: string): JSX.Element => (
-                        <td key={entry} className={styles.RowEntry}>
+                        <td key={entry} className={Styles.RowEntry}>
                             {entry}
                         </td>
                     ))}

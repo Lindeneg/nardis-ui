@@ -33,6 +33,13 @@
     text-align: center;  
 }
 
+.ManipulateRoute {
+    color: #7bafba;
+    width: 25%;
+    padding: unset;
+    margin: unset;
+}
+
 .SetTrain, .ChangeDestination, .ChangeOrigin, .BuyRoute {
     background-color: #3e5fc2;
     margin: 0;
@@ -52,12 +59,16 @@
     color: rgb(255, 255, 0);
 }
 
+.BuyRoute:disabled {
+    background-color: #3e5fc2;
+}
+
 .SetTrain:hover, .ChangeOrigin:hover, .ChangeDestination:hover, .BuyRoute:hover {
     background-color: green;
     color: white !important;
 }
 
-.SetTrain:disabled:hover, .ChangeOrigin:disabled:hover, .ChangeDestination:disabled:hover {
+.SetTrain:disabled:hover, .ChangeOrigin:disabled:hover, .ChangeDestination:disabled:hover, .BuyRoute:disabled:hover {
     background-color: #3e5fc2;
 }
 
