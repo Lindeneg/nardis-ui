@@ -10,12 +10,12 @@ const initialize: ActionFunc = (
     args: ActionFuncArgs
 ): NardisState => {
     if (args.payload.initGame) {
-        let game: Nardis = Nardis.createFromPlayer(args.payload.initGame.name); // delete
-/*         if (!!window.localStorage[localKeys[LocalKey.HasActiveGame]]) {
+        let game: Nardis;
+        if (!!window.localStorage[localKeys[LocalKey.HasActiveGame]]) {
             game = Nardis.createFromLocalStorage();
         } else {
-            game = Nardis.createFromPlayer(args.payload.initGame.name);
-        } */
+            game = Nardis.createFromPlayer(args.payload.initGame.name, args.payload.initGame.money);
+        }
         const player: Player = game.getCurrentPlayer();
         return {
             _game: game,

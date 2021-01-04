@@ -94,13 +94,13 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
                 inputConfig: {
                     type: 'number',
                     label: 'Money (TODO does nothing atm)',
-                    placeholder: '800' //'min 800, max 3500'
+                    placeholder: '800'
                 },
                 validation: (inp: string): boolean => {
                     const value: number = parseInt(inp);
                     return !Number.isNaN(value) && value >= 800 && value < 3501;
                 },
-                valid: true, //false,
+                valid: false,
                 touched: false,
                 value: ''
             },
@@ -108,23 +108,23 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
                 inputConfig: {
                     type: 'number',
                     label: 'Opponents (TODO does nothing atm)',
-                    placeholder: '3' //'min 1, max 4'
+                    placeholder: '3'
                 },
                 validation: (inp: string): boolean => {
                     const value: number = parseInt(inp);
                     return !Number.isNaN(value) && value >= 1 && value < 5;
                 },
-                valid: true, // false,
+                valid: false,
                 touched: false,
                 value: ''
             }
         },
-        isValid: true //false
+        isValid: false
     };
 
     componentDidMount = (): void => {
         if (!!window.localStorage[localKeys[LocalKey.HasActiveGame]]) {
-            //this.props.initGame('', 0, 0);
+            this.props.initGame('', 0, 0);
         }
     }
 
