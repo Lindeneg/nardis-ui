@@ -9,7 +9,6 @@ const endTurn: ActionFunc = (
     let state: NardisState = {...args.state};
     if (args.state.gameCreated && args.state._game) {
         args.state._game.endTurn();
-        args.state._game.startTurn();
         state = {...update({state, payload: {}})};
     }
     return state;
