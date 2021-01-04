@@ -12,6 +12,7 @@ import update from './actions/update';
 import addToPlayerQueue from './actions/addToPlayerQueue';
 import endTurn from './actions/endTurn';
 import removeFromPlayerQueue from './actions/removeFromPlayerQueue';
+import removeRouteFromRoutes from './actions/removeRouteFromRoutes';
 
 
 const initialState: NardisState = {
@@ -51,6 +52,7 @@ const reducer = (
             returnFunc = removeFromPlayerQueue;
             break;
         case NardisAction.REMOVE_FROM_PLAYER_ROUTE:
+            returnFunc = removeRouteFromRoutes;
             break;
         case NardisAction.UPDATE_PLAYER_VALUES:
             returnFunc = update;

@@ -20,6 +20,9 @@ interface ReducerPayload {
     },
     removeFromPlayerQueue?: {
         route: Route
+    },
+    removeRouteFromRoutes?: {
+        routeId: string
     }
 };
 
@@ -40,13 +43,13 @@ export interface ActionFuncArgs {
     payload: ReducerPayload
 };
 
-export type ActionFunc           = Func<ActionFuncArgs, NardisState>
+export type ActionFunc            = Func<ActionFuncArgs, NardisState>
 
-export type GetStartCity         = Func<void, City[]>;
-export type GetPotentialRoutes   = Func<City, PotentialRoute[]>;
-export type GetPossibleTrains    = Func<void, PossibleTrain[]>;
-export type AddRouteToQueue      = Func<BuyableRoute, void>;
-export type RemoveRouteFromQueue = Func<Route, void>;
+export type GetStartCity          = Func<void, City[]>;
+export type GetPotentialRoutes    = Func<City, PotentialRoute[]>;
+export type GetPossibleTrains     = Func<void, PossibleTrain[]>;
+export type AddRouteToQueue       = Func<BuyableRoute, void>;
+export type RemoveRouteFromQueue  = Func<Route, void>;
 
 export interface ReducerAction extends Action<NardisAction> {
     payload: ReducerPayload
