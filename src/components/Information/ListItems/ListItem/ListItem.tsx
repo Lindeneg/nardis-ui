@@ -78,7 +78,7 @@ const listItem: Functional<ListItemProps> = (
                     ['GOLD COST', props.potentialRoute.goldCost + 'G'],
                     ['TURN COST', props.potentialRoute.turnCost],
                     ['ACTIVE ROUTES', props.potentialRoute.cityTwo.getCurrentRouteCount()],
-                    ['MAX ROUTES', 5]
+                    ['MAX ROUTES', props.potentialRoute.cityTwo.getMaxRouteCount()]
                 ]);
             }
             break;
@@ -113,7 +113,7 @@ const listItem: Functional<ListItemProps> = (
                 contentJSX = getContent([
                     ['SIZE', city.getSize()],
                     ['ACTIVE ROUTES', city.getCurrentRouteCount()],
-                    ['MAX ROUTES', 5]
+                    ['MAX ROUTES', city.getMaxRouteCount()]
                 ]);
             }
             break;
