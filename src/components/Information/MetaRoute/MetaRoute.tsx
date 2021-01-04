@@ -15,7 +15,8 @@ interface MetaRouteProps extends Props {
         city: City,
         color: string
     },
-    editRouteDisabled: boolean,
+    editRouteDisabled?: boolean,
+    deleteRouteDisabled?: boolean,
     editRouteFunc: IdFunc,
     deleteRouteFunc: IdFunc,
     id: string,
@@ -68,14 +69,14 @@ const metaRoute: Functional<MetaRouteProps> = (
         <div className={Styles.Buttons}>
             <Button 
                 buttonType={ButtonType.ManipulateRoute} 
-                disabled={props.editRouteDisabled} 
+                disabled={typeof props.editRouteDisabled !== 'undefined' ? props.editRouteDisabled : true} 
                 whenClicked={() => props.editRouteFunc(props.id)} 
             >
                 EDIT
             </Button>
             <Button 
                 buttonType={ButtonType.ManipulateRoute} 
-                disabled={false} 
+                disabled={typeof props.deleteRouteDisabled !== 'undefined' ? props.deleteRouteDisabled : true} 
                 whenClicked={() => props.deleteRouteFunc(props.id)}
             >
                 DELETE

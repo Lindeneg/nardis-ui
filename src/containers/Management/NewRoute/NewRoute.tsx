@@ -349,14 +349,15 @@ class NewRoute extends Component<NewRouteProps, NewRouteState> {
     ];
 
     getCargoSelector = (): JSX.Element | null => {
+        const route: PotentialRoute | null = this.state.chosenRoute.length > 0 ? this.state.chosenRoute[0] : null;
         const cityOneCargo: RouteCargo[] = this.state.chosenTrain.routePlanCargo?.cityOne || [];
         const cityTwoCargo:  RouteCargo[] = this.state.chosenTrain.routePlanCargo?.cityTwo || [];
         const availableCargo: number = this.state.chosenTrain.train?.cargoSpace || 0;
         const cards = getCargoCards(cityOneCargo, cityTwoCargo, this.state.chosenRoute, availableCargo, this.onCargoAdd, this.onCargoRemove);
-        const NotAfford = (
-            (this.state.chosenRoute.length > 0 ? this.state.chosenRoute[0].goldCost : 0) + (this.state.chosenTrain.cost || 0)
+        const invalid = (
+            (route ? route.goldCost : 0) + (this.state.chosenTrain.cost || 0)
         )
-        > this.props.gold;
+        > this.props.gold || (route?.cityOne.isFull() || false) || (route?.cityTwo.isFull() || false);
 
         let jsx: JSX.Element | null = null;
 
@@ -365,7 +366,7 @@ class NewRoute extends Component<NewRouteProps, NewRouteState> {
                 first={{...cards.first}}
                 second={{...cards.second}}
                 changeTrainButton={{disabled: false, whenClicked: this.onSetTrainChange, buttonType: ButtonType.SetTrain}}
-                buyRouteButton={{disabled: NotAfford, whenClicked: this.onRouteBuy, buttonType: ButtonType.BuyRoute}}
+                buyRouteButton={{disabled: invalid, whenClicked: this.onRouteBuy, buttonType: ButtonType.BuyRoute}}
             />
         }
         return jsx;

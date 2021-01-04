@@ -73,9 +73,8 @@ class BuildQueue extends Component<BuildQueueProps, BuildQueueState> {
                     key={index}
                     cityOne={{city: item.route.getCityOne(), color: 'yellow'}}
                     cityTwo={{city: item.route.getCityTwo(), color: 'lightgreen'}}
-                    editRouteDisabled={true}
                     editRouteFunc={() => null}
-                    // TODO inactive delete func when queued route is loading
+                    deleteRouteDisabled={!(item.turnCost > 0)}
                     deleteRouteFunc={() => this.deleteRouteFunc(item.route)}
                     id={item.route.id}
                     headers={metaRouteHeaderNames}
