@@ -1,10 +1,17 @@
+import { CSSProperties } from 'react';
+
+import { generateArrayOfRandomNames } from 'nardis-game';
+
 import Styles from './Table.module.css';
 import { Functional, Props } from '../../../common/props';
 
 
 interface TableProps extends Props {
-    headers: string[],
-    rows: string[][]
+    headers           : string[],
+    rows              : string[][]
+    headerStyles     ?: CSSProperties,
+    headerStylesAfter?: CSSProperties,
+    rowStyles        ?: CSSProperties,
 };
 
 
@@ -18,15 +25,23 @@ const table: Functional<TableProps> = (
         <tbody>
             <tr>
                 {props.headers.map((content: string, i: number): JSX.Element => (
-                    <th key={i} className={Styles.Header}>
+                    <th 
+                        key={i} 
+                        className={Styles.Header}
+                        style={i > 0 ? props.headerStylesAfter || props.headerStyles : props.headerStyles}
+                    >
                         {content}
                     </th>
                 ))}
             </tr>
             {props.rows.map((row: string[], i: number): JSX.Element => (
-                <tr key={row[0] + i}>
+                <tr key={i}>
                     {row.map((entry: string): JSX.Element => (
-                        <td key={entry} className={Styles.RowEntry}>
+                        <td 
+                            key={generateArrayOfRandomNames(1, 32, 32, [])[0]} 
+                            className={Styles.RowEntry}
+                            style={props.rowStyles}
+                        >
                             {entry}
                         </td>
                     ))}
