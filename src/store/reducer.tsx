@@ -1,4 +1,3 @@
-import initialize from './actions/initialize';
 import { 
     NardisState, 
 } from '../common/state';
@@ -9,8 +8,9 @@ import {
     ActionFuncArgs
 } from '../common/actions';
 import update from './actions/update';
-import addToPlayerQueue from './actions/addToPlayerQueue';
 import endTurn from './actions/endTurn';
+import initialize from './actions/initialize';
+import addToPlayerQueue from './actions/addToPlayerQueue';
 import removeFromPlayerQueue from './actions/removeFromPlayerQueue';
 import removeRouteFromRoutes from './actions/removeRouteFromRoutes';
 
@@ -30,6 +30,10 @@ const initialState: NardisState = {
     getStartCity      : () => [],
     getPotentialRoutes: () => [],
     getPossibleTrains : () => [],
+    getFinanceHistory : () => [],
+    getAllResources   : () => [],
+    getFinanceTotal   : () => [],
+    getTotalProfits   : () => 0
 };
 
 const reducer = (

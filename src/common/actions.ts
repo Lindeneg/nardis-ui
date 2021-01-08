@@ -1,6 +1,14 @@
 import { Action } from 'redux';
 
-import { BuyableRoute, City, PotentialRoute, Route } from "nardis-game";
+import { 
+    BuyableRoute, 
+    FinanceHistory, 
+    FinanceTotal, 
+    PotentialRoute, 
+    Resource, 
+    Route,
+    City
+} from "nardis-game";
 
 import { Func, PossibleTrain } from "./props";
 import { NardisState } from "./state";
@@ -48,6 +56,10 @@ export type ActionFunc            = Func<ActionFuncArgs, NardisState>
 export type GetStartCity          = Func<void, City[]>;
 export type GetPotentialRoutes    = Func<City, PotentialRoute[]>;
 export type GetPossibleTrains     = Func<void, PossibleTrain[]>;
+export type GetFinanceHistory     = Func<void, FinanceHistory[]>;
+export type GetFinanceTotal       = Func<void, FinanceTotal[]>;
+export type GetTotalProfits       = Func<void, number>;
+export type GetAllResources       = Func<void, Resource[]>;
 export type AddRouteToQueue       = Func<BuyableRoute, void>;
 export type RemoveRouteFromQueue  = Func<Route, void>;
 
