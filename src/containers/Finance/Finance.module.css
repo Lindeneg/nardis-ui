@@ -1,0 +1,14 @@
+.Finance {
+    padding: 20px;
+    border-right: 1px solid #3e5fc2;
+    border-left: 1px solid #3e5fc2;
+    font-family: monospace;
+}
+
+.Tables {
+    text-align-last: center;
+}
+
+.FinanceTable {
+    padding: 10px;
+}
