@@ -43,7 +43,7 @@ const cityRect: Functional<CityRectProps> = (
                 {props.city ? (isDeparture ? ' SUPPLY' : ' DEMAND') : null} 
                 {sizeJSX}
             </h4>
-            <CityResources routeCargo={props.routeCargo} resources={resources} />
+            <CityResources routeCargo={props.routeCargo} resources={resources} isDeparture={isDeparture} />
         </div>
     );
 };

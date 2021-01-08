@@ -7,7 +7,8 @@ import { Functional, Props } from "../../../../common/props";
 
 interface CityResourcesProps extends Props {
     resources : CityResource[],
-    routeCargo: RouteCargo[]
+    routeCargo: RouteCargo[],
+    isDeparture: boolean
 };
 
 
@@ -31,7 +32,7 @@ const cityResources: Functional<CityResourcesProps> = (
                 row.resource.getValue() + 'g',
                 row.resource.getWeight().toString() + 't',
                 // subtract the matched cargo if applicable
-                row.available > -1 ? (row.available - match).toString() : '~'
+                props.isDeparture ? (row.available - match).toString() : '~'
             ]
         )})
         // sort resources by ascending value
