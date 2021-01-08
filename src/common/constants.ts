@@ -1,8 +1,7 @@
-import { NavigationEntriesProps } from '../components/Navigation/NavigationEntries/NavigationEntries';
+import { FinanceType } from 'nardis-game';
+
 import { NIndexable } from './props';
-
-
-
+import { NavigationEntriesProps } from '../components/Navigation/NavigationEntries/NavigationEntries';
 
 
 /**
@@ -161,4 +160,11 @@ export const layoutCardLabels: [string, string][] = [
     ['routes', ''],
     ['queue', ''],
     ['turn', '']
+];
+
+export const FinanceExpenseRows: Array<[string, FinanceType]> = [
+    ['TRAINS', FinanceType.Train],
+    ['TRACKS', FinanceType.Track],
+    ['UPGRADES', FinanceType.Upgrade],
+    ['UPKEEP', FinanceType.Upkeep],
 ];
