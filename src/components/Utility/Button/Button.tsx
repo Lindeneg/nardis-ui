@@ -1,6 +1,11 @@
 import Styles from './Button.module.css';
 import { ButtonType, buttonTypeToClassName } from '../../../common/constants';
-import { Clickable, Functional, OnClickFunc, Props } from '../../../common/props';
+import { 
+    Clickable, 
+    Functional, 
+    OnClickFunc, 
+    Props 
+} from '../../../common/props';
 
 
 export interface ButtonProps extends Props, Clickable<OnClickFunc> {

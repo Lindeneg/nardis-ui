@@ -47,6 +47,21 @@
     width: 100%
 }
 
+.EditRouteConfirm, .EditRouteCancel {
+    width: 50%;
+    margin: 0;
+}
+
+.EditRouteConfirm:hover {
+    background-color: green;
+    color: white !important;
+}
+
+.EditRouteCancel:hover {
+    background-color: red;
+    color: white !important;
+}
+
 .BuyRoute {
     background-color: rebeccapurple;
 }
