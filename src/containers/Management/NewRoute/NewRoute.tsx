@@ -353,7 +353,7 @@ class NewRoute extends Component<NewRouteProps, NewRouteState> {
         const cityOneCargo: RouteCargo[] = this.state.chosenTrain.routePlanCargo?.cityOne || [];
         const cityTwoCargo:  RouteCargo[] = this.state.chosenTrain.routePlanCargo?.cityTwo || [];
         const availableCargo: number = this.state.chosenTrain.train?.cargoSpace || 0;
-        const cards = getCargoCards(cityOneCargo, cityTwoCargo, this.state.chosenRoute, availableCargo, this.onCargoAdd, this.onCargoRemove);
+        const cards = getCargoCards(cityOneCargo, cityTwoCargo, availableCargo, this.onCargoAdd, this.onCargoRemove, this.state.chosenRoute, []);
         const invalid = (
             (route ? route.goldCost : 0) + (this.state.chosenTrain.cost || 0)
         )
