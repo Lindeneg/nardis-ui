@@ -1,8 +1,11 @@
 import { CSSProperties } from 'react';
 
 import Styles from './Card.module.css';
-import { Functional, Props } from '../../../../common/props';
 import { SignProps } from '../../../Utility/Signs/Sign/Sign';
+import { 
+    Functional, 
+    Props 
+} from '../../../../common/props';
 
 
 export interface CardProps extends Props {

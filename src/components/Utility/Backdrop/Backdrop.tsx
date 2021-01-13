@@ -1,5 +1,10 @@
 import Styles from './Backdrop.module.css';
-import { Clickable, Functional, OnClickFunc, Props } from '../../../common/props';
+import { 
+    Clickable, 
+    Functional, 
+    OnClickFunc, 
+    Props 
+} from '../../../common/props';
 
 
 interface BackdropProps extends Props, Clickable<OnClickFunc> {

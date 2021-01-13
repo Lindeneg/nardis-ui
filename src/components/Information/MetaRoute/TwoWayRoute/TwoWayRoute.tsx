@@ -3,7 +3,10 @@ import { City, RouteCargo } from 'nardis-game';
 import OneWayRoute from './../OneWayRoute/OneWayRoute';
 import Styles from './TwoWayRoute.module.css';
 import { Direction } from '../../../../common/constants';
-import { Functional, Props } from '../../../../common/props';
+import { 
+    Functional, 
+    Props 
+} from '../../../../common/props';
 
 
 interface TwoWayRouteProps extends Props {

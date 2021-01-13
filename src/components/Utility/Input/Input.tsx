@@ -1,6 +1,10 @@
 import Styles from './Input.module.css';
 import { InputType } from '../../../common/constants';
-import { Changeable, Functional, Props } from '../../../common/props';
+import { 
+    Changeable, 
+    Functional, 
+    Props 
+} from '../../../common/props';
 
 
 interface Shared {

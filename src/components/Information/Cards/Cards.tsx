@@ -3,7 +3,10 @@ import { Fragment } from 'react';
 import Signs from '../../Utility/Signs/Signs';
 import Styles from './Cards.module.css';
 import Card, { CardProps } from './Card/Card';
-import { Functional, Props } from '../../../common/props';
+import { 
+    Functional, 
+    Props 
+} from '../../../common/props';
 
 
 export interface CardsProps extends Props {

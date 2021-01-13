@@ -4,7 +4,12 @@ import NavigationEntries from '../NavigationEntries/NavigationEntries';
 import Backdrop from '../../Utility/Backdrop/Backdrop';
 import Styles from './SideBar.module.css';
 import { mainNavigationBarEntries } from '../../../common/constants';
-import { Clickable, Functional, OnClickFunc, Props } from '../../../common/props';
+import { 
+    Clickable, 
+    Functional, 
+    OnClickFunc, 
+    Props 
+} from '../../../common/props';
 
 
 interface SideBarProps extends Props, Clickable<OnClickFunc> {

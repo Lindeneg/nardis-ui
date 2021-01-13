@@ -1,7 +1,10 @@
 import { Redirect } from 'react-router-dom';
 
 import Styles from './Spinner.module.css';
-import { Functional, Props } from "../../../common/props";
+import { 
+    Functional, 
+    Props 
+} from "../../../common/props";
 
 
 interface SpinnerProps extends Props {
