@@ -1,20 +1,21 @@
+import { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import { Route, RouteState } from "nardis-game";
+import { Route } from "nardis-game";
 
 import NardisState from "../../../common/state";
-import { IdFunc, MapDispatch, OnDispatch, Props } from "../../../common/props";
+import EditRoute from '../EditRoute/EditRoute';
+import DeleteModal from './Helpers/DeleteModal/DeleteModal';
+import getMetaRoute from "./getMetaRoute";
 import Styles from './ManageRoute.module.css';
-
-import MetaRoute from '../../../components/Information/MetaRoute/MetaRoute';
-import { Component, Fragment } from "react";
-import { metaRouteActiveHeaderNames } from "../../../common/constants";
 import { NardisAction } from "../../../common/actions";
+import { IdFunc, MapDispatch, OnDispatch, Props } from "../../../common/props";
 
 
 interface ManageRouteState {
     deleteInitiated: boolean,
-    deleteConfirmed: boolean
+    editInitiated: boolean,
+    id: string
 };
 
 interface BuildRouteMappedProps {
@@ -52,63 +53,61 @@ const mapDispatchToProps: MapDispatch<BuildRouteDispatchedProps> = (
 );
 
 
+/**
+ * 
+ */
 class ManageRoute extends Component<ManageRouteProps, ManageRouteState> {
 
     state: ManageRouteState = {
         deleteInitiated: false,
-        deleteConfirmed: false
+        editInitiated: false,
+        id: ''
     };
 
-    // TODO redo have double confirmation before deleting
-    onDelete = (id: string) => {
-        this.props.removeRouteFromRoutes(id);
-        this.setState({...this.state, deleteConfirmed: true});
+    onDelete: IdFunc = (id: string) => {
+        if (!this.state.deleteInitiated) {
+            this.setState({deleteInitiated: true, editInitiated: false, id});
+        } else {
+            if (id === this.state.id) {
+                this.props.removeRouteFromRoutes(id);
+            }
+            this.setState({deleteInitiated: false, editInitiated: false, id: ''});
+        }
     }
 
+    onEdit: IdFunc = (id: string) => {
+        if (this.state.editInitiated && id !== this.state.id) {
+            this.setState({deleteInitiated: false, editInitiated: false, id: ''});
+        } else {
+            this.setState({deleteInitiated: false, editInitiated: true, id});
+        }
+    }
 
     render () {
         return (
             <Fragment>
+                <DeleteModal 
+                    show={this.state.deleteInitiated}
+                    onDelete={this.onDelete}
+                    id={this.state.id}
+                    value={0 /* TODO implement resell value of active route */}
+                />
                 <hr/>
-                {this.props.routes.length <= 0 ? <p className={Styles.NoRoutes}>NO ACTIVE ROUTES</p> :
+                {this.props.routes.length <= 0 ? <p className={Styles.NoRoutes}>NO ACTIVE ROUTES</p> 
+                :
+                this.state.editInitiated ? <EditRoute 
+                    route={this.props.routes.filter(e => e.id === this.state.id)} 
+                    onCancel={this.onEdit.bind(null, '')} />
+                : 
                 <div className={Styles.Container}>
-                {this.props.routes.map((route: Route, index: number): JSX.Element => {
-                    const state: RouteState = route.getRouteState();
-                    const destCityOne: boolean = state.destination.equals(route.getCityOne());
-                    const distance: number = state.distance > 0 ? state.distance : 0;
-                    let c1: string = '#ccc'; let c2: string = '#ccc';
-                    let a1: string = '#ccc'; let a2: string = '#ccc';
-                    let routeState: string;
-        
-                    if (destCityOne && distance < 1) { c1 = 'lightcoral'; } 
-                    else if (!destCityOne && distance < 1) { c2 = 'lightcoral'; }
-                    else if (destCityOne && distance > 0) { a1 = 'lightcoral' }
-                    else if (!destCityOne && distance > 0) { a2 = 'lightcoral' }
-        
-                    if (!state.hasArrived && distance <= 0) { routeState = 'UNLOADING'; }
-                    else if (state.hasArrived && distance <= 0) { routeState = 'LOADING'; }
-                    else { routeState = 'EN ROUTE'; }
-        
-                    return (
-                        <MetaRoute
-                            key={index}
-                            cityOne={{city: route.getCityOne(), color: c1}}
-                            cityTwo={{city: route.getCityTwo(), color: c2}}
-                            editRouteDisabled={true}
-                            deleteRouteDisabled={false}
-                            editRouteFunc={() => null}
-                            deleteRouteFunc={this.onDelete}
-                            id={route.id}
-                            headers={metaRouteActiveHeaderNames}
-                            values={[
-                                routeState,
-                                distance > 0 ? distance + 'KM' : 'IN CITY',
-                                route.getKilometersTravelled() + 'KM',
-                                route.getProfit() + 'G'
-                            ]}
-                            arrowColors={{toCityOne: a1, toCityTwo: a2}}
-                        />
-                )})}
+                    {this.props.routes.map((route: Route, index: number): JSX.Element => getMetaRoute({
+                        route,
+                        index,
+                        editDisabled: false,
+                        deleteDisabled: false,
+                        onEdit: this.onEdit,
+                        onDelete: this.onDelete
+                    }))}
                 </div>}
             </Fragment>
         );
