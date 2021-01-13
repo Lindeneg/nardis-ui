@@ -6,6 +6,7 @@ import TwoWayRoute from '../../../../../components/Information/MetaRoute/TwoWayR
 import Cards from '../../../../../components/Information/Cards/Cards';
 import { ChosenTrain } from "../../NewRoute";
 import { Functional, Props } from "../../../../../common/props";
+import { cardDefaultStyle } from "../../../../../common/constants";
 
 
 interface OverviewProps extends Props {
@@ -14,7 +15,7 @@ interface OverviewProps extends Props {
     startCity  : City | null
 };
 
-const style = {margin: '0'};
+const style = cardDefaultStyle;
 
 
 /**
