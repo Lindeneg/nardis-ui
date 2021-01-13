@@ -14,9 +14,6 @@ import { Func, PossibleTrain } from "./props";
 import { NardisState } from "./state";
 
 
-/* reducer action types and action functions. */
-
-
 interface ReducerPayload {
     initGame?: {
         name: string,

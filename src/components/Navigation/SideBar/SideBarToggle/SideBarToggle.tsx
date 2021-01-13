@@ -1,5 +1,10 @@
 import Styles from './SideBarToggle.module.css';
-import { Clickable, Props, OnClickFunc, Functional } from '../../../../common/props';
+import { 
+    Clickable, 
+    Props, 
+    OnClickFunc, 
+    Functional 
+} from '../../../../common/props';
 
 
 interface SideBarToggleProps extends Props, Clickable<OnClickFunc> {};

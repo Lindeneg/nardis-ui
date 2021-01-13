@@ -9,7 +9,11 @@ import Spinner from '../../components/Utility/Spinner/Spinner';
 import Styles from './Layout.module.css';
 import { NardisState } from '../../common/state';
 import { layoutCardLabels } from '../../common/constants';
-import { Indexable, MapState, Props } from '../../common/props';
+import { 
+    Indexable, 
+    MapState, 
+    Props 
+} from '../../common/props';
 
 
 interface LayoutState {

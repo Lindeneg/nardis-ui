@@ -3,7 +3,14 @@ import { City, PotentialRoute, Route } from 'nardis-game';
 import ListItem from './ListItem/ListItem';
 import Styles from './ListItems.module.css';
 import { ListType } from '../../../common/constants';
-import { Clickable, Functional, IdFunc, Indexable, Props, PossibleTrain } from '../../../common/props';
+import { 
+    Clickable, 
+    Functional, 
+    IdFunc, 
+    Indexable, 
+    Props, 
+    PossibleTrain 
+} from '../../../common/props';
 
 
 type MetaContent  = PossibleTrain | PotentialRoute | Route;

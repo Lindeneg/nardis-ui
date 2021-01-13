@@ -1,6 +1,9 @@
 import Styles from './OneWayRoute.module.css';
 import CityRect, { CityRectProps } from '../../CityRect/CityRect';
-import { Functional, Props } from '../../../../common/props';
+import { 
+    Functional, 
+    Props 
+} from '../../../../common/props';
 
 
 interface OneWayRouteProps extends Props {

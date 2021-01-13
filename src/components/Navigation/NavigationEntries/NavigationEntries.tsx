@@ -5,7 +5,13 @@ import Button from '../../Utility/Button/Button';
 import Styles from './NavigationEntries.module.css';
 import { ButtonType } from '../../../common/constants';
 import { NardisAction } from '../../../common/actions';
-import { Functional, MapDispatch, OnDispatch, Props, RouterRouteLinkProps } from '../../../common/props';
+import { 
+    Functional, 
+    MapDispatch, 
+    OnDispatch, 
+    Props, 
+    RouterRouteLinkProps 
+} from '../../../common/props';
 
 
 interface Entry extends RouterRouteLinkProps {

@@ -1,0 +1,12 @@
+.RouteState {
+    text-align: -webkit-center;
+}
+
+.EditRouteContent {
+    width: 100%;
+}
+
+.EditRoute h3 {
+    color: #ccc;
+    text-align: center;
+}

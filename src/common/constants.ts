@@ -2,6 +2,7 @@ import { FinanceType } from 'nardis-game';
 
 import { NIndexable } from './props';
 import { NavigationEntriesProps } from '../components/Navigation/NavigationEntries/NavigationEntries';
+import { CSSProperties } from 'react';
 
 
 /**
@@ -59,7 +60,9 @@ export enum ButtonType {
     SetTrain,
     CreateGame,
     BuyRoute,
-    ManipulateRoute
+    ManipulateRoute,
+    EditRouteConfirm,
+    EditRouteCancel
 };
 
 /**
@@ -74,7 +77,9 @@ export const buttonTypeToClassName: NIndexable<string> = {
     [ButtonType.SetTrain]         : 'SetTrain',
     [ButtonType.CreateGame]       : 'CreateGame',
     [ButtonType.BuyRoute]         : 'BuyRoute',
-    [ButtonType.ManipulateRoute]  : 'ManipulateRoute'
+    [ButtonType.ManipulateRoute]  : 'ManipulateRoute',
+    [ButtonType.EditRouteConfirm] : 'EditRouteConfirm',
+    [ButtonType.EditRouteCancel]  : 'EditRouteCancel'
 };
 
 export const mainNavigationBarEntries: NavigationEntriesProps = {
@@ -168,3 +173,5 @@ export const FinanceExpenseRows: Array<[string, FinanceType]> = [
     ['UPGRADES', FinanceType.Upgrade],
     ['UPKEEP', FinanceType.Upkeep],
 ];
+
+export const cardDefaultStyle: CSSProperties = {margin: '0', backgroundColor: '#2d3a9c'};

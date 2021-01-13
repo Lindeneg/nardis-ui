@@ -1,10 +1,13 @@
-import { City, CityResource, PotentialRoute, RouteCargo } from "nardis-game";
+import { CSSProperties } from "react";
+
+import { City, CityResource, PotentialRoute, Route, RouteCargo } from "nardis-game";
+
+import { Selection } from './CargoSelector';
 import { CardProps } from "../../../../../components/Information/Cards/Card/Card";
 import { CardsProps } from "../../../../../components/Information/Cards/Cards";
 import { CargoChange } from "../../NewRoute";
-import { RouteRevolution, SignType } from '../../../../../common/constants';
-import {Selection} from './CargoSelector';
 import { NIndexable } from "../../../../../common/props";
+import { cardDefaultStyle, RouteRevolution, SignType } from '../../../../../common/constants';
 
 
 interface AvailableCargo extends NIndexable<number> {
@@ -12,33 +15,38 @@ interface AvailableCargo extends NIndexable<number> {
     [RouteRevolution.Full]: number
 };
 
-const headerStyle = {margin: '0', backgroundColor: 'darkblue'};
-const contentStyle = {margin: '0', backgroundColor: '#212fa2'};
-const cardSStyle = {margin: '0'};
+const contentStyle: CSSProperties = {margin: '0', backgroundColor: '#212fa2'};
+const cardSStyle  : CSSProperties = {margin: '0'};
+const style       : CSSProperties = cardDefaultStyle;
 
 
 /**
  * 
  */
-const getCardHeader = (from: string, to: string, availableCargo: AvailableCargo, key: RouteRevolution): CardsProps => ({
+const getCardHeader = (
+    from: string, 
+    to: string, 
+    availableCargo: AvailableCargo, 
+    key: RouteRevolution
+): CardsProps => ({
     cards: [
         {
             label: 'FROM',
             value: from.toUpperCase(),
-            style: headerStyle,
-            spanStyle: {color: key === RouteRevolution.NonFull ? 'yellow' : 'lightgreen'}
+            spanStyle: {color: key === RouteRevolution.NonFull ? 'yellow' : 'lightgreen'},
+            style
         },
         {
             label: 'TO',
             value: to.toUpperCase(),
-            style: headerStyle,
-            spanStyle: {color: key === RouteRevolution.NonFull ? 'lightgreen' : 'yellow'}
+            spanStyle: {color: key === RouteRevolution.NonFull ? 'lightgreen' : 'yellow'},
+            style
         },
         {
             label: 'CARGO SPACE',
             value: availableCargo[key] + 'T',
-            style: headerStyle,
-            spanStyle: {color: availableCargo[key] <= 0 ? 'gray' : 'white'}
+            spanStyle: {color: availableCargo[key] <= 0 ? 'gray' : 'white'},
+            style
         }
     ],
     style: cardSStyle
@@ -93,10 +101,11 @@ const getCardContent = (
 export const getCargoCards = (
     cityOneCargo: RouteCargo[],
     cityTwoCargo: RouteCargo[],
-    chosenRoute: PotentialRoute[],
     availableCargo: number,
     whenClickedAdd: CargoChange,
-    whenClickedRemoved: CargoChange
+    whenClickedRemoved: CargoChange,
+    chosenRoute?: PotentialRoute[],
+    activeRoute?: Route[]
 ): {first: Selection | null, second: Selection | null} => {
 
     const available: AvailableCargo = {
@@ -106,19 +115,24 @@ export const getCargoCards = (
 
     let first: Selection | null = null;
     let second: Selection | null = null;
+    let cityOne: City | null = null; let cityTwo: City | null = null;
 
-    if (chosenRoute.length > 0) {
-        const [cityOne, cityTwo] = [chosenRoute[0].cityOne, chosenRoute[0].cityTwo];
+    if (chosenRoute && chosenRoute.length > 0) {
+        [cityOne, cityTwo] = [chosenRoute[0].cityOne, chosenRoute[0].cityTwo];
+    } else if (activeRoute && activeRoute.length > 0) {
+        [cityOne, cityTwo] = [activeRoute[0].getCityOne(), activeRoute[0].getCityTwo()];
+    }
 
+    if (cityOne && cityTwo) {
         first = {
             cargo: getCardContent(cityOne, cityOneCargo, available, RouteRevolution.NonFull, whenClickedAdd, whenClickedRemoved),
             header: getCardHeader(cityOne.name, cityTwo.name, available, RouteRevolution.NonFull)
         };
-
+    
         second = {
             cargo: getCardContent(cityTwo, cityTwoCargo, available, RouteRevolution.Full, whenClickedAdd, whenClickedRemoved),
             header: getCardHeader(cityTwo.name, cityOne.name, available, RouteRevolution.Full)
-
+    
         };
     }
     return {first, second};

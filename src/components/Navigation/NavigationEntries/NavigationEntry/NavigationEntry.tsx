@@ -1,7 +1,10 @@
 import { NavLink } from 'react-router-dom';
 
 import Styles from './NavigationEntry.module.css';
-import { Functional, RouterRouteLinkProps } from '../../../../common/props';
+import { 
+    Functional, 
+    RouterRouteLinkProps 
+} from '../../../../common/props';
 
 
 /**

@@ -1,0 +1,15 @@
+.DeleteModal {
+    text-align: center;
+}
+
+.DeleteModal p {
+    color: ghostwhite;
+    font-weight: 700;
+}
+
+.DeleteModal span {
+    color: lightgreen;
+    text-decoration: underline;
+    font-weight: 700;
+    float: unset;
+}
