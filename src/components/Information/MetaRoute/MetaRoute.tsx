@@ -33,7 +33,7 @@ interface MetaRouteProps extends Props {
 const metaRoute: Functional<MetaRouteProps> = (
     props: MetaRouteProps
 ): JSX.Element => (
-    <div className={Styles.MetaRoute}>
+    <div className={Styles.MetaRoute} style={props.style}>
         <div className={Styles.BuildQueueCities}>
             <p style={{color: props.cityOne.color}}>{props.cityOne.city.name}</p>
 
@@ -65,8 +65,9 @@ const metaRoute: Functional<MetaRouteProps> = (
                 </p>
             ))}
         </div>
-        <hr/>
+        {props.deleteRouteDisabled && props.editRouteDisabled ? null :
         <div className={Styles.Buttons}>
+            <hr/>
             <Button 
                 buttonType={ButtonType.ManipulateRoute} 
                 disabled={typeof props.editRouteDisabled !== 'undefined' ? props.editRouteDisabled : true} 
@@ -81,7 +82,7 @@ const metaRoute: Functional<MetaRouteProps> = (
             >
                 DELETE
             </Button>
-        </div>
+        </div>}
     </div>
 );
 
