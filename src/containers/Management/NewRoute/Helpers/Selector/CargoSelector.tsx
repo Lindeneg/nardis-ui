@@ -13,8 +13,8 @@ export interface Selection {
 interface CargoSelectorProps extends Props {
     first: Selection
     second: Selection
-    changeTrainButton: ButtonProps,
-    buyRouteButton: ButtonProps
+    changeTrainButton?: ButtonProps,
+    buyRouteButton?: ButtonProps
 };
 
 
@@ -25,9 +25,10 @@ const cargoSelector: Functional<CargoSelectorProps> = (
     props: CargoSelectorProps
 ): JSX.Element => (
     <Fragment>
+        {props.changeTrainButton ? 
         <Button {...props.changeTrainButton} >
             CHANGE TRAIN
-        </Button>
+        </Button> : null}
         <hr/>
         <Cards {...props.first.header} />
         <hr/>
@@ -37,9 +38,10 @@ const cargoSelector: Functional<CargoSelectorProps> = (
         <hr/>
         <Cards {...props.second.cargo} />
         <hr/>
+        {props.buyRouteButton ?
         <Button {...props.buyRouteButton} >
             BUY ROUTE
-        </Button>
+        </Button> : null}
     </Fragment>
 );
 
