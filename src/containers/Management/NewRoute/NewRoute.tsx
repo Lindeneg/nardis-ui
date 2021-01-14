@@ -14,6 +14,7 @@ import Modal from '../../../components/Utility/Modal/Modal';
 import CitySelector, { SelectorProp } from './Helpers/Selector/CitySelector';
 import { NardisState } from '../../../common/state';
 import { getCargoCards } from './Helpers/Selector/getCargoCards';
+import { addCargo, removeCargo } from '../ManageRoute/Helpers/manipulateCargo';
 import { RouteRevolution, ListType, ButtonType } from '../../../common/constants';
 import { MapDispatch, OnDispatch, Props, PossibleTrain, IdFunc, Func } from '../../../common/props';
 import { 
@@ -259,55 +260,24 @@ class NewRoute extends Component<NewRouteProps, NewRouteState> {
     }
 
     onCargoAdd: CargoChange = (resource: Resource, revolution: RouteRevolution): void => {
-        const cityOne = [...this.state.chosenTrain.routePlanCargo?.cityOne || []];
-        const cityTwo = [...this.state.chosenTrain.routePlanCargo?.cityTwo || []];
-        const targetCity = revolution === RouteRevolution.NonFull ? cityOne : cityTwo;
-        const targetResource = targetCity.filter(target => target.resource.equals(resource));
-
-        if (targetResource.length > 0) {
-            targetResource[0].targetAmount++;
-        } else {
-            targetCity.push({
-                resource,
-                actualAmount: 0,
-                targetAmount: 1
-            });
-        }
-
         this.setState({
             ...this.state,
             chosenTrain: {
                 ...this.state.chosenTrain,
                 routePlanCargo: {
-                    cityOne,
-                    cityTwo
+                    ...addCargo(resource, revolution, this.state.chosenTrain.routePlanCargo)
                 }
             }
         });
     }
 
     onCargoRemove: CargoChange = (resource: Resource, revolution: RouteRevolution): void => {
-        const cityOne = [...this.state.chosenTrain.routePlanCargo?.cityOne || []];
-        const cityTwo = [...this.state.chosenTrain.routePlanCargo?.cityTwo || []];
-        const targetCity = revolution === RouteRevolution.NonFull ? cityOne : cityTwo;
-
-        for (let i = 0; i < targetCity.length; i++) {
-            if (targetCity[i].resource.equals(resource)) {
-                if (targetCity[i].targetAmount - 1 <= 0) {
-                    targetCity.splice(i, 1);
-                } else {
-                    targetCity[i].targetAmount--;
-                }
-            }
-        }
-
         this.setState({
             ...this.state,
             chosenTrain: {
                 ...this.state.chosenTrain,
                 routePlanCargo: {
-                    cityOne,
-                    cityTwo
+                    ...removeCargo(resource, revolution, this.state.chosenTrain.routePlanCargo)
                 }
             }
         });
