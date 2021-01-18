@@ -8,7 +8,7 @@ import EditRoute from './EditRoute/EditRoute';
 import DeleteModal from './Helpers/DeleteModal/DeleteModal';
 import getMetaRoute from "./Helpers/getMetaRoute";
 import Styles from './ManageRoute.module.css';
-import { GetPossibleTrains, NardisAction } from "../../../common/actions";
+import { EditActiveRoute, GetPossibleTrains, NardisAction } from "../../../common/actions";
 import { IdFunc, MapDispatch, OnDispatch, PossibleTrain, Props } from "../../../common/props";
 import { CargoChange } from "../NewRoute/NewRoute";
 import { RouteRevolution } from "../../../common/constants";
@@ -24,7 +24,8 @@ interface ManageRouteState {
     editCost       : number,
     recoupValue    : number,
     routePlan      : RoutePlanCargo | null,
-    showModal      : boolean
+    showModal      : boolean,
+    didChange      : boolean
 };
 
 interface BuildRouteMappedProps {
@@ -34,6 +35,7 @@ interface BuildRouteMappedProps {
 
 interface BuildRouteDispatchedProps {
     removeRouteFromRoutes: (id: string, value: number) => void,
+    editActivePlayerRoutes: EditActiveRoute
 };
 
 interface ManageRouteProps extends Props, BuildRouteMappedProps, BuildRouteDispatchedProps {}
@@ -60,6 +62,19 @@ const mapDispatchToProps: MapDispatch<BuildRouteDispatchedProps> = (
                     }
                 }
             }
+        ),
+        editActivePlayerRoutes: (routeId: string, train: Train, routePlan: RoutePlanCargo, cost: number) => dispatch(
+            {
+                type: NardisAction.EDIT_ACTIVE_PLAYER_ROUTE,
+                payload: {
+                    editActivePlayerRoute: {
+                        routeId,
+                        train,
+                        routePlan,
+                        cost
+                    }
+                }
+            }
         )
     }
 );
@@ -79,7 +94,8 @@ class ManageRoute extends Component<ManageRouteProps, ManageRouteState> {
         editCost: 0,
         recoupValue: 0,
         train: null,
-        routePlan: null
+        routePlan: null,
+        didChange: false
     };
 
     onDelete: IdFunc = (id: string): void => {
@@ -98,6 +114,7 @@ class ManageRoute extends Component<ManageRouteProps, ManageRouteState> {
             this.setState({
                 ...this.state, 
                 id: '',
+                recoupValue: 0,
                 deleteInitiated: false, 
             });
         }
@@ -108,9 +125,11 @@ class ManageRoute extends Component<ManageRouteProps, ManageRouteState> {
             this.setState({
                 ...this.state, 
                 id: '', 
+                editCost: 0,
                 editInitiated: false, 
                 train: null, 
-                routePlan: null
+                routePlan: null,
+                didChange: false
             });
         } else {
             const route: Route[] = this.props.routes.filter(e => e.id === id);
@@ -127,6 +146,7 @@ class ManageRoute extends Component<ManageRouteProps, ManageRouteState> {
     onCargoAdd: CargoChange = (resource: Resource, revolution: RouteRevolution): void => {
         this.setState({
             ...this.state,
+            didChange: true,
             routePlan: {
                 ...addCargo(resource, revolution, this.state.routePlan)
             }
@@ -136,6 +156,7 @@ class ManageRoute extends Component<ManageRouteProps, ManageRouteState> {
     onCargoRemove: CargoChange = (resource: Resource, revolution: RouteRevolution): void => {
         this.setState({
             ...this.state,
+            didChange: true,
             routePlan: {
                 ...removeCargo(resource, revolution, this.state.routePlan)
             }
@@ -155,6 +176,7 @@ class ManageRoute extends Component<ManageRouteProps, ManageRouteState> {
         }
         this.setState({
             ...newState,
+            didChange: true,
             showModal: false
         });
     }
@@ -191,8 +213,10 @@ class ManageRoute extends Component<ManageRouteProps, ManageRouteState> {
                     train={this.state.train}
                     editCost={this.state.editCost}
                     routePlan={this.state.routePlan}
+                    didChange={this.state.didChange}
                     onCancel={this.onEdit.bind(null, '')} 
                     onCargoAdd={this.onCargoAdd}
+                    onConfirm={this.props.editActivePlayerRoutes}
                     onCargoRemove={this.onCargoRemove} 
                     onTrainChange={this.onChangeTrain}
                     changingTrain={this.state.showModal}

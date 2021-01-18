@@ -7,7 +7,9 @@ import {
     PotentialRoute, 
     Resource, 
     Route,
-    City
+    City,
+    Train,
+    RoutePlanCargo
 } from "nardis-game";
 
 import { Func, PossibleTrain } from "./props";
@@ -29,6 +31,12 @@ interface ReducerPayload {
     removeRouteFromRoutes?: {
         routeId: string,
         value: number
+    },
+    editActivePlayerRoute?: {
+        routeId: string,
+        train: Train,
+        routePlan: RoutePlanCargo,
+        cost: number
     }
 };
 
@@ -39,6 +47,7 @@ export enum NardisAction {
     ADD_PLAYER_UPGRADE,
     REMOVE_FROM_PLAYER_QUEUE,
     REMOVE_FROM_PLAYER_ROUTE,
+    EDIT_ACTIVE_PLAYER_ROUTE,
     UPDATE_PLAYER_VALUES,
     END_PLAYER_TURN,
     TOGGLE_LOADING
@@ -58,6 +67,7 @@ export type GetFinanceTotal       = Func<void, FinanceTotal[]>;
 export type GetTotalProfits       = Func<void, number>;
 export type GetAllResources       = Func<void, Resource[]>;
 export type AddRouteToQueue       = Func<BuyableRoute, void>;
+export type EditActiveRoute       = (routeId: string, train: Train, routePlan: RoutePlanCargo, cost: number) => void;
 export type RemoveRouteFromQueue  = Func<Route, void>;
 
 export interface ReducerAction extends Action<NardisAction> {

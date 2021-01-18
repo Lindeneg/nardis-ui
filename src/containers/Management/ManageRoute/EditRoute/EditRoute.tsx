@@ -14,6 +14,7 @@ import { CargoChange } from "../../NewRoute/NewRoute";
 import { IdFunc, PossibleTrain } from "../../../../common/props";
 import Modal from '../../../../components/Utility/Modal/Modal';
 import ListItems from '../../../../components/Information/ListItems/ListItems';
+import { EditActiveRoute } from "../../../../common/actions";
 
 
 interface EditRouteProps {
@@ -23,12 +24,14 @@ interface EditRouteProps {
     editCost     : number,
     routePlan    : RoutePlanCargo | null,
     changingTrain: boolean,
+    didChange    : boolean,
     onCancel     : () => void,
     modalOpen    : () => void,
     modalClose   : () => void,
     onCargoAdd   : CargoChange,
     onCargoRemove: CargoChange,
-    onTrainChange: IdFunc
+    onTrainChange: IdFunc,
+    onConfirm: EditActiveRoute
 };
 
 
@@ -122,9 +125,17 @@ const editRoute = (props: EditRouteProps) => {
                     activeId={props.train?.id || ''} />
             </Modal>
             <Button 
-                disabled={false} 
+                disabled={!props.didChange} 
                 buttonType={ButtonType.EditRouteConfirm} 
-                whenClicked={() => null}
+                whenClicked={() => {
+                    if (props.route.length > 0) {
+                        const route: Route = props.route[0];
+                        const train: Train = props.train ? props.train : route.getTrain(); 
+                        const routePlan: RoutePlanCargo = props.routePlan ? props.routePlan : route.getRoutePlan();
+                        props.onConfirm(props.route[0].id, train, routePlan, props.editCost);
+                        props.onCancel();
+                    }
+                }}
             >
                 CONFIRM EDIT {!!props.editCost ? `(${props.editCost}G)` : ''}
             </Button>
