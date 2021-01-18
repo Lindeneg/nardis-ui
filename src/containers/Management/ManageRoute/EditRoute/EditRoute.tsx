@@ -61,6 +61,7 @@ const editRoute = (props: EditRouteProps) => {
                 <div className={Styles.RouteState}>
                     {getMetaRoute({
                         route,
+                        isEditing: true,
                         editDisabled: true,
                         deleteDisabled: true,
                         onEdit: () => null,

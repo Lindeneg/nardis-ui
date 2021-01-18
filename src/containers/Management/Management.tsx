@@ -9,6 +9,9 @@ import { managementNavigationBarEntries } from '../../common/constants';
 import { Functional, Props } from '../../common/props';
 
 
+/**
+ * Container with components to create/manage routes
+ */
 const management: Functional<Props> = (props: Props): JSX.Element => (
     <div className={Styles.Management}>
         <NavigationEntries style={{flexDirection: 'row', textAlign: 'center'}} {...managementNavigationBarEntries} />

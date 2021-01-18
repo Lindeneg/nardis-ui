@@ -1,7 +1,7 @@
 import { Route, RouteState } from "nardis-game";
 
 import MetaRoute from '../../../../components/Information/MetaRoute/MetaRoute';
-import { metaRouteActiveHeaderNames } from '../../../../common/constants';
+import { metaRouteActiveHeaderNames, metaRouteEditHeaderNames } from '../../../../common/constants';
 import { Functional, IdFunc, Props } from '../../../../common/props';
 
 
@@ -11,8 +11,37 @@ interface GetMetaRouteProps extends Props {
     deleteDisabled: boolean,
     onEdit        : IdFunc,
     onDelete      : IdFunc,
+    isEditing    ?: boolean,
     index        ?: number
 };
+
+
+const getHeaderValues = (route: Route, distance: number, isEditing: boolean, routeState: string): {
+    headers: string[];
+    values: (string)[];
+} => {
+    if (isEditing) {
+        return {
+            headers: metaRouteEditHeaderNames,
+            values: [
+                route.getDistance() + 'KM',
+                route.getKilometersTravelled() + 'KM',
+                route.getProfit() + 'G',
+                route.getPurchasedOnTurn().toString()
+            ]
+        }
+    } else {
+        return {
+            headers: metaRouteActiveHeaderNames,
+            values: [
+                routeState,
+                distance > 0 ? distance + 'KM' : 'IN CITY',
+                route.getKilometersTravelled() + 'KM',
+                route.getProfit() + 'G'
+            ]
+        };
+    }
+}
 
 
 /**
@@ -45,13 +74,7 @@ const getMetaRoute: Functional<GetMetaRouteProps> = (props: GetMetaRouteProps): 
             editRouteFunc={props.onEdit}
             deleteRouteFunc={props.onDelete}
             id={props.route.id}
-            headers={metaRouteActiveHeaderNames}
-            values={[
-                routeState,
-                distance > 0 ? distance + 'KM' : 'IN CITY',
-                props.route.getKilometersTravelled() + 'KM',
-                props.route.getProfit() + 'G'
-            ]}
+            {...getHeaderValues(props.route, distance, props.isEditing ? true : false, routeState)}
             arrowColors={{toCityOne: a1, toCityTwo: a2}}
             style={props.style}
         />

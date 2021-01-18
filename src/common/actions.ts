@@ -27,7 +27,8 @@ interface ReducerPayload {
         route: Route
     },
     removeRouteFromRoutes?: {
-        routeId: string
+        routeId: string,
+        value: number
     }
 };
 
@@ -49,7 +50,6 @@ export interface ActionFuncArgs {
 };
 
 export type ActionFunc            = Func<ActionFuncArgs, NardisState>
-
 export type GetStartCity          = Func<void, City[]>;
 export type GetPotentialRoutes    = Func<City, PotentialRoute[]>;
 export type GetPossibleTrains     = Func<void, PossibleTrain[]>;

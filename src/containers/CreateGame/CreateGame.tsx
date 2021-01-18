@@ -93,7 +93,7 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
             startMoney: {
                 inputConfig: {
                     type: 'number',
-                    label: 'Money (TODO does nothing atm)',
+                    label: 'Money',
                     placeholder: '800'
                 },
                 validation: (inp: string): boolean => {

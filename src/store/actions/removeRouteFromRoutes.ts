@@ -8,7 +8,7 @@ const removeRouteFromRoutes: ActionFunc = (
 ): NardisState => {
     let state: NardisState = {...args.state};
     if (args.state.gameCreated && args.state._game && args.payload.removeRouteFromRoutes) {
-        args.state._game.removeRouteFromPlayerRoutes(args.payload.removeRouteFromRoutes.routeId);
+        args.state._game.removeRouteFromPlayerRoutes(args.payload.removeRouteFromRoutes.routeId, args.payload.removeRouteFromRoutes.value);
         state = {...update({state, payload: {}})};
     }
     return state;

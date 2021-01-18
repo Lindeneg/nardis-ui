@@ -17,13 +17,14 @@ import { addCargo, removeCargo } from './Helpers/manipulateCargo';
 
 interface ManageRouteState {
     deleteInitiated: boolean,
-    editInitiated: boolean,
-    possibleTrains: PossibleTrain[],
-    id: string,
-    train: Train | null,
-    editCost: number,
-    routePlan: RoutePlanCargo | null,
-    showModal: boolean
+    editInitiated  : boolean,
+    possibleTrains : PossibleTrain[],
+    id             : string,
+    train          : Train | null,
+    editCost       : number,
+    recoupValue    : number,
+    routePlan      : RoutePlanCargo | null,
+    showModal      : boolean
 };
 
 interface BuildRouteMappedProps {
@@ -32,7 +33,7 @@ interface BuildRouteMappedProps {
 };
 
 interface BuildRouteDispatchedProps {
-    removeRouteFromRoutes: IdFunc,
+    removeRouteFromRoutes: (id: string, value: number) => void,
 };
 
 interface ManageRouteProps extends Props, BuildRouteMappedProps, BuildRouteDispatchedProps {}
@@ -49,12 +50,13 @@ const mapDispatchToProps: MapDispatch<BuildRouteDispatchedProps> = (
     dispatch: OnDispatch
 ): BuildRouteDispatchedProps => (
     {
-        removeRouteFromRoutes: (routeId: string) => dispatch(
+        removeRouteFromRoutes: (routeId: string, value: number) => dispatch(
             {
                 type: NardisAction.REMOVE_FROM_PLAYER_ROUTE,
                 payload: {
                     removeRouteFromRoutes: {
-                        routeId
+                        routeId,
+                        value
                     }
                 }
             }
@@ -75,20 +77,23 @@ class ManageRoute extends Component<ManageRouteProps, ManageRouteState> {
         possibleTrains: this.props.getPossibleTrains(),
         id: '',
         editCost: 0,
+        recoupValue: 0,
         train: null,
         routePlan: null
     };
 
     onDelete: IdFunc = (id: string): void => {
         if (!this.state.deleteInitiated) {
+            const route: Route[] = this.props.routes.filter(e => e.id === id);
             this.setState({
                 ...this.state, 
                 id,
+                recoupValue: route.length > 0 ? Math.floor(route[0].getCost() / 2) : 0,
                 deleteInitiated: true
             });
         } else {
             if (id === this.state.id) {
-                this.props.removeRouteFromRoutes(id);
+                this.props.removeRouteFromRoutes(id, this.state.recoupValue);
             }
             this.setState({
                 ...this.state, 
@@ -176,7 +181,7 @@ class ManageRoute extends Component<ManageRouteProps, ManageRouteState> {
                     show={this.state.deleteInitiated}
                     onDelete={this.onDelete}
                     id={this.state.id}
-                    value={0 /* TODO implement resell value of active route */}
+                    value={this.state.recoupValue}
                 />
                 <hr/>
                 {this.props.routes.length <= 0 ? <p className={Styles.NoRoutes}>NO ACTIVE ROUTES</p> 

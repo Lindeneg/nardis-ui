@@ -184,11 +184,10 @@ class NewRoute extends Component<NewRouteProps, NewRouteState> {
 
     trainChangeHandler: IdFunc = (trainId: string): void => {
         const train: PossibleTrain = this.state.possibleTrains.filter(e => e.train.id === trainId)[0];
-        const possibleTrains: PossibleTrain[] = [...this.state.possibleTrains];
 
         this.setState({
             ...this.state,
-            possibleTrains: [...possibleTrains]
+            possibleTrains: [...this.state.possibleTrains]
             .sort((a, b) => (a.train.levelRequired - b.train.levelRequired) - (b.cost - a.cost)),
             chosenTrain: {
                 train: train.train,
@@ -264,9 +263,7 @@ class NewRoute extends Component<NewRouteProps, NewRouteState> {
             ...this.state,
             chosenTrain: {
                 ...this.state.chosenTrain,
-                routePlanCargo: {
-                    ...addCargo(resource, revolution, this.state.chosenTrain.routePlanCargo)
-                }
+                routePlanCargo: addCargo(resource, revolution, this.state.chosenTrain.routePlanCargo)
             }
         });
     }
@@ -276,9 +273,7 @@ class NewRoute extends Component<NewRouteProps, NewRouteState> {
             ...this.state,
             chosenTrain: {
                 ...this.state.chosenTrain,
-                routePlanCargo: {
-                    ...removeCargo(resource, revolution, this.state.chosenTrain.routePlanCargo)
-                }
+                routePlanCargo: removeCargo(resource, revolution, this.state.chosenTrain.routePlanCargo)
             }
         });
     }

@@ -30,6 +30,9 @@ interface MetaRouteProps extends Props {
 };
 
 
+/**
+ * Component to display an active route and its current state
+ */
 const metaRoute: Functional<MetaRouteProps> = (
     props: MetaRouteProps
 ): JSX.Element => (

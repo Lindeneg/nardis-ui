@@ -158,6 +158,13 @@ export const metaRouteActiveHeaderNames: string[] = [
     'PROFIT'
 ];
 
+export const metaRouteEditHeaderNames: string[] = [
+    'DISTANCE',
+    'TRAVELLED',
+    'PROFIT',
+    'BOUGHT ON TURN'
+];
+
 export const layoutCardLabels: [string, string][] = [
     ['money', 'g'],
     ['level', ''],
