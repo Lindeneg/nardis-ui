@@ -83,7 +83,14 @@
     color: white !important;
 }
 
-.SetTrain:disabled:hover, .ChangeOrigin:disabled:hover, .ChangeDestination:disabled:hover, .BuyRoute:disabled:hover {
+.EditRouteConfirm:disabled:hover {
+    background-color: #212fa2
+}
+
+.SetTrain:disabled:hover, 
+.ChangeOrigin:disabled:hover, 
+.ChangeDestination:disabled:hover, 
+.BuyRoute:disabled:hover {
     background-color: #3e5fc2;
 }
 
