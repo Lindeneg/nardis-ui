@@ -1,8 +1,9 @@
 import { City } from "nardis-game";
 
 import Button from '../../../components/Utility/Button/Button';
+import Arrows from '../../../components/Utility/Arrows/Arrows';
 import { IdFunc, Functional, Props } from "../../../common/props";
-import { ButtonType } from "../../../common/constants";
+import { ArrowDirection, ButtonType } from "../../../common/constants";
 import Styles from './MetaRoute.module.css';
 
 
@@ -39,13 +40,23 @@ const metaRoute: Functional<MetaRouteProps> = (
     <div className={Styles.MetaRoute} style={props.style}>
         <div className={Styles.BuildQueueCities}>
             <p style={{color: props.cityOne.color}}>{props.cityOne.city.name}</p>
-
-            {/*TODO make arrow utility component*/}
-            <div className={Styles.Arrows}>
-                <p style={{color: props.arrowColors?.toCityOne || '#ccc'}} className={Styles.Arrow}>&#8656;</p>
-                <p style={{marginBottom: '30px', color: props.arrowColors?.toCityTwo || '#ccc'}} className={Styles.Arrow}>&#8658;</p>
-            </div>
-
+            <Arrows 
+                arrows={[
+                    {
+                        arrowDirection: ArrowDirection.Left,
+                        style: {
+                            color: props.arrowColors?.toCityOne || '#ccc'
+                        }
+                    },
+                    {
+                        arrowDirection: ArrowDirection.Right,
+                        style: {
+                            color: props.arrowColors?.toCityTwo || '#ccc',
+                            marginBottom: '30px'
+                        }
+                    }
+                ]}
+            />
             <p style={{color: props.cityTwo.color}}>{props.cityTwo.city.name}</p>
         </div>
         <div className={Styles.BuildQueueInfo}>
