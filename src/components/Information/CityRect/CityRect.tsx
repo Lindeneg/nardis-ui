@@ -26,11 +26,12 @@ const cityRect: Functional<CityRectProps> = (
     let name         : string             = 'NO DESTINATION COULD BE FOUND';
     let resources    : CityResource[]     = [];
     let sizeJSX      : JSX.Element | null = null;
+    let maxCapacity  : JSX.Element | null = null;
 
     if (props.city) {
         name      = props.city.name;
         resources = isDeparture ? props.city.getSupply() : props.city.getDemand();
-        sizeJSX   = props.showSize ? <span> | SIZE {props.city.getSize()}</span> : null;
+        sizeJSX   = props.showSize ? <span> | SIZE {props.city.getSize()} {props.city.isFull() ? '| IS FULL' : ''}</span> : null;
     }
 
     return (
@@ -42,6 +43,7 @@ const cityRect: Functional<CityRectProps> = (
                 {name.toUpperCase()} 
                 {props.city ? (isDeparture ? ' SUPPLY' : ' DEMAND') : null} 
                 {sizeJSX}
+                {maxCapacity}
             </h4>
             <CityResources routeCargo={props.routeCargo} resources={resources} isDeparture={isDeparture} />
         </div>

@@ -1,4 +1,4 @@
-import { IdFunc, Props } from "../../../../../common/props";
+import { Functional, IdFunc, Props } from "../../../../../common/props";
 import Button from '../../../../../components/Utility/Button/Button';
 import Modal from '../../../../../components/Utility/Modal/Modal';
 import { ButtonType } from "../../../../../common/constants";
@@ -13,7 +13,9 @@ interface DeleteModalProps extends Props {
 };
 
 
-const deleteModal = (props: DeleteModalProps): JSX.Element => (
+const deleteModal: Functional<DeleteModalProps> = (
+    props: DeleteModalProps
+): JSX.Element => (
     <Modal
         show={props.show}
         whenClicked={props.onDelete.bind(null, '')}

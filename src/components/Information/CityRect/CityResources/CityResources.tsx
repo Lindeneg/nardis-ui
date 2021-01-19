@@ -26,13 +26,14 @@ const cityResources: Functional<CityResourcesProps> = (
             .filter((entry: RouteCargo): boolean => entry.resource.equals(row.resource))
             .map((entry: RouteCargo): number => entry.targetAmount)
             .reduce((a: number, b: number): number => a + b, 0);
+            const diff: number = row.available - match;
             return (
             [
                 row.resource.name, 
                 row.resource.getValue() + 'g',
                 row.resource.getWeight().toString() + 't',
                 // subtract the matched cargo if applicable
-                props.isDeparture ? (row.available - match).toString() : '~'
+                props.isDeparture ? (diff < 0 ? 0 : diff).toString() : '~'
             ]
         )})
         // sort resources by ascending value

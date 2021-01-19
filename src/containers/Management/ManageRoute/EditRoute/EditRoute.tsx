@@ -11,7 +11,7 @@ import Styles from './EditRoute.module.css';
 import { ButtonType, cardDefaultStyle, ListType } from "../../../../common/constants";
 import { getCargoCards } from "../../NewRoute/Helpers/Selector/getCargoCards";
 import { CargoChange } from "../../NewRoute/NewRoute";
-import { IdFunc, PossibleTrain } from "../../../../common/props";
+import { Functional, IdFunc, PossibleTrain } from "../../../../common/props";
 import Modal from '../../../../components/Utility/Modal/Modal';
 import ListItems from '../../../../components/Information/ListItems/ListItems';
 import { EditActiveRoute } from "../../../../common/actions";
@@ -39,9 +39,11 @@ const style: CSSProperties = cardDefaultStyle;
 
 
 /**
- * 
+ * Component to allow edits of an active Player Route.
  */
-const editRoute = (props: EditRouteProps) => {
+const editRoute: Functional<EditRouteProps> = (
+    props: EditRouteProps
+) => {
 
     let jsx: JSX.Element = <p>NO ROUTE TO EDIT</p>;
 
