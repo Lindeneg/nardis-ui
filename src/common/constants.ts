@@ -15,6 +15,14 @@ export enum Direction {
 };
 
 /**
+ * The direction of an arrow relative to the position of the user
+ */
+export enum ArrowDirection {
+    Right,
+    Left
+};
+
+/**
  * nonfull - none or half the directions have been visited
  * full    - all directions have been visited
  */
@@ -182,3 +190,18 @@ export const FinanceExpenseRows: Array<[string, FinanceType]> = [
 ];
 
 export const cardDefaultStyle: CSSProperties = {margin: '0', backgroundColor: '#2d3a9c'};
+
+export const defaultChartColors: string[] = [
+    '#aaffc3',
+    '#9a6324',
+    '#808000',
+    '#469990',
+    '#ffd8b1',
+    '#e6194B',
+    '#f58231',
+    '#ffe119',
+    '#bfef45',
+    '#42d4f4',
+    '#4363d8',
+    '#911eb4'
+];
