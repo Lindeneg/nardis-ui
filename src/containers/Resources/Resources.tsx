@@ -35,15 +35,17 @@ const getLabels = (turn: number): number[] => {
     return arr;
 }
 
+
 /* history length will always be less than currentTurn  
    so normalize array length to the value of currentTurn */
-const normalizeArrayLength = (currentTurn: number, history: ResourceValueHistory[]): number[] => {
-    const arr: number[] = [];
+const normalizeArrayLength = (currentTurn: number, history: ResourceValueHistory[]): Array<number | null> => {
+    const arr: Array<number | null> = [];
     for (let i = 0; i < history.length; i++) {
         const [turn, value]: [number, number] = [history[i].turn, history[i].value];
         const diff: number = i < history.length - 1 ? history[i + 1].turn - turn : (currentTurn - turn) + 1;
+        arr.push(value);
         for (let j = 0; j < diff; j++) {
-            arr.push(value);
+            arr.push(null);
         }
     }
     return arr;
@@ -59,6 +61,7 @@ const getValues = (turn: number, resources: Resource[]): ChartDataSets[] => {
             backgroundColor: color,
             borderColor: color,
             fill: false,
+            spanGaps: true,
             data: normalizeArrayLength(turn, resource.getValueHistory())
         }
     })
