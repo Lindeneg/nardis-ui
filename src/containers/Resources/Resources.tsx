@@ -41,11 +41,11 @@ const getLabels = (turn: number): number[] => {
 const normalizeArrayLength = (currentTurn: number, history: ResourceValueHistory[]): Array<number | null> => {
     const arr: Array<number | null> = [];
     for (let i = 0; i < history.length; i++) {
+        const notLastEntry: boolean = i < history.length - 1;
         const [turn, value]: [number, number] = [history[i].turn, history[i].value];
-        const diff: number = i < history.length - 1 ? history[i + 1].turn - turn : (currentTurn - turn) + 1;
-        arr.push(value);
+        const diff: number = notLastEntry ? history[i + 1].turn - turn : (currentTurn - turn) + 1;
         for (let j = 0; j < diff; j++) {
-            arr.push(null);
+            arr.push(j <= 0 || (!notLastEntry && j === diff - 1) ? value : null);
         }
     }
     return arr;
