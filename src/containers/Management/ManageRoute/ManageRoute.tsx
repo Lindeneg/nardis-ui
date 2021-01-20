@@ -1,7 +1,7 @@
 import { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import { Resource, Route, RoutePlanCargo, Train } from "nardis-game";
+import { Resource, Route, RoutePlanCargo, Train, Upgrade } from "nardis-game";
 
 import NardisState from "../../../common/state";
 import EditRoute from './EditRoute/EditRoute';
@@ -30,6 +30,7 @@ interface ManageRouteState {
 
 interface BuildRouteMappedProps {
     routes: Route[],
+    upgrades: Upgrade[],
     getPossibleTrains : GetPossibleTrains
 };
 
@@ -45,6 +46,7 @@ const mapStateToProps = (
     state: NardisState
 ): BuildRouteMappedProps => ({
     routes: state.routes,
+    upgrades: state.upgrades,
     getPossibleTrains: state.getPossibleTrains
 });
 
@@ -211,6 +213,7 @@ class ManageRoute extends Component<ManageRouteProps, ManageRouteState> {
                 this.state.editInitiated ? <EditRoute 
                     route={this.props.routes.filter(e => e.id === this.state.id)} 
                     train={this.state.train}
+                    upgrades={this.props.upgrades}
                     editCost={this.state.editCost}
                     routePlan={this.state.routePlan}
                     didChange={this.state.didChange}

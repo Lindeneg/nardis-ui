@@ -1,25 +1,27 @@
 import { CSSProperties, Fragment } from "react";
 
-import { Route, RoutePlanCargo, Train } from "nardis-game";
+import { Route, RoutePlanCargo, Train, Upgrade } from "nardis-game";
 
 import Button from '../../../../components/Utility/Button/Button';
 import Cards from '../../../../components/Information/Cards/Cards';
 import TwoWayRoute from '../../../../components/Information/MetaRoute/TwoWayRoute/TwoWayRoute';
 import CargoSelector from '../../NewRoute/Helpers/Selector/CargoSelector';
+import Modal from '../../../../components/Utility/Modal/Modal';
+import ListItems from '../../../../components/Information/ListItems/ListItems';
 import getMetaRoute from "..//Helpers/getMetaRoute";
+import getTrainUpgradeContext, { TrainUpgradeContext } from "../../../Helpers/getUpgradeContext";
 import Styles from './EditRoute.module.css';
 import { ButtonType, cardDefaultStyle, ListType } from "../../../../common/constants";
 import { getCargoCards } from "../../NewRoute/Helpers/Selector/getCargoCards";
 import { CargoChange } from "../../NewRoute/NewRoute";
 import { Functional, IdFunc, PossibleTrain } from "../../../../common/props";
-import Modal from '../../../../components/Utility/Modal/Modal';
-import ListItems from '../../../../components/Information/ListItems/ListItems';
 import { EditActiveRoute } from "../../../../common/actions";
 
 
 interface EditRouteProps {
     route        : Route[],
     possibleTrains: PossibleTrain[],
+    upgrades     : Upgrade[],
     train        : Train | null,
     editCost     : number,
     routePlan    : RoutePlanCargo | null,
@@ -50,6 +52,11 @@ const editRoute: Functional<EditRouteProps> = (
     if (props.route.length > 0) {
         const route: Route = props.route[0];
         const train: Train = props.train ? props.train : route.getTrain(); 
+        const trainContext: TrainUpgradeContext = getTrainUpgradeContext(
+            train.speed,
+            train.upkeep,
+            props.upgrades
+        );
         const routePlan: RoutePlanCargo = props.routePlan ? props.routePlan : route.getRoutePlan();
         const cargoCards = getCargoCards(
             routePlan.cityOne, 
@@ -94,8 +101,8 @@ const editRoute: Functional<EditRouteProps> = (
                     cards={[
                         {label: 'TRAIN', value: train.name, style},
                         {label: 'CARGO SPACE', value: train.cargoSpace + 'T', style},
-                        {label: 'UPKEEP', value: train.upkeep + 'G/TURN', style},
-                        {label: 'SPEED', value: train.speed + 'KM/TURN', style},
+                        {label: 'UPKEEP', value: trainContext.upkeep + 'G/TURN', style},
+                        {label: 'SPEED', value: trainContext.speed + 'KM/TURN', style},
                         {label: 'LEVEL', value: train.levelRequired.toString(), style},
                     ]}
                     style={{margin: 0}}

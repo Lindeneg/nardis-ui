@@ -1,13 +1,13 @@
+import { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import { QueuedRouteItem, Route } from "nardis-game";
+import { QueuedRouteItem, Route, Train, Upgrade } from "nardis-game";
 
 import NardisState from "../../../common/state";
-import { MapDispatch, OnDispatch, Props } from "../../../common/props";
 import Styles from './BuildQueue.module.css';
-
 import MetaRoute from '../../../components/Information/MetaRoute/MetaRoute';
-import { Component, Fragment } from "react";
+import getTrainUpgradeContext, { TrainUpgradeContext } from "../../Helpers/getUpgradeContext";
+import { MapDispatch, OnDispatch, Props } from "../../../common/props";
 import { metaRouteHeaderNames } from "../../../common/constants";
 import { NardisAction, RemoveRouteFromQueue } from "../../../common/actions";
 
@@ -18,6 +18,7 @@ interface BuildQueueState {
 
 interface BuildQueueMappedProps {
     queue: QueuedRouteItem[],
+    upgrades: Upgrade[]
 };
 
 interface BuildQueueDispatchedProps {
@@ -30,7 +31,8 @@ interface BuildQueueProps extends Props, BuildQueueMappedProps, BuildQueueDispat
 const mapStateToProps = (
     state: NardisState
 ): BuildQueueMappedProps => ({
-    queue: state.queue
+    queue: state.queue,
+    upgrades: state.upgrades
 });
 
 const mapDispatchToProps: MapDispatch<BuildQueueDispatchedProps> = (
@@ -68,7 +70,14 @@ class BuildQueue extends Component<BuildQueueProps, BuildQueueState> {
             <hr/>
             {this.props.queue.length <= 0 ? <p className={Styles.NoRoutes}>NO ROUTES IN QUEUE</p> :
             <div className={Styles.Container}>
-            {this.props.queue.map((item: QueuedRouteItem, index: number): JSX.Element => (
+            {this.props.queue.map((item: QueuedRouteItem, index: number): JSX.Element => {
+                const train: Train = item.route.getTrain();
+                const trainContext: TrainUpgradeContext = getTrainUpgradeContext(
+                    train.speed,
+                    train.upkeep,
+                    this.props.upgrades
+                );
+                return (
                 <MetaRoute
                     key={index}
                     cityOne={{city: item.route.getCityOne(), color: 'yellow'}}
@@ -80,12 +89,12 @@ class BuildQueue extends Component<BuildQueueProps, BuildQueueState> {
                     headers={metaRouteHeaderNames}
                     values={[
                         item.route.getDistance() + 'KM', 
-                        item.route.getTrain().speed + 'KM/TURN',
+                        trainContext.speed + 'KM/TURN',
                         item.turnCost > 0 ? item.turnCost.toString() : 'LOADING CARGO', 
-                        item.route.getTrain().upkeep + 'G/TURN'
+                        trainContext.upkeep + 'G/TURN'
                     ]}
                 />
-            ))}
+            )})}
             </div>}
         </Fragment>
         );

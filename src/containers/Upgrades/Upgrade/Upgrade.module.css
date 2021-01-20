@@ -1,0 +1,36 @@
+.Upgrade {
+    display: flex;
+    flex-wrap: wrap;
+    width: 500px;
+    border: 1px solid #3e5fc2;
+    background-color: royalblue;
+    text-align: center;
+    margin: 10px;
+}
+
+.Purchased {
+    background-color: green;
+}
+
+.Unpurchaseable {
+    background-color: #212fa2;
+}
+
+.Unpurchaseable p {
+    text-decoration: line-through;
+}
+
+.Upgrade:hover {
+    background-color: green;
+    cursor: pointer;
+}
+
+.Unpurchaseable:hover {
+    background-color: initial;
+    cursor: not-allowed;
+}
+
+.Purchased:hover {
+    background-color: green;
+    cursor: not-allowed;
+}

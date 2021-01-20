@@ -11,13 +11,14 @@ const update: ActionFunc = (
         const player: Player = args.state._game.getCurrentPlayer();
         return {
             ...args.state,
-            money   : player.getFinance().getGold(),
-            turn    : args.state._game.getCurrentTurn(),
-            level   : player.getLevel(),
-            range   : player.getRange(),
-            routes  : player.getRoutes(),
-            queue   : player.getQueue(),
-            upgrades: player.getUpgrades(),
+            money     : player.getFinance().getGold(),
+            turn      : args.state._game.getCurrentTurn(),
+            level     : player.getLevel(),
+            range     : player.getRange(),
+            avgRevenue: player.getFinance().getAverageRevenue(),
+            routes    : player.getRoutes(),
+            queue     : player.getQueue(),
+            upgrades  : player.getUpgrades(),
         };
     }
     console.error('invalid update state');

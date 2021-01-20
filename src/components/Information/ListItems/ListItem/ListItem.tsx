@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 
-import { City, PotentialRoute, Route } from 'nardis-game';
+import { City, PotentialRoute, Route, Upgrade } from 'nardis-game';
 
 import Styles from './ListItem.module.css';
 import NardisState from '../../../../common/state';
+import getTrainUpgradeContext, { TrainUpgradeContext } from '../../../../containers/Helpers/getUpgradeContext';
 import { ListType } from '../../../../common/constants';
 import { Clickable, Functional, Props, IdFunc, Func, PossibleTrain } from '../../../../common/props';
 
@@ -11,7 +12,8 @@ import { Clickable, Functional, Props, IdFunc, Func, PossibleTrain } from '../..
 interface MapStateToProps {
     money          : number,
     level          : number,
-    range          : number
+    range          : number,
+    upgrades       : Upgrade[]
 };
 
 interface ListItemProps extends Props, MapStateToProps, Clickable<IdFunc> {
@@ -44,7 +46,8 @@ const mapStateToProps: Func<NardisState, MapStateToProps> = (
 ): MapStateToProps => ({
     money: state.money,
     level: state.level,
-    range: state.range
+    range: state.range,
+    upgrades: state.upgrades
 });
 
 
@@ -84,6 +87,11 @@ const listItem: Functional<ListItemProps> = (
             break;
         case ListType.Train:
             if (props.possibleTrain) {
+                const trainContext: TrainUpgradeContext = getTrainUpgradeContext(
+                    props.possibleTrain.train.speed,
+                    props.possibleTrain.train.upkeep,
+                    props.upgrades
+                );
                 isValid = (
                     props.possibleTrain.cost <= props.money && 
                     props.possibleTrain.train.levelRequired <= props.level
@@ -92,8 +100,8 @@ const listItem: Functional<ListItemProps> = (
                 header = props.possibleTrain.train.name.toUpperCase();
                 contentJSX = getContent([
                     ['COST', props.possibleTrain.cost + 'G'],
-                    ['UPKEEP', props.possibleTrain.train.upkeep + 'G/TURN'],
-                    ['SPEED', props.possibleTrain.train.speed + 'KM/TURN'],
+                    ['UPKEEP', trainContext.upkeep + 'G/TURN'],
+                    ['SPEED', trainContext.speed + 'KM/TURN'],
                     ['CARGO SPACE', props.possibleTrain.train.cargoSpace + 'T'],
                     ['LEVEL REQUIRED', props.possibleTrain.train.levelRequired]
                 ]);

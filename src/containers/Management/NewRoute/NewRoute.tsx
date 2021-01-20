@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import { 
     City, PotentialRoute, Resource, RouteCargo, 
-    Route, RoutePlanCargo, Train, BuyableRoute 
+    Route, RoutePlanCargo, Train, BuyableRoute, Upgrade 
 } from 'nardis-game';
 
 import Overview from './Helpers/Overview/Overview';
@@ -52,11 +52,12 @@ interface RouteInfo {
 };
 
 interface MappedProps {
-    addToPlayerQueue  : AddRouteToQueue,
+    addToPlayerQueue  : AddRouteToQueue
 };
 
 interface BaseProps {
     routes            : Route[],
+    upgrades          : Upgrade[],
     gold              : number,
     getStartCity      : GetStartCity,
     getPotentialRoutes: GetPotentialRoutes,
@@ -70,6 +71,7 @@ const mapStateToProps = (
     state: NardisState
 ): BaseProps => ({
     routes            : state.routes,
+    upgrades          : state.upgrades,
     gold              : state.money,
     getStartCity      : state.getStartCity,
     getPotentialRoutes: state.getPotentialRoutes,
@@ -397,6 +399,7 @@ class NewRoute extends Component<NewRouteProps, NewRouteState> {
                     chosenRoute={this.state.chosenRoute.length > 0 ? this.state.chosenRoute[0] : null}
                     chosenTrain={this.state.chosenTrain}
                     startCity={this.state.startCity} 
+                    upgrades={this.props.upgrades}
                 />
                 {this.getCargoSelector()}
             </Fragment>

@@ -1,18 +1,20 @@
 import { Fragment } from "react";
 
-import { City, PotentialRoute, Train } from "nardis-game";
+import { City, PotentialRoute, Train, Upgrade } from "nardis-game";
 
 import TwoWayRoute from '../../../../../components/Information/MetaRoute/TwoWayRoute/TwoWayRoute';
 import Cards from '../../../../../components/Information/Cards/Cards';
 import { ChosenTrain } from "../../NewRoute";
 import { Functional, Props } from "../../../../../common/props";
 import { cardDefaultStyle } from "../../../../../common/constants";
+import getTrainUpgradeContext, { TrainUpgradeContext } from "../../../../Helpers/getUpgradeContext";
 
 
 interface OverviewProps extends Props {
     chosenRoute: PotentialRoute | null,
     chosenTrain: ChosenTrain,
-    startCity  : City | null
+    startCity  : City | null,
+    upgrades   : Upgrade[]
 };
 
 const style = cardDefaultStyle;
@@ -30,6 +32,7 @@ const overview: Functional<OverviewProps> = (
         cityOne={{city: props.chosenRoute ? props.chosenRoute.cityOne : props.startCity, routeCargo: props.chosenTrain.routePlanCargo?.cityOne || null}}
         cityTwo={{city: props.chosenRoute ? props.chosenRoute.cityTwo : null, routeCargo: props.chosenTrain.routePlanCargo?.cityTwo || null}}
     />;
+    const trainUpgradeContext: TrainUpgradeContext = getTrainUpgradeContext(train?.speed || 0, train?.upkeep || 0, props.upgrades);
     const cards: JSX.Element = (
         <div>
             <hr/>
@@ -45,8 +48,8 @@ const overview: Functional<OverviewProps> = (
                 style={style}
                 cards={[
                     {label: 'CHOSEN TRAIN', value: train?.name || '', style},
-                    {label: 'SPEED', value: (train?.speed || 0) + 'KM/TURN', style},
-                    {label: 'UPKEEP', value: (train?.upkeep || 0) + 'G/TURN', style}
+                    {label: 'SPEED', value: trainUpgradeContext.speed + 'KM/TURN', style},
+                    {label: 'UPKEEP', value: trainUpgradeContext.upkeep + 'G/TURN', style}
                 ]}
             />
         </div>

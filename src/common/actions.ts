@@ -9,7 +9,8 @@ import {
     Route,
     City,
     Train,
-    RoutePlanCargo
+    RoutePlanCargo,
+    Upgrade
 } from "nardis-game";
 
 import { Func, PossibleTrain } from "./props";
@@ -24,6 +25,9 @@ interface ReducerPayload {
     },
     addToPlayerQueue?: {
         route: BuyableRoute
+    },
+    addUpgradeToPlayer?: {
+        upgradeId: string
     },
     removeFromPlayerQueue?: {
         route: Route
@@ -65,6 +69,7 @@ export type GetPossibleTrains     = Func<void, PossibleTrain[]>;
 export type GetFinanceHistory     = Func<void, FinanceHistory[]>;
 export type GetFinanceTotal       = Func<void, FinanceTotal[]>;
 export type GetTotalProfits       = Func<void, number>;
+export type GetAllUpgrades        = Func<void, Upgrade[]>;
 export type GetAllResources       = Func<void, Resource[]>;
 export type AddRouteToQueue       = Func<BuyableRoute, void>;
 export type EditActiveRoute       = (routeId: string, train: Train, routePlan: RoutePlanCargo, cost: number) => void;

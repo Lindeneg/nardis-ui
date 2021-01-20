@@ -14,6 +14,7 @@ import addToPlayerQueue from './actions/addToPlayerQueue';
 import removeFromPlayerQueue from './actions/removeFromPlayerQueue';
 import removeRouteFromRoutes from './actions/removeRouteFromRoutes';
 import editActivePlayerRoute from './actions/editActivePlayerRoute';
+import addUpgradeToPlayer from './actions/addUpgradeToPlayer';
 
 
 const initialState: NardisState = {
@@ -23,6 +24,7 @@ const initialState: NardisState = {
     turn              : 0,
     level             : 0,
     range             : 0,
+    avgRevenue        : 0,
     routes            : [],
     queue             : [],
     upgrades          : [],
@@ -33,6 +35,7 @@ const initialState: NardisState = {
     getPossibleTrains : () => [],
     getFinanceHistory : () => [],
     getAllResources   : () => [],
+    getAllUpgrades    : () => [],
     getFinanceTotal   : () => [],
     getTotalProfits   : () => 0
 };
@@ -52,6 +55,7 @@ const reducer = (
             returnFunc = addToPlayerQueue;
             break;
         case NardisAction.ADD_PLAYER_UPGRADE:
+            returnFunc = addUpgradeToPlayer;
             break;
         case NardisAction.REMOVE_FROM_PLAYER_QUEUE:
             returnFunc = removeFromPlayerQueue;

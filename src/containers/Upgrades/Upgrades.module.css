@@ -1,0 +1,26 @@
+.Upgrades {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 35px;
+}
+
+.LevelUpRequirements {
+    width: 100%;
+}
+
+.Container h2 { 
+    color: floralwhite;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 36px;
+    margin: 35px 0 35px 0;
+    text-align: center;
+    text-shadow: 2px 2px darkolivegreen;
+}
+
+.ModalButtons {
+    text-align: center;
+    width: 100%;
+}
