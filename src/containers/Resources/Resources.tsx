@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { connect } from "react-redux";
 
 import { ChartDataSets } from 'chart.js';
@@ -70,50 +71,53 @@ const getValues = (turn: number, resources: Resource[]): ChartDataSets[] => {
 const resources: Functional<ResourcesProps> = (
     props: ResourcesProps
 ): JSX.Element => (
-    <Chart
-        id='resourceChart'
-        type='line'
-        data={{
-            labels: getLabels(props.turn),
-            datasets: getValues(props.turn, props.getAllResources())
-        }}
-        options={{
-            legend: {
-                labels: {
-                    fontColor: 'white'
-                }
-            },
-            scales: {
-                xAxes: [{
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'TURN',
-                        fontColor: '#eee'
-                    },
-                    ticks: {
-                        fontColor: 'white',
-                        autoSkip: true,
-                        maxTicksLimit: 15
+    <Fragment>
+        <hr/>
+        <Chart
+            id='resourceChart'
+            type='line'
+            data={{
+                labels: getLabels(props.turn),
+                datasets: getValues(props.turn, props.getAllResources())
+            }}
+            options={{
+                legend: {
+                    labels: {
+                        fontColor: 'white'
                     }
-                }],
-                yAxes: [{
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'VALUE',
-                        fontColor: '#eee'
-                    },
-                    ticks: {
-                        fontColor: 'white',
-                    }
-                }]
-            },
-            responsive: true
-        }}
-        style={{
-            width: '100%',
-            height: '650px'
-        }}
-    />
+                },
+                scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'TURN',
+                            fontColor: '#eee'
+                        },
+                        ticks: {
+                            fontColor: 'white',
+                            autoSkip: true,
+                            maxTicksLimit: 15
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'VALUE',
+                            fontColor: '#eee'
+                        },
+                        ticks: {
+                            fontColor: 'white',
+                        }
+                    }]
+                },
+                responsive: true
+            }}
+            style={{
+                width: '100%',
+                height: '650px'
+            }}
+        />
+    </Fragment>
 );
 
 
