@@ -58,12 +58,12 @@ const reduceFinance = (items: FinanceTurnItem[], cmp?: Compare): number => (
 
 const getRow = (item: FinanceHistoryItem, cmp: Compare): string[] => (
     Object.keys(item)
-    .map((e: string): string => (reduceFinance(item[e], cmp) + 'G'))
+    .map((e: string): string => (reduceFinance(item[e], cmp).toLocaleString() + 'G'))
 );
 
 const getTotalProfitsPerTurn = (history: FinanceHistory) => (
     Object.keys(history.income).map(key => (
-        (reduceFinance(history.income[key]) - reduceFinance(history.expense[key])) + 'G'
+        (reduceFinance(history.income[key]) - reduceFinance(history.expense[key])).toLocaleString() + 'G'
     ))
 );
 
@@ -101,7 +101,7 @@ const finance: Functional<FinanceProps> = (props: FinanceProps): JSX.Element => 
     const mGetRow                     = getRow.bind(null, history.expense);
     const mCmp                        = (target: FinanceType, item: FinanceTurnItem): boolean => item.type === target;  
     const mGetTotal                   = (key: string | number)                      : string  => (
-        (total[(typeof key === 'number' ? localKeys[key] : key)] || 0) + 'G'
+        (total[(typeof key === 'number' ? localKeys[key] : key)] || 0).toLocaleString() + 'G'
     );
 
     return (
@@ -136,7 +136,7 @@ const finance: Functional<FinanceProps> = (props: FinanceProps): JSX.Element => 
                 <div className={Styles.FinanceTable}>
                     <Table
                         headers={mGetHeaders('PROFITS')}
-                        rows={[['TOTAL PROFITS', ...getTotalProfitsPerTurn(history), props.getTotalProfits() + 'G']]}
+                        rows={[['TOTAL PROFITS', ...getTotalProfitsPerTurn(history), props.getTotalProfits().toLocaleString() + 'G']]}
                         {...propStyles}
                     />
                 </div>

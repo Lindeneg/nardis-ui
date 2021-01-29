@@ -25,9 +25,9 @@ const getHeaderValues = (route: Route, distance: number, isEditing: boolean, rou
             headers: metaRouteEditHeaderNames,
             values: [
                 route.getDistance() + 'KM',
-                route.getKilometersTravelled() + 'KM',
-                route.getProfit() + 'G',
-                route.getPurchasedOnTurn().toString()
+                route.getKilometersTravelled().toLocaleString() + 'KM',
+                route.getProfit().toLocaleString() + 'G',
+                route.getPurchasedOnTurn().toLocaleString()
             ]
         }
     } else {
@@ -36,8 +36,8 @@ const getHeaderValues = (route: Route, distance: number, isEditing: boolean, rou
             values: [
                 routeState,
                 distance > 0 ? distance + 'KM' : 'IN CITY',
-                route.getKilometersTravelled() + 'KM',
-                route.getProfit() + 'G'
+                route.getKilometersTravelled().toLocaleString() + 'KM',
+                route.getProfit().toLocaleString() + 'G'
             ]
         };
     }

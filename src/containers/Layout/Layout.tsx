@@ -87,7 +87,7 @@ class Layout extends Component<LayoutProps, LayoutState> {
                 const [label, suffix] = cards;
                 return {
                     label,
-                    value: (this.props[label]?.toString() || '') + suffix
+                    value: (this.props[label]?.toLocaleString() || '') + suffix
                 };
             });
             jsx = (
