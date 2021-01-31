@@ -12,19 +12,22 @@ import {
 
 import Table from '../../components/Utility/Table/Table';
 import NardisState from "../../common/state";
+import Card from '../../components/Information/Cards/Card/Card';
 import Styles from './Finance.module.css';
-import { FinanceExpenseRows } from "../../common/constants";
+import { cardDefaultStyle, FinanceExpenseRows } from "../../common/constants";
 import { Func, Functional, Props } from "../../common/props";
 import { 
     GetAllResources, GetFinanceHistory, 
     GetFinanceTotal, GetTotalProfits 
 } from "../../common/actions";
+import { Fragment } from "react";
 
 
 type Compare = Func<FinanceTurnItem, boolean>;
 
 interface FinanceMappedProps {
     turn             : number,
+    avgRevenue       : number,
     getFinanceHistory: GetFinanceHistory,
     getAllResources  : GetAllResources,
     getFinanceTotal  : GetFinanceTotal
@@ -36,6 +39,7 @@ interface FinanceProps extends Props, FinanceMappedProps {}
 
 const mapStateToProps = (state: NardisState): FinanceMappedProps => ({
     turn             : state.turn,
+    avgRevenue       : state.avgRevenue,
     getFinanceHistory: state.getFinanceHistory,
     getAllResources  : state.getAllResources,
     getFinanceTotal  : state.getFinanceTotal,
@@ -105,44 +109,58 @@ const finance: Functional<FinanceProps> = (props: FinanceProps): JSX.Element => 
     );
 
     return (
-        <div className={Styles.Finance}>
-            <hr/>
-            <div className={Styles.Tables}>
-                <div className={Styles.FinanceTable}>
-                    <Table
-                        headers={mGetHeaders('REVENUE')}
-                        rows={revenueRows.map((e: Resource): string[] => ([
-                            e.name, 
-                            ...getRow(history.income, (j: FinanceTurnItem) => e.id === j.id), 
-                            mGetTotal(e.id)
-                        ]))}
-                        rowStyles={propStyles.rowStyles}
-                        headerStyles={propStyles.headerStyles}
-                    />
-                </div>
+        <Fragment>
+            <div className={Styles.Finance}>
                 <hr/>
-                <div className={Styles.FinanceTable} >
-                    <Table
-                        headers={mGetHeaders('EXPENSE')}
-                        rows={FinanceExpenseRows.map((row: [string, FinanceType]): string[] => [
-                            row[0],
-                            ...mGetRow(mCmp.bind(null, row[1])),
-                            mGetTotal(row[1])
-                        ])}
-                        {...propStyles}
-                    />
+                <div className={Styles.Tables}>
+                    <div className={Styles.FinanceTable}>
+                        <Table
+                            headers={mGetHeaders('REVENUE')}
+                            rows={revenueRows.map((e: Resource): string[] => ([
+                                e.name, 
+                                ...getRow(history.income, (j: FinanceTurnItem) => e.id === j.id), 
+                                mGetTotal(e.id)
+                            ]))}
+                            rowStyles={propStyles.rowStyles}
+                            headerStyles={propStyles.headerStyles}
+                        />
+                    </div>
+                    <hr/>
+                    <div className={Styles.FinanceTable} >
+                        <Table
+                            headers={mGetHeaders('EXPENSE')}
+                            rows={FinanceExpenseRows.map((row: [string, FinanceType]): string[] => [
+                                row[0],
+                                ...mGetRow(mCmp.bind(null, row[1])),
+                                mGetTotal(row[1])
+                            ])}
+                            {...propStyles}
+                        />
+                    </div>
+                    <hr/>
+                    <div className={Styles.FinanceTable}>
+                        <Table
+                            headers={mGetHeaders('PROFITS')}
+                            rows={[['TOTAL PROFITS', ...getTotalProfitsPerTurn(history), props.getTotalProfits().toLocaleString() + 'G']]}
+                            {...propStyles}
+                        />
+                    </div>
+                    <hr/>
                 </div>
-                <hr/>
-                <div className={Styles.FinanceTable}>
-                    <Table
-                        headers={mGetHeaders('PROFITS')}
-                        rows={[['TOTAL PROFITS', ...getTotalProfitsPerTurn(history), props.getTotalProfits().toLocaleString() + 'G']]}
-                        {...propStyles}
-                    />
-                </div>
-                <hr/>
             </div>
-        </div>
+            {/*
+            <h1>RESOURCE REVENUE DISTRIBUTION</h1>
+                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                    <Card 
+                        label='AVG. REVENUE'
+                        value={props.avgRevenue.toLocaleString() + 'G/TURN'}
+                        style={{...cardDefaultStyle, width: '50%', backgroundColor: '#212fa2'}}
+                    />
+                </div>
+                * pie chart: resources/profit *
+                * line chart: avg revenue / turn *
+            */}
+        </Fragment>
     );
 }
 
