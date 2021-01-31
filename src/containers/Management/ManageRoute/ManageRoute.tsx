@@ -45,7 +45,7 @@ interface ManageRouteProps extends Props, BuildRouteMappedProps, BuildRouteDispa
 const mapStateToProps = (
     state: NardisState
 ): BuildRouteMappedProps => ({
-    routes: state.routes,
+    routes: state.routes.sort((a: Route, b: Route): number => b.getProfit() - a.getProfit()),
     upgrades: state.upgrades,
     getPossibleTrains: state.getPossibleTrains
 });
