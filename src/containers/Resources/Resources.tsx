@@ -75,6 +75,7 @@ const resources: Functional<ResourcesProps> = (
     props: ResourcesProps
 ): JSX.Element => (
     <Fragment>
+        <h1 style={{color: 'white', textAlign: 'center'}}>RESOURCE VALUES OVER TIME</h1>
         <hr/>
         <Chart
             id='resourceChart'
@@ -87,6 +88,11 @@ const resources: Functional<ResourcesProps> = (
                 legend: {
                     labels: {
                         fontColor: 'white'
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 2
                     }
                 },
                 scales: {
@@ -109,7 +115,7 @@ const resources: Functional<ResourcesProps> = (
                             fontColor: '#eee'
                         },
                         ticks: {
-                            fontColor: 'white',
+                            fontColor: 'white'
                         }
                     }]
                 },
