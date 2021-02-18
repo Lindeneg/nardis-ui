@@ -3,10 +3,10 @@ import { connect } from "react-redux";
 
 import { ChartDataSets } from 'chart.js';
 
-import { Resource, ResourceValueHistory } from "nardis-game";
+import { Resource } from "nardis-game";
 
 import NardisState from "../../common/state";
-import Chart from '../../components/Information/Chart/Chart';
+import Chart, { getLabels, normalizeArrayLength } from '../../components/Information/Chart/Chart';
 import { Functional, Props } from "../../common/props";
 import { GetAllResources } from "../../common/actions";
 import { defaultChartColors } from '../../common/constants';
@@ -26,32 +26,6 @@ const mapStateToProps = (state: NardisState): ResourcesMappedProps => ({
 });
 
 
-// generate array containing number from 1 to the current turn number
-const getLabels = (turn: number): number[] => {
-    const arr: number[] = [];
-    for (let i = 1; i < turn + 1; i++) {
-        arr.push(i);
-    }
-    return arr;
-}
-
-
-/* history length will always be less than currentTurn  
-   so normalize array length to the value of currentTurn */
-const normalizeArrayLength = (currentTurn: number, history: ResourceValueHistory[]): Array<number | null> => {
-    const arr: Array<number | null> = [];
-    for (let i = 0; i < history.length; i++) {
-        const notLastEntry: boolean = i < history.length - 1;
-        const [turn, value]: [number, number] = [history[i].turn, history[i].value];
-        const diff: number = notLastEntry ? history[i + 1].turn - turn : (currentTurn - turn) + 1;
-        for (let j = 0; j < diff; j++) {
-            arr.push(j <= 0 || (!notLastEntry && j === diff - 1) ? value : null);
-        }
-    }
-    return arr;
-}
-
-// generate array of ChartDataSets from Resource instances
 const getValues = (turn: number, resources: Resource[]): ChartDataSets[] => {
     const colors: string[] = [...defaultChartColors];
     return resources.map((resource: Resource): ChartDataSets => {
@@ -75,7 +49,6 @@ const resources: Functional<ResourcesProps> = (
     props: ResourcesProps
 ): JSX.Element => (
     <Fragment>
-        <h1 style={{color: 'white', textAlign: 'center'}}>RESOURCE VALUES OVER TIME</h1>
         <hr/>
         <Chart
             id='resourceChart'
