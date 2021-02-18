@@ -10,7 +10,9 @@ import {
     City,
     Train,
     RoutePlanCargo,
-    Upgrade
+    Upgrade,
+    Stocks,
+    Player
 } from "nardis-game";
 
 import { Func, PossibleTrain } from "./props";
@@ -70,6 +72,8 @@ export type GetFinanceHistory     = Func<void, FinanceHistory[]>;
 export type GetFinanceTotal       = Func<void, FinanceTotal[]>;
 export type GetTotalProfits       = Func<void, number>;
 export type GetAllUpgrades        = Func<void, Upgrade[]>;
+export type GetAllStock           = Func<void, Stocks[]>;
+export type GetAllPlayers         = Func<void, Player[]>;
 export type GetAllResources       = Func<void, Resource[]>;
 export type AddRouteToQueue       = Func<BuyableRoute, void>;
 export type EditActiveRoute       = (routeId: string, train: Train, routePlan: RoutePlanCargo, cost: number) => void;

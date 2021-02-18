@@ -70,7 +70,9 @@ export enum ButtonType {
     BuyRoute,
     ManipulateRoute,
     EditRouteConfirm,
-    EditRouteCancel
+    EditRouteCancel,
+    StockAction,
+    ViewFinance
 };
 
 /**
@@ -87,7 +89,9 @@ export const buttonTypeToClassName: NIndexable<string> = {
     [ButtonType.BuyRoute]         : 'BuyRoute',
     [ButtonType.ManipulateRoute]  : 'ManipulateRoute',
     [ButtonType.EditRouteConfirm] : 'EditRouteConfirm',
-    [ButtonType.EditRouteCancel]  : 'EditRouteCancel'
+    [ButtonType.EditRouteCancel]  : 'EditRouteCancel',
+    [ButtonType.StockAction]      : 'StockAction',
+    [ButtonType.ViewFinance]      : 'ViewFinance',
 };
 
 export const mainNavigationBarEntries: NavigationEntriesProps = {

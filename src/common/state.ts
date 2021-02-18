@@ -1,7 +1,9 @@
 import { Route, QueuedRouteItem, Upgrade, Player, Nardis } from 'nardis-game';
 
 import { 
+    GetAllPlayers,
     GetAllResources, 
+    GetAllStock, 
     GetAllUpgrades, 
     GetFinanceHistory, 
     GetFinanceTotal, 
@@ -21,6 +23,8 @@ export interface NardisState {
     level             : number,
     range             : number,
     avgRevenue        : number,
+    avgExpense        : number,
+    netWorth          : number,
     routes            : Route[],
     queue             : QueuedRouteItem[],
     upgrades          : Upgrade[],
@@ -33,6 +37,8 @@ export interface NardisState {
     getFinanceTotal   : GetFinanceTotal,
     getAllResources   : GetAllResources,
     getAllUpgrades    : GetAllUpgrades,
+    getAllStock       : GetAllStock,
+    getAllPlayers     : GetAllPlayers,
     getTotalProfits   : GetTotalProfits
 };
 
