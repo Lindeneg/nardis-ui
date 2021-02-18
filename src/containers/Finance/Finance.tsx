@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { connect } from "react-redux";
 
 import { 
@@ -12,34 +13,37 @@ import {
 
 import Table from '../../components/Utility/Table/Table';
 import NardisState from "../../common/state";
-import Card from '../../components/Information/Cards/Card/Card';
 import Styles from './Finance.module.css';
-import { cardDefaultStyle, FinanceExpenseRows } from "../../common/constants";
+import { FinanceExpenseRows } from "../../common/constants";
 import { Func, Functional, Props } from "../../common/props";
 import { 
     GetAllResources, GetFinanceHistory, 
     GetFinanceTotal, GetTotalProfits 
 } from "../../common/actions";
-import { Fragment } from "react";
 
 
 type Compare = Func<FinanceTurnItem, boolean>;
 
 interface FinanceMappedProps {
     turn             : number,
-    avgRevenue       : number,
     getFinanceHistory: GetFinanceHistory,
     getAllResources  : GetAllResources,
     getFinanceTotal  : GetFinanceTotal
     getTotalProfits  : GetTotalProfits
-}
+};
 
-interface FinanceProps extends Props, FinanceMappedProps {}
+interface FinanceProps extends Props, FinanceMappedProps {
+    alt             ?: {
+        history      : FinanceHistory,
+        total        : FinanceTotal,
+        totalProfits : number
+
+    }
+};
 
 
 const mapStateToProps = (state: NardisState): FinanceMappedProps => ({
     turn             : state.turn,
-    avgRevenue       : state.avgRevenue,
     getFinanceHistory: state.getFinanceHistory,
     getAllResources  : state.getAllResources,
     getFinanceTotal  : state.getFinanceTotal,
@@ -96,9 +100,11 @@ const propStyles = {
  * Component to display financial information from the current 
  * and last two turns as well as the overall total for all turns.
  */
-const finance: Functional<FinanceProps> = (props: FinanceProps): JSX.Element => {
-    const history    : FinanceHistory = props.getFinanceHistory()[0];
-    const total      : FinanceTotal   = props.getFinanceTotal()[0];
+const finance: Functional<FinanceProps> = (
+    props: FinanceProps
+): JSX.Element => {
+    const history    : FinanceHistory = props.alt ? props.alt.history : props.getFinanceHistory()[0];
+    const total      : FinanceTotal   = props.alt ? props.alt.total : props.getFinanceTotal()[0];
     const revenueRows: Resource[]     = props.getAllResources();
 
     const mGetHeaders                 = getHeaders.bind(null, props.turn);
@@ -116,11 +122,24 @@ const finance: Functional<FinanceProps> = (props: FinanceProps): JSX.Element => 
                     <div className={Styles.FinanceTable}>
                         <Table
                             headers={mGetHeaders('REVENUE')}
-                            rows={revenueRows.map((e: Resource): string[] => ([
-                                e.name, 
-                                ...getRow(history.income, (j: FinanceTurnItem) => e.id === j.id), 
-                                mGetTotal(e.id)
-                            ]))}
+                            rows={[
+                                ...revenueRows.map((e: Resource): string[] => ([
+                                    e.name, 
+                                    ...getRow(history.income, (j: FinanceTurnItem): boolean => e.id === j.id), 
+                                    mGetTotal(e.id)
+                                ])),
+                                [
+                                    'RECOUPS',
+                                    ...getRow(history.income, (j: FinanceTurnItem): boolean => j.id === localKeys[FinanceType.Recoup]),
+                                    mGetTotal(localKeys[FinanceType.Recoup])
+                                ],
+                                [
+                                    'STOCKS',
+                                    ...getRow(history.income, (j: FinanceTurnItem): boolean => j.id === localKeys[FinanceType.StockSell]),
+                                    mGetTotal(localKeys[FinanceType.StockSell])
+                                ]
+                            
+                            ]}
                             rowStyles={propStyles.rowStyles}
                             headerStyles={propStyles.headerStyles}
                         />
@@ -129,11 +148,19 @@ const finance: Functional<FinanceProps> = (props: FinanceProps): JSX.Element => 
                     <div className={Styles.FinanceTable} >
                         <Table
                             headers={mGetHeaders('EXPENSE')}
-                            rows={FinanceExpenseRows.map((row: [string, FinanceType]): string[] => [
-                                row[0],
-                                ...mGetRow(mCmp.bind(null, row[1])),
-                                mGetTotal(row[1])
-                            ])}
+                            rows={[
+                                ...FinanceExpenseRows.map((row: [string, FinanceType]): string[] => [
+                                    row[0],
+                                    ...mGetRow(mCmp.bind(null, row[1])),
+                                    mGetTotal(row[1])
+                                    ]
+                                ),
+                                [
+                                    'STOCKS',
+                                    ...getRow(history.expense, (j: FinanceTurnItem): boolean => j.id === localKeys[FinanceType.StockBuy]),
+                                    mGetTotal(localKeys[FinanceType.StockBuy])
+                                ]
+                            ]}
                             {...propStyles}
                         />
                     </div>
@@ -141,25 +168,13 @@ const finance: Functional<FinanceProps> = (props: FinanceProps): JSX.Element => 
                     <div className={Styles.FinanceTable}>
                         <Table
                             headers={mGetHeaders('PROFITS')}
-                            rows={[['TOTAL PROFITS', ...getTotalProfitsPerTurn(history), props.getTotalProfits().toLocaleString() + 'G']]}
+                            rows={[['TOTAL PROFITS', ...getTotalProfitsPerTurn(history), (props.alt ? props.alt.totalProfits : props.getTotalProfits()).toLocaleString() + 'G']]}
                             {...propStyles}
                         />
                     </div>
                     <hr/>
                 </div>
             </div>
-            {/*
-            <h1>RESOURCE REVENUE DISTRIBUTION</h1>
-                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                    <Card 
-                        label='AVG. REVENUE'
-                        value={props.avgRevenue.toLocaleString() + 'G/TURN'}
-                        style={{...cardDefaultStyle, width: '50%', backgroundColor: '#212fa2'}}
-                    />
-                </div>
-                * pie chart: resources/profit *
-                * line chart: avg revenue / turn *
-            */}
         </Fragment>
     );
 }
