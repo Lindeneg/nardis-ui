@@ -1,6 +1,5 @@
 import { Component, CSSProperties, Fragment } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
 
 import  * as Nardis from "nardis-game";
 
@@ -122,7 +121,6 @@ class Upgrades extends Component<UpgradesProps, UpgradesState> {
             Nardis.levelUpRequirements[0] : Nardis.levelUpRequirements[this.props.playerLevel + 1];
         return (
             <Fragment>
-                {this.state.hasPurchased ? <Redirect to='/finance' /> : null}
                 <Modal
                     show={this.state.showModal}
                     whenClicked={this.initiatePurchase.bind(this, '')}
