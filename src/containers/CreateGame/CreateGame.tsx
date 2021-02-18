@@ -107,8 +107,8 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
             opponents: {
                 inputConfig: {
                     type: 'number',
-                    label: 'Opponents (TODO does nothing atm)',
-                    placeholder: '3'
+                    label: 'Opponents',
+                    placeholder: '2'
                 },
                 validation: (inp: string): boolean => {
                     const value: number = parseInt(inp);
