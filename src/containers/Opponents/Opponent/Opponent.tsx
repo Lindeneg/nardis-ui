@@ -18,7 +18,6 @@ interface Lower extends Indexable<string> {
     averageRevenue   : string,
     averageExpense   : string,
     routes           : string,
-    //queue            : string
 }
 
 interface DisabledButton {

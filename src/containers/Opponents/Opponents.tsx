@@ -157,7 +157,6 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
                                     averageRevenue: finance.getAverageRevenue().toLocaleString() + 'G/TURN',
                                     averageExpense: finance.getAverageExpense().toLocaleString() + 'G/TURN',
                                     routes: player.getRoutes().length.toLocaleString(),
-                                    //queue: player.getQueue().length.toLocaleString()
                                 }}
                                 callbacks={{
                                     viewFinances: this.onViewFinanceClick.bind(this, player.id),
