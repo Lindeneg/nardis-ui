@@ -6,7 +6,8 @@ import {
     Nardis, 
     Player,
     City,
-    Finance
+    Finance,
+    Stocks
 } from 'nardis-game';
 
 import { NardisState } from '../../common/state';
@@ -26,7 +27,7 @@ const initialize: ActionFunc = (
         if (!!window.localStorage[localKeys[LocalKey.HasActiveGame]]) {
             game = Nardis.createFromLocalStorage();
         } else {
-            game = Nardis.createFromPlayer(args.payload.initGame.name, args.payload.initGame.money);
+            game = Nardis.createFromPlayer(args.payload.initGame.name, args.payload.initGame.money, args.payload.initGame.opponents);
         }
         const player : Player = game.getCurrentPlayer();
         const finance: Finance = player.getFinance();
@@ -34,11 +35,13 @@ const initialize: ActionFunc = (
             _game             : game,
             gameCreated       : true,
             isLoading         : false,
-            money             : player.gold,
+            money             : finance.getGold(),
             turn              : game.getCurrentTurn(),
             level             : player.getLevel(),
             range             : player.getRange(),
             avgRevenue        : finance.getAverageRevenue(),
+            avgExpense        : finance.getAverageExpense(),
+            netWorth          : finance.getNetWorth(),
             routes            : player.getRoutes(),
             queue             : player.getQueue(),
             upgrades          : player.getUpgrades(),
@@ -50,6 +53,8 @@ const initialize: ActionFunc = (
             getAllUpgrades    : () => game.data.upgrades,
             getTotalProfits   : () => finance.getTotalProfits(),
             getFinanceHistory : () => getArr<FinanceHistory>(finance.getHistory()),
+            getAllStock       : () => getArr<Stocks>(game.stocks),
+            getAllPlayers     : () => game.players,
             getStartCity      : () => getArr<City>(player.getStartCity()),
             getFinanceTotal   : () => getArr<FinanceTotal>(finance.getTotalHistory()),
         };

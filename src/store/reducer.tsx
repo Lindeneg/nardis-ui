@@ -25,6 +25,8 @@ const initialState: NardisState = {
     level             : 0,
     range             : 0,
     avgRevenue        : 0,
+    avgExpense        : 0,
+    netWorth          : 0,
     routes            : [],
     queue             : [],
     upgrades          : [],
@@ -36,6 +38,8 @@ const initialState: NardisState = {
     getFinanceHistory : () => [],
     getAllResources   : () => [],
     getAllUpgrades    : () => [],
+    getAllStock       : () => [],
+    getAllPlayers     : () => [],
     getFinanceTotal   : () => [],
     getTotalProfits   : () => 0
 };
