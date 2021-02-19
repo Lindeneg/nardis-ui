@@ -6,7 +6,6 @@ import {
     OpponentInformation, 
     opponentInformation, 
     Player, 
-    PlayerType, 
     Stock, 
     stockConstant, 
     Stocks, 
@@ -17,6 +16,7 @@ import CFinance from '../Finance/Finance';
 import NardisState from '../../common/state';
 import Opponent from './Opponent/Opponent';
 import Button from '../../components/Utility/Button/Button';
+import StockChart from './StockInfo/StockChart/StockChart';
 import Styles from './Opponents.module.css';
 import { IdFunc, Props } from '../../common/props';
 import { ButtonType } from '../../common/constants';
@@ -31,16 +31,21 @@ interface OpponentsState {
 interface MappedOpponentsProps {
     players: Player[],
     gameStocks: Stocks[],
+    turn: number
 };
 
 interface OpponentsProps extends Props, MappedOpponentsProps {};
 
+
 const mapStateToProps = (state: NardisState): MappedOpponentsProps => ({
     players: state.getAllPlayers(),
-    gameStocks: state.getAllStock()
+    gameStocks: state.getAllStock(),
+    turn: state.turn
 });
 
-const getPlayerIndex = (playerId: string, players: Player[]): number => {
+
+// TODO move to util func folder
+export const getPlayerIndexFromPlayerId = (playerId: string, players: Player[]): number => {
     for (let i: number = 0; i < players.length; i++) {
         if (players[i].id === playerId) {
             return i;
@@ -53,11 +58,12 @@ const getStockOwnerBackgroundColorArray = (stock: Stock, players: Player[], defa
     const result: string[] = [];
     const supply: StockSupply = stock.getSupply();
     Object.keys(supply).forEach((playerId: string): void => {
-        if (supply[playerId] > 0) {
-            const index: number = getPlayerIndex(playerId, players);
+        const n: number = supply[playerId];
+        if (n > 0) {
+            const index: number = getPlayerIndexFromPlayerId(playerId, players);
             if (index > -1) {
                 const color: string = opponentInformation[index].color;
-                for (let i: number = 0; i < supply[playerId]; i++) {
+                for (let i: number = 0; i < n; i++) {
                     result.push(color);
                 }
             }
@@ -89,11 +95,11 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
     }
 
     onStockBuy: IdFunc = (playerId: string): void => {
-
+        // TODO
     }
 
     onStockSell: IdFunc = (playerId: string): void => {
-        
+        // TODO
     }
 
     onToggleStockChart = (): void => {
@@ -131,13 +137,17 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
             <Fragment>
                 <Button
                     disabled={false}
-                    buttonType={ButtonType.ViewFinance}
+                    buttonType={ButtonType.StandardView}
                     whenClicked={() => this.onToggleStockChart()}
                     style={this.state.showStockChart ? {backgroundColor: 'green', marginBottom: '15px'} : {marginBottom: '15px'}}
                 >
                     VIEW STOCK CHART
                 </Button>
-                {/* TODO Stock Chart */}
+                {this.state.showStockChart ? <StockChart 
+                    players={this.props.players} 
+                    gameStocks={this.props.gameStocks[0]} 
+                    turn={this.props.turn}
+                /> : null}
                 <hr/>
                 <div className={Styles.Opponents}>
                      {this.props.players.map((player: Player, index: number): JSX.Element => {
@@ -168,7 +178,7 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
                                 stockOwners={getStockOwnerBackgroundColorArray(stock, this.props.players)}
                                 financeActive={player.id === this.state.viewFinancePlayerId}
                                 disabled={{
-                                    finance: player.playerType === PlayerType.Human,
+                                    finance: false, //player.playerType === PlayerType.Human,
                                     stockBuy: stock.currentAmountOfStockHolders() >= stockConstant.maxStockAmount,
                                     stockSell: !stock.isStockHolder(this.props.players[0].id)
                                 }}

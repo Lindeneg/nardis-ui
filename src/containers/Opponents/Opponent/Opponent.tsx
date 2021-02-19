@@ -1,36 +1,41 @@
-import { Functional, Indexable, Props } from "../../../common/props";
 import Avatar from '../../../components/Utility/Avatar/Avatar';
 import Card from '../../../components/Information/Cards/Card/Card';
-import Styles from './Opponent.module.css';
-import Button from '../../../components/Utility/Button/Button';
-import { ButtonType } from "../../../common/constants";
 import StockOwners from '../StockInfo/StockOwners/StockOwners';
+import Button from '../../../components/Utility/Button/Button';
+import Styles from './Opponent.module.css';
+import { ButtonType } from "../../../common/constants";
+import { 
+    Func,
+    Functional, 
+    Indexable, 
+    Props 
+} from "../../../common/props";
 
 
 interface Upper extends Indexable<string> {
     name             : string,
     level            : string,
     money            : string,
-}
+};
 
 interface Lower extends Indexable<string> {
     netWorth         : string,
     averageRevenue   : string,
     averageExpense   : string,
     routes           : string,
-}
+};
 
 interface DisabledButton {
     finance: boolean,
     stockBuy: boolean,
     stockSell: boolean
-}
+};
 
 interface Callback {
-    viewFinances     : () => void,
-    stockBuy         : () => void,
-    stockSell        : () => void
-}
+    viewFinances     : Func<void, void>,
+    stockBuy         : Func<void, void>,
+    stockSell        : Func<void, void>
+};
 
 interface OpponentProps extends Props {
     upper            : Upper,
@@ -43,7 +48,7 @@ interface OpponentProps extends Props {
     financeActive    : boolean,
     disabled         : DisabledButton,
     callbacks        : Callback
-}
+};
 
 
 const opponent: Functional<OpponentProps> = (
@@ -97,7 +102,7 @@ const opponent: Functional<OpponentProps> = (
             />
             <Button
                 disabled={props.disabled.finance}
-                buttonType={ButtonType.ViewFinance}
+                buttonType={ButtonType.StandardView}
                 whenClicked={() => props.callbacks.viewFinances()}
                 style={props.financeActive ? {backgroundColor: 'green'} : {}}
             >
@@ -106,5 +111,6 @@ const opponent: Functional<OpponentProps> = (
         </div>
     </div>
 );
+
 
 export default opponent;

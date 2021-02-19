@@ -1,10 +1,11 @@
-import { Functional, Props } from "../../../../common/props";
 import Styles from './StockOwners.module.css';
+import { Functional, Props } from "../../../../common/props";
 
 
 interface StockOwnersProps extends Props {
     backgroundColors: string[]
 };
+
 
 const stockOwners: Functional<StockOwnersProps> = (props: StockOwnersProps): JSX.Element => (
     <div className={Styles.StockOwners}>
