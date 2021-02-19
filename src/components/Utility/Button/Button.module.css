@@ -40,7 +40,7 @@
     margin: unset;
 }
 
-.StockAction, .ViewFinance {
+.StockAction, .StandardView {
     width: 50%;
     background-color: #212fa2;
     height: 35px;
@@ -52,7 +52,7 @@
     cursor: pointer;
 }
 
-.ViewFinance {
+.StandardView {
     width: 100%;
 }
 
@@ -94,12 +94,12 @@
     background-color: #3e5fc2;
 }
 
-.ViewFinance:hover {
+.StandardView:hover {
     background-color: green;
     color: white !important;
 }
 
-.ViewFinance:disabled:hover {
+.StandardView:disabled:hover {
     background-color: #212fa2;
 }
 
