@@ -1,8 +1,9 @@
-import { FinanceType } from 'nardis-game';
+import { FinanceType, Indexable } from 'nardis-game';
 
 import { NIndexable } from './props';
 import { NavigationEntriesProps } from '../components/Navigation/NavigationEntries/NavigationEntries';
 import { CSSProperties } from 'react';
+import { ChartOptions } from 'chart.js';
 
 
 /**
@@ -72,7 +73,7 @@ export enum ButtonType {
     EditRouteConfirm,
     EditRouteCancel,
     StockAction,
-    ViewFinance
+    StandardView
 };
 
 /**
@@ -91,7 +92,7 @@ export const buttonTypeToClassName: NIndexable<string> = {
     [ButtonType.EditRouteConfirm] : 'EditRouteConfirm',
     [ButtonType.EditRouteCancel]  : 'EditRouteCancel',
     [ButtonType.StockAction]      : 'StockAction',
-    [ButtonType.ViewFinance]      : 'ViewFinance',
+    [ButtonType.StandardView]     : 'StandardView',
 };
 
 export const mainNavigationBarEntries: NavigationEntriesProps = {
@@ -177,6 +178,44 @@ export const metaRouteEditHeaderNames: string[] = [
     'BOUGHT ON TURN'
 ];
 
+export const defaultChartOptions: ChartOptions = {
+    legend: {
+        labels: {
+            fontColor: 'white'
+        }
+    },
+    elements: {
+        point: {
+            radius: 2
+        }
+    },
+    scales: {
+        xAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: 'TURN',
+                fontColor: '#eee'
+            },
+            ticks: {
+                fontColor: 'white',
+                autoSkip: true,
+                maxTicksLimit: 15
+            }
+        }],
+        yAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: 'VALUE',
+                fontColor: '#eee'
+            },
+            ticks: {
+                fontColor: 'white'
+            }
+        }]
+    },
+    responsive: true
+}
+
 export const layoutCardLabels: [string, string][] = [
     ['money', 'g'],
     ['level', ''],
@@ -192,6 +231,11 @@ export const FinanceExpenseRows: Array<[string, FinanceType]> = [
     ['UPGRADES', FinanceType.Upgrade],
     ['UPKEEP', FinanceType.Upkeep],
 ];
+
+export const yieldMap: Indexable<[number, number]> = {
+    low: [5, 16],
+    med: [15, 80],
+};
 
 export const cardDefaultStyle: CSSProperties = {margin: '0', backgroundColor: '#2d3a9c'};
 
