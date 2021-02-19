@@ -5,6 +5,7 @@ import * as ChartJS from 'chart.js';
 import Styles from './Chart.module.css';
 import { Props } from '../../../common/props';
 import { ValueHistory } from 'nardis-game';
+import { defaultChartOptions } from '../../../common/constants';
 
 
 interface ChartProps extends Props, ChartJS.ChartConfiguration {
@@ -32,6 +33,20 @@ class Chart extends Component<ChartProps> {
     }
 }
 
+
+export const newLineChartInstance = (
+    name: string,
+    data: ChartJS.ChartData
+): ChartJS => new ChartJS.Chart(
+    name,
+    {
+        type: 'line',
+        data,
+        options: {
+            ...defaultChartOptions
+        }
+    }
+);
 
 export const getLabels = (turn: number): number[] => {
     const arr: number[] = [];
