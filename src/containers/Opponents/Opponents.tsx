@@ -18,8 +18,9 @@ import Opponent from './Opponent/Opponent';
 import Button from '../../components/Utility/Button/Button';
 import StockChart from './StockInfo/StockChart/StockChart';
 import Styles from './Opponents.module.css';
-import { IdFunc, Props } from '../../common/props';
+import { IdFunc, MapDispatch, OnDispatch, Props } from '../../common/props';
 import { ButtonType } from '../../common/constants';
+import { NardisAction } from '../../common/actions';
 
 
 interface OpponentsState {
@@ -28,23 +29,20 @@ interface OpponentsState {
 
 };
 
+interface DispatchedProps {
+    buyStock: IdFunc,
+    selStock: IdFunc
+};
+
 interface MappedOpponentsProps {
     players: Player[],
     gameStocks: Stocks[],
     turn: number
 };
 
-interface OpponentsProps extends Props, MappedOpponentsProps {};
+interface OpponentsProps extends Props, MappedOpponentsProps, DispatchedProps {};
 
 
-const mapStateToProps = (state: NardisState): MappedOpponentsProps => ({
-    players: state.getAllPlayers(),
-    gameStocks: state.getAllStock(),
-    turn: state.turn
-});
-
-
-// TODO move to util func folder
 export const getPlayerIndexFromPlayerId = (playerId: string, players: Player[]): number => {
     for (let i: number = 0; i < players.length; i++) {
         if (players[i].id === playerId) {
@@ -78,7 +76,43 @@ const getStockOwnerBackgroundColorArray = (stock: Stock, players: Player[], defa
     return result;
 }
 
+const mapStateToProps = (state: NardisState): MappedOpponentsProps => ({
+    players: state.getAllPlayers(),
+    gameStocks: state.getAllStock(),
+    turn: state.turn
+});
 
+const mapDispatchToProps: MapDispatch<DispatchedProps> = (
+    dispatch: OnDispatch
+): DispatchedProps => (
+    {
+        buyStock: (playerId: string) => dispatch(
+            {
+                type: NardisAction.BUY_STOCK,
+                payload: {
+                    buyStock: {
+                        playerId
+                    }
+                }
+            }
+        ),
+        selStock: (playerId: string) => dispatch(
+            {
+                type: NardisAction.SELL_STOCK,
+                payload: {
+                    sellStock: {
+                        playerId
+                    }
+                }
+            }
+        )
+    }
+);
+
+
+/**
+ * 
+ */
 class Opponents extends Component<OpponentsProps, OpponentsState> {
 
     state: OpponentsState = {
@@ -95,11 +129,11 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
     }
 
     onStockBuy: IdFunc = (playerId: string): void => {
-        // TODO
+        this.props.buyStock(playerId);
     }
 
     onStockSell: IdFunc = (playerId: string): void => {
-        // TODO
+        this.props.selStock(playerId);
     }
 
     onToggleStockChart = (): void => {
@@ -133,6 +167,7 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
     }
 
     render(): JSX.Element {
+        const human: Player = this.props.players[0];
         return (
             <Fragment>
                 <Button
@@ -179,8 +214,11 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
                                 financeActive={player.id === this.state.viewFinancePlayerId}
                                 disabled={{
                                     finance: false, //player.playerType === PlayerType.Human,
-                                    stockBuy: stock.currentAmountOfStockHolders() >= stockConstant.maxStockAmount,
-                                    stockSell: !stock.isStockHolder(this.props.players[0].id)
+                                    stockBuy: (
+                                        stock.currentAmountOfStockHolders() >= stockConstant.maxStockAmount ||
+                                        stock.getBuyValue() > human.getFinance().getGold()
+                                    ),
+                                    stockSell: !stock.isStockHolder(human.id)
                                 }}
                                 avatar={info.avatar}
                                 color={info.color}
@@ -195,4 +233,4 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
 }
 
 
-export default connect(mapStateToProps)(Opponents);
+export default connect(mapStateToProps, mapDispatchToProps)(Opponents);

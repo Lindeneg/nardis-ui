@@ -147,7 +147,7 @@ class Resources extends Component<ResourcesProps, ResourcesState> {
     }
 
     onDisabledIdsChange = (disabledIds: string[], createNewChart: boolean = false) => {
-        if (this.state.chart) {
+        if (this.state.chart !== null) {
             const sets: ResourceDataSet[] = updateDataSets(this.state.data.sets, disabledIds);
             const oldChart: Chart = this.state.chart;
             let chart: Chart;

@@ -43,7 +43,13 @@ interface ReducerPayload {
         train: Train,
         routePlan: RoutePlanCargo,
         cost: number
-    }
+    },
+    buyStock?: {
+        playerId: string
+    },    
+    sellStock?: {
+        playerId: string
+    },
 };
 
 export enum NardisAction {
@@ -51,8 +57,10 @@ export enum NardisAction {
     START_PLAYER_TURN,
     ADD_TO_PLAYER_QUEUE,
     ADD_PLAYER_UPGRADE,
+    BUY_STOCK,
     REMOVE_FROM_PLAYER_QUEUE,
     REMOVE_FROM_PLAYER_ROUTE,
+    SELL_STOCK,
     EDIT_ACTIVE_PLAYER_ROUTE,
     UPDATE_PLAYER_VALUES,
     END_PLAYER_TURN,

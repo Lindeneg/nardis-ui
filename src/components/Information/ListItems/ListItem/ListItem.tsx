@@ -115,7 +115,7 @@ const listItem: Functional<ListItemProps> = (
                 city = props.city;
             }
             if (city) {
-                isValid = true;
+                isValid = !city.isFull();
                 target = city.id;
                 header = city.name.toUpperCase();
                 contentJSX = getContent([

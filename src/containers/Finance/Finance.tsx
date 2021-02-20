@@ -113,7 +113,7 @@ const finance: Functional<FinanceProps> = (
     const mGetTotal                   = (key: string | number)                      : string  => (
         (total[(typeof key === 'number' ? localKeys[key] : key)] || 0).toLocaleString() + 'G'
     );
-
+    
     return (
         <Fragment>
             <div className={Styles.Finance}>

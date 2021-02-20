@@ -15,6 +15,8 @@ import removeFromPlayerQueue from './actions/removeFromPlayerQueue';
 import removeRouteFromRoutes from './actions/removeRouteFromRoutes';
 import editActivePlayerRoute from './actions/editActivePlayerRoute';
 import addUpgradeToPlayer from './actions/addUpgradeToPlayer';
+import buyStock from './actions/buyStock';
+import sellStock from './actions/sellStock';
 
 
 const initialState: NardisState = {
@@ -61,11 +63,17 @@ const reducer = (
         case NardisAction.ADD_PLAYER_UPGRADE:
             returnFunc = addUpgradeToPlayer;
             break;
+        case NardisAction.BUY_STOCK:
+            returnFunc = buyStock;
+            break;
         case NardisAction.REMOVE_FROM_PLAYER_QUEUE:
             returnFunc = removeFromPlayerQueue;
             break;
         case NardisAction.REMOVE_FROM_PLAYER_ROUTE:
             returnFunc = removeRouteFromRoutes;
+            break;
+        case NardisAction.SELL_STOCK:
+            returnFunc = sellStock;
             break;
         case NardisAction.EDIT_ACTIVE_PLAYER_ROUTE:
             returnFunc = editActivePlayerRoute;

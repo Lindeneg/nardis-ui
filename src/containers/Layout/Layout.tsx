@@ -101,7 +101,7 @@ class Layout extends Component<LayoutProps, LayoutState> {
                             {this.props.children}
                         </main>
                         <footer>Footer</footer>
-                    </div> : <Spinner redirectTo="/finance"/>}
+                    </div> : <Spinner />}
                 </Fragment>
             );
         }

@@ -124,7 +124,7 @@ class NewRoute extends Component<NewRouteProps, NewRouteState> {
             const startCity: City = this.props.getStartCity()[0];
             const possibleRoutes: RouteInfo = this.getPossibleRouteInfo(startCity);
             const train: PossibleTrain = possibleRoutes.trains[0];
-            if (possibleRoutes.routes.length > 0 /* && 1 > 2 */) {
+            if (possibleRoutes.routes.length > 0) {
                 this.setState({
                     ...this.state,
                     startCity,
