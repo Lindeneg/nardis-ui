@@ -136,6 +136,11 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
         this.props.selStock(playerId);
     }
 
+    onBuyout: IdFunc = (playerId: string): void => {
+        // TODO
+        console.log('take over: ' + playerId);
+    }
+
     onToggleStockChart = (): void => {
         this.setState({
             ...this.state,
@@ -189,6 +194,20 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
                          const finance: Finance             = player.getFinance();
                          const stock  : Stock               = this.props.gameStocks[0][player.id];
                          const info   : OpponentInformation = opponentInformation[index];
+                         let buyValue : number              = stock.getBuyValue();
+                         let buyText  : string              = 'BUY STOCK';
+                         let buyFunc  : IdFunc              = this.onStockBuy;
+                         if (stock.currentAmountOfStockHolders() >= stockConstant.maxStockAmount) {
+                             const supply = stock.getBuyOutValues();
+                             for (let i: number = 0; i < supply.length; i++) {
+                                 if (supply[i].id === human.id) {
+                                     buyValue = stock.owningPlayerId === human.id ? buyValue : Math.floor(stock.getSellValue() * stockConstant.maxStockAmount) - supply[i].totalValue;
+                                     buyText = stock.owningPlayerId === human.id ? buyText : 'BUY OUT';
+                                     buyFunc = stock.owningPlayerId === human.id ? buyFunc : this.onBuyout;
+                                     break;
+                                 }
+                             }
+                         }
                          return (
                              <Opponent 
                                 key={player.id}
@@ -205,21 +224,23 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
                                 }}
                                 callbacks={{
                                     viewFinances: this.onViewFinanceClick.bind(this, player.id),
-                                    stockBuy: this.onStockBuy.bind(this, player.id),
+                                    stockBuy: buyFunc.bind(this, player.id),
                                     stockSell: this.onStockSell.bind(this, player.id)
                                 }}
-                                stockBuy={stock.getBuyValue().toLocaleString() + 'G'}
+                                stockBuy={buyValue.toLocaleString() + 'G'}
                                 stockSell={stock.getSellValue().toLocaleString() + 'G'}
+                                buyText={buyText}
                                 stockOwners={getStockOwnerBackgroundColorArray(stock, this.props.players)}
                                 financeActive={player.id === this.state.viewFinancePlayerId}
                                 disabled={{
-                                    finance: false, //player.playerType === PlayerType.Human,
                                     stockBuy: (
-                                        stock.currentAmountOfStockHolders() >= stockConstant.maxStockAmount ||
-                                        stock.getBuyValue() > human.getFinance().getGold()
+                                        buyValue > human.getFinance().getGold() || 
+                                        buyValue <= 0 || !stock.isActive() || 
+                                        (stock.currentAmountOfStockHolders() >= stockConstant.maxStockAmount && stock.owningPlayerId === human.id)
                                     ),
-                                    stockSell: !stock.isStockHolder(human.id)
+                                    stockSell: !stock.isStockHolder(human.id) || !stock.isActive()
                                 }}
+                                isActive={player.isActive()}
                                 avatar={info.avatar}
                                 color={info.color}
                              />

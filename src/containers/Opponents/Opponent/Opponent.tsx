@@ -26,7 +26,6 @@ interface Lower extends Indexable<string> {
 };
 
 interface DisabledButton {
-    finance: boolean,
     stockBuy: boolean,
     stockSell: boolean
 };
@@ -44,17 +43,19 @@ interface OpponentProps extends Props {
     color            : string,
     stockBuy         : string,
     stockSell        : string,
+    buyText          : string,
     stockOwners      : string[],
     financeActive    : boolean,
     disabled         : DisabledButton,
-    callbacks        : Callback
+    callbacks        : Callback,
+    isActive         : boolean
 };
 
 
 const opponent: Functional<OpponentProps> = (
     props: OpponentProps
 ): JSX.Element => (
-    <div className={Styles.Opponent}>
+    <div className={[Styles.Opponent, !props.isActive ? Styles.Disabled : ''].join(' ')}>
         <Avatar 
             avatar={props.avatar}
             alt={`${props.upper.name} avatar`}
@@ -84,7 +85,7 @@ const opponent: Functional<OpponentProps> = (
                 buttonType={ButtonType.StockAction}
                 whenClicked={() => props.callbacks.stockBuy()}
                 altText={{
-                    left: 'BUY STOCK',
+                    left: props.buyText,
                     right: props.stockBuy
                 }}
             />
@@ -101,7 +102,7 @@ const opponent: Functional<OpponentProps> = (
                 backgroundColors={props.stockOwners}
             />
             <Button
-                disabled={props.disabled.finance}
+                disabled={false}
                 buttonType={ButtonType.StandardView}
                 whenClicked={() => props.callbacks.viewFinances()}
                 style={props.financeActive ? {backgroundColor: 'green'} : {}}

@@ -12,3 +12,8 @@
     flex-direction: column;
     flex-wrap: wrap;
 }
+
+.Disabled, .Disabled span {
+    text-decoration: 4px line-through;
+    text-decoration-color: darkgray;
+}
