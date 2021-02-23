@@ -1,23 +1,35 @@
 import { Component, CSSProperties, Fragment, ReactNode } from 'react';
 import { connect } from 'react-redux';
 
+import { GameStatus, Player } from 'nardis-game';
+
 import Navigation from '../../components/Navigation/Navigation';
 import SideBar from '../../components/Navigation/SideBar/SideBar';
 import Cards from '../../components/Information/Cards/Cards';
 import CreateGame from '../CreateGame/CreateGame';
+import EndedGame from '../CreateGame/EndedGame/EndedGame';
 import Spinner from '../../components/Utility/Spinner/Spinner';
 import Styles from './Layout.module.css';
 import { NardisState } from '../../common/state';
+import { NardisAction } from '../../common/actions';
+import { getPlayerIndexFromPlayerId } from '../Opponents/Opponents';
 import { layoutCardLabels } from '../../common/constants';
 import { 
     Indexable, 
+    MapDispatch, 
     MapState, 
+    OnDispatch, 
     Props 
 } from '../../common/props';
 
 
 interface LayoutState {
-    showSideBar: boolean
+    showSideBar: boolean,
+    examineEndedGame: boolean
+};
+
+interface LayoutDispatchedProps {
+    endGame: () => void
 };
 
 interface LayoutMappedProps {
@@ -29,12 +41,14 @@ interface LayoutMappedProps {
     range      : number,
     routes     : number,
     queue      : number,
-    opponents  : number
+    opponents  : number,
+    gameStatus : GameStatus,
+    players    : Player[]
 };
 
-type Union = number | string | CSSProperties | ReactNode;
+type Union = string | CSSProperties | ReactNode | LayoutDispatchedProps | LayoutMappedProps;
 
-interface LayoutProps extends Props, LayoutMappedProps, Indexable<Union> {};
+interface LayoutProps extends Props, LayoutMappedProps, LayoutDispatchedProps, Indexable<Union> {};
 
 
 const mapStateToProps: MapState<NardisState, LayoutMappedProps> = (
@@ -49,7 +63,20 @@ const mapStateToProps: MapState<NardisState, LayoutMappedProps> = (
     routes     : state.routes.length,
     queue      : state.queue.length,
     opponents  : state.opponents.length,
+    gameStatus : state.getGameStatus(),
+    players    : state.getAllPlayers()
 });
+
+const mapDispatchToProps: MapDispatch<LayoutDispatchedProps> = (
+    dispatch: OnDispatch
+): LayoutDispatchedProps => (
+    {
+        endGame: () => dispatch({
+            type: NardisAction.END_CURRENT_GAME,
+            payload: {}
+        })
+    }
+);
 
 
 /**
@@ -60,7 +87,8 @@ const mapStateToProps: MapState<NardisState, LayoutMappedProps> = (
 class Layout extends Component<LayoutProps, LayoutState> {
 
     state: LayoutState = {
-        showSideBar: false
+        showSideBar: false,
+        examineEndedGame: false // false
     };
 
     closeSideBarHandler = (): void => {
@@ -77,6 +105,13 @@ class Layout extends Component<LayoutProps, LayoutState> {
             showSideBar
         });
     };
+
+    onExamineEndedGame = (): void => {
+        this.setState({
+            ...this.state,
+            examineEndedGame: true
+        });
+    }
 
     render (): JSX.Element {
 
@@ -98,7 +133,13 @@ class Layout extends Component<LayoutProps, LayoutState> {
                         <SideBar show={this.state.showSideBar} whenClicked={this.closeSideBarHandler} />
                         <Cards cards={playerCards} />
                         <main className={Styles.Content}>
-                            {this.props.children}
+                            {this.props.gameStatus.gameOver && !this.state.examineEndedGame ? (
+                                <EndedGame 
+                                    examineCallback={this.onExamineEndedGame}
+                                    newGameCallback={this.props.endGame}
+                                    winningPlayer={this.props.players[getPlayerIndexFromPlayerId(this.props.gameStatus.id, this.props.players)]}
+                                />
+                            ) : this.props.children}
                         </main>
                         <footer>Footer</footer>
                     </div> : <Spinner />}
@@ -110,4 +151,4 @@ class Layout extends Component<LayoutProps, LayoutState> {
 }
 
 
-export default connect(mapStateToProps)(Layout);
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

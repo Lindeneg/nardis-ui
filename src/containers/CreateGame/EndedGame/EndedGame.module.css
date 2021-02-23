@@ -1,0 +1,36 @@
+.EndedGame {
+    width: 100%;
+}
+
+.Buttons, .Cards {
+    display: flex;
+    flex-direction: row;
+}
+
+.Buttons {
+    margin: 0 0 35px 0;
+}
+
+.Main h1 {
+    text-align: center;
+    color: #eee;
+    font-size: 45px;
+}
+
+.Winner {
+    font-size: 20px;
+    padding: 10px;
+    width: unset;
+}
+
+.Note {
+    margin-top: 35px;
+    font-style: italic;
+    font-size: 15px;
+    text-align: center;
+}
+
+.Winner span {
+    text-decoration: underline white;
+    float: unset;
+}

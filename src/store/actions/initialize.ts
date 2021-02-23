@@ -54,6 +54,7 @@ const initialize: ActionFunc = (
             getTotalProfits   : () => finance.getTotalProfits(),
             getFinanceHistory : () => getArr<FinanceHistory>(finance.getHistory()),
             getAllStock       : () => getArr<Stocks>(game.stocks),
+            getGameStatus     : () => game.getGameStatus(),
             getAllPlayers     : () => game.players,
             getStartCity      : () => getArr<City>(player.getStartCity()),
             getFinanceTotal   : () => getArr<FinanceTotal>(finance.getTotalHistory()),

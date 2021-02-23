@@ -1,4 +1,5 @@
 import { 
+    getDefaultState,
     NardisState, 
 } from '../common/state';
 import { 
@@ -17,34 +18,11 @@ import editActivePlayerRoute from './actions/editActivePlayerRoute';
 import addUpgradeToPlayer from './actions/addUpgradeToPlayer';
 import buyStock from './actions/buyStock';
 import sellStock from './actions/sellStock';
+import buyOutPlayer from './actions/buyoutPlayer';
+import endGame from './actions/endGame';
 
 
-const initialState: NardisState = {
-    gameCreated       : false,
-    isLoading         : false,
-    money             : 0,
-    turn              : 0,
-    level             : 0,
-    range             : 0,
-    avgRevenue        : 0,
-    avgExpense        : 0,
-    netWorth          : 0,
-    routes            : [],
-    queue             : [],
-    upgrades          : [],
-    opponents         : [],
-
-    getStartCity      : () => [],
-    getPotentialRoutes: () => [],
-    getPossibleTrains : () => [],
-    getFinanceHistory : () => [],
-    getAllResources   : () => [],
-    getAllUpgrades    : () => [],
-    getAllStock       : () => [],
-    getAllPlayers     : () => [],
-    getFinanceTotal   : () => [],
-    getTotalProfits   : () => 0
-};
+const initialState: NardisState = getDefaultState();
 
 const reducer = (
     state : NardisState = initialState, 
@@ -55,8 +33,6 @@ const reducer = (
         case NardisAction.INITIALIZE_GAME:
             returnFunc = initialize;
             break;
-        case NardisAction.START_PLAYER_TURN:
-            break;
         case NardisAction.ADD_TO_PLAYER_QUEUE:
             returnFunc = addToPlayerQueue;
             break;
@@ -65,6 +41,9 @@ const reducer = (
             break;
         case NardisAction.BUY_STOCK:
             returnFunc = buyStock;
+            break;
+        case NardisAction.BUY_OUT_PLAYER:
+            returnFunc = buyOutPlayer;
             break;
         case NardisAction.REMOVE_FROM_PLAYER_QUEUE:
             returnFunc = removeFromPlayerQueue;
@@ -89,6 +68,9 @@ const reducer = (
                 ...state,
                 isLoading: !state.isLoading
             }
+        case NardisAction.END_CURRENT_GAME:
+            returnFunc = endGame;
+            break;
         default:
             break;
     }
