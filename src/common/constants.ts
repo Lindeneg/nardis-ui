@@ -234,7 +234,7 @@ export const FinanceExpenseRows: Array<[string, FinanceType]> = [
 
 export const yieldMap: Indexable<[number, number]> = {
     low: [5, 16],
-    med: [15, 80],
+    med: [15, 86],
 };
 
 export const cardDefaultStyle: CSSProperties = {margin: '0', backgroundColor: '#2d3a9c'};
