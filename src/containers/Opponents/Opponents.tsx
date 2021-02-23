@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { 
     Finance, 
+    GameStatus, 
     OpponentInformation, 
     opponentInformation, 
     Player, 
@@ -16,6 +17,7 @@ import CFinance from '../Finance/Finance';
 import NardisState from '../../common/state';
 import Opponent from './Opponent/Opponent';
 import Button from '../../components/Utility/Button/Button';
+import Modal from '../../components/Utility/Modal/Modal';
 import StockChart from './StockInfo/StockChart/StockChart';
 import Styles from './Opponents.module.css';
 import { IdFunc, MapDispatch, OnDispatch, Props } from '../../common/props';
@@ -23,21 +25,26 @@ import { ButtonType } from '../../common/constants';
 import { NardisAction } from '../../common/actions';
 
 
+type BuyOutFunc = (playerId: string, selfBuyOut: boolean) => void;
+
 interface OpponentsState {
     viewFinancePlayerId: string,
-    showStockChart: boolean
-
+    showStockChart: boolean,
+    showModal: boolean,
+    modalButtonCallback: () => void
 };
 
 interface DispatchedProps {
     buyStock: IdFunc,
-    selStock: IdFunc
+    buyOutPlayer: BuyOutFunc,
+    sellStock: IdFunc
 };
 
 interface MappedOpponentsProps {
     players: Player[],
     gameStocks: Stocks[],
-    turn: number
+    turn: number,
+    gameStatus: GameStatus
 };
 
 interface OpponentsProps extends Props, MappedOpponentsProps, DispatchedProps {};
@@ -79,7 +86,8 @@ const getStockOwnerBackgroundColorArray = (stock: Stock, players: Player[], defa
 const mapStateToProps = (state: NardisState): MappedOpponentsProps => ({
     players: state.getAllPlayers(),
     gameStocks: state.getAllStock(),
-    turn: state.turn
+    turn: state.turn,
+    gameStatus: state.getGameStatus()
 });
 
 const mapDispatchToProps: MapDispatch<DispatchedProps> = (
@@ -96,7 +104,7 @@ const mapDispatchToProps: MapDispatch<DispatchedProps> = (
                 }
             }
         ),
-        selStock: (playerId: string) => dispatch(
+        sellStock: (playerId: string) => dispatch(
             {
                 type: NardisAction.SELL_STOCK,
                 payload: {
@@ -105,7 +113,11 @@ const mapDispatchToProps: MapDispatch<DispatchedProps> = (
                     }
                 }
             }
-        )
+        ),
+        buyOutPlayer: (playerId: string, selfBuyOut: boolean) => dispatch({
+            type: NardisAction.BUY_OUT_PLAYER,
+            payload: {buyOutPlayer: {playerId, selfBuyOut}}
+        })
     }
 );
 
@@ -117,7 +129,9 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
 
     state: OpponentsState = {
         viewFinancePlayerId: '',
-        showStockChart: false
+        showStockChart: false,
+        showModal: false,
+        modalButtonCallback: () => null
     };
 
     onViewFinanceClick: IdFunc = (playerId: string): void => {
@@ -133,18 +147,37 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
     }
 
     onStockSell: IdFunc = (playerId: string): void => {
-        this.props.selStock(playerId);
+        this.props.sellStock(playerId);
     }
 
-    onBuyout: IdFunc = (playerId: string): void => {
-        // TODO
-        console.log('take over: ' + playerId);
+    onBuyoutConfirm = () => {
+        this.state.modalButtonCallback();
+        this.setState({
+            ...this.state,
+            modalButtonCallback: () => null,
+            showModal: false
+        });
+    }
+
+    onBuyout: BuyOutFunc = (playerId: string, selfBuyOut: boolean): void => {
+        this.setState({
+            ...this.state,
+            showModal: true,
+            modalButtonCallback: this.props.buyOutPlayer.bind(this, playerId, selfBuyOut)
+        });
     }
 
     onToggleStockChart = (): void => {
         this.setState({
             ...this.state,
             showStockChart: !this.state.showStockChart
+        });
+    }
+
+    onHideModal = (): void => {
+        this.setState({
+            ...this.state,
+            showModal: false
         });
     }
 
@@ -175,6 +208,26 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
         const human: Player = this.props.players[0];
         return (
             <Fragment>
+                <Modal
+                    whenClicked={() => this.onHideModal()}
+                    show={this.state.showModal}
+                    style={{backgroundColor: 'navy', overflowY: 'unset', display: 'flex', flexDirection: 'row', justifyContent: 'center'}}
+                >
+                    <Button
+                        disabled={false}
+                        buttonType={ButtonType.Success}
+                        whenClicked={() => this.onBuyoutConfirm()}
+                    >
+                        CONFIRM BUYOUT
+                    </Button>
+                    <Button
+                        disabled={false}
+                        buttonType={ButtonType.Danger}
+                        whenClicked={() => this.onHideModal()}
+                    >
+                        CANCEL BUYOUT
+                    </Button>
+                </Modal>
                 <Button
                     disabled={false}
                     buttonType={ButtonType.StandardView}
@@ -191,19 +244,23 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
                 <hr/>
                 <div className={Styles.Opponents}>
                      {this.props.players.map((player: Player, index: number): JSX.Element => {
-                         const finance: Finance             = player.getFinance();
-                         const stock  : Stock               = this.props.gameStocks[0][player.id];
-                         const info   : OpponentInformation = opponentInformation[index];
-                         let buyValue : number              = stock.getBuyValue();
-                         let buyText  : string              = 'BUY STOCK';
-                         let buyFunc  : IdFunc              = this.onStockBuy;
-                         if (stock.currentAmountOfStockHolders() >= stockConstant.maxStockAmount) {
+                         const finance     : Finance             = player.getFinance();
+                         const stock       : Stock               = this.props.gameStocks[0][player.id];
+                         const info        : OpponentInformation = opponentInformation[index];
+                         const maxStock    : boolean             = stock.currentAmountOfStockHolders() >= stockConstant.maxStockAmount;
+                         const fullOwner   : boolean             = maxStock && stock.getSupply()[human.id] >= stockConstant.maxStockAmount;
+                         const isHumanStock: boolean             = stock.owningPlayerId === human.id;
+                         let buyValue      : number              = stock.getBuyValue();
+                         let buyText       : string              = 'BUY STOCK';
+                         let buyFunc       : BuyOutFunc          = this.onStockBuy;
+
+                         if (maxStock) {
                              const supply = stock.getBuyOutValues();
                              for (let i: number = 0; i < supply.length; i++) {
                                  if (supply[i].id === human.id) {
-                                     buyValue = stock.owningPlayerId === human.id ? buyValue : Math.floor(stock.getSellValue() * stockConstant.maxStockAmount) - supply[i].totalValue;
-                                     buyText = stock.owningPlayerId === human.id ? buyText : 'BUY OUT';
-                                     buyFunc = stock.owningPlayerId === human.id ? buyFunc : this.onBuyout;
+                                     buyValue = isHumanStock && fullOwner ? buyValue : Math.floor(stock.getSellValue() * stockConstant.maxStockAmount) - supply[i].totalValue;
+                                     buyText  = isHumanStock && fullOwner ? buyText : 'BUY OUT';
+                                     buyFunc  = isHumanStock && fullOwner ? buyFunc : this.onBuyout;
                                      break;
                                  }
                              }
@@ -224,7 +281,7 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
                                 }}
                                 callbacks={{
                                     viewFinances: this.onViewFinanceClick.bind(this, player.id),
-                                    stockBuy: buyFunc.bind(this, player.id),
+                                    stockBuy: buyFunc.bind(this, player.id, isHumanStock && maxStock && !fullOwner),
                                     stockSell: this.onStockSell.bind(this, player.id)
                                 }}
                                 stockBuy={buyValue.toLocaleString() + 'G'}
@@ -234,11 +291,10 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
                                 financeActive={player.id === this.state.viewFinancePlayerId}
                                 disabled={{
                                     stockBuy: (
-                                        buyValue > human.getFinance().getGold() || 
-                                        buyValue <= 0 || !stock.isActive() || 
-                                        (stock.currentAmountOfStockHolders() >= stockConstant.maxStockAmount && stock.owningPlayerId === human.id)
+                                        buyValue > human.getFinance().getGold() || buyValue <= 0 || 
+                                        !stock.isActive() || this.props.gameStatus.gameOver || (maxStock && fullOwner)
                                     ),
-                                    stockSell: !stock.isStockHolder(human.id) || !stock.isActive()
+                                    stockSell: !stock.isStockHolder(human.id) || !stock.isActive() || this.props.gameStatus.gameOver
                                 }}
                                 isActive={player.isActive()}
                                 avatar={info.avatar}

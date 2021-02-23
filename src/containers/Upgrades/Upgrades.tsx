@@ -10,8 +10,9 @@ import Cards from '../../components/Information/Cards/Cards';
 import Styles from './Upgrades.module.css';
 import NardisState from "../../common/state";
 import { GetAllUpgrades, NardisAction } from "../../common/actions";
-import { IdFunc, MapDispatch, OnDispatch, Props } from "../../common/props";
+import { IdFunc, MapDispatch, MapState, OnDispatch, Props } from "../../common/props";
 import { ButtonType, cardDefaultStyle } from "../../common/constants";
+import { GameStatus } from "nardis-game";
 
 
 interface LevelUpRequirements {
@@ -33,6 +34,7 @@ interface UpgradesMappedProps {
     playerGold: number,
     playerLevel: number,
     playerUpgrades: Nardis.Upgrade[],
+    gameStatus: GameStatus,
     getAllUpgrades: GetAllUpgrades
 };
 
@@ -43,7 +45,7 @@ interface UpgradesDispatchedProps {
 interface UpgradesProps extends Props, UpgradesMappedProps, UpgradesDispatchedProps {}
 
 
-const mapStateToProps = (
+const mapStateToProps: MapState<NardisState, UpgradesMappedProps> = (
     state: NardisState
 ): UpgradesMappedProps => ({
     playerRoutes: state.routes,
@@ -51,6 +53,7 @@ const mapStateToProps = (
     playerGold: state.money,
     playerLevel: state.level,
     playerUpgrades: state.upgrades,
+    gameStatus: state.getGameStatus(),
     getAllUpgrades: state.getAllUpgrades
 });
 
@@ -201,7 +204,8 @@ class Upgrades extends Component<UpgradesProps, UpgradesState> {
                                 purchased={this.props.playerUpgrades.filter(e => e.equals(entry)).length > 0}
                                 purchaseable={
                                     this.props.playerLevel >= entry.levelRequired && 
-                                    this.props.playerGold  >= entry.cost
+                                    this.props.playerGold  >= entry.cost && 
+                                    !this.props.gameStatus.gameOver
                                 }
                                 purchase={this.initiatePurchase.bind(this, entry.id)}
                             />

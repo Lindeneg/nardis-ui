@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import { 
     City, PotentialRoute, Resource, RouteCargo, 
-    Route, RoutePlanCargo, Train, BuyableRoute, Upgrade 
+    Route, RoutePlanCargo, Train, BuyableRoute, Upgrade, GameStatus 
 } from 'nardis-game';
 
 import Overview from './Helpers/Overview/Overview';
@@ -16,7 +16,7 @@ import { NardisState } from '../../../common/state';
 import { getCargoCards } from './Helpers/Selector/getCargoCards';
 import { addCargo, removeCargo } from '../ManageRoute/Helpers/manipulateCargo';
 import { RouteRevolution, ListType, ButtonType } from '../../../common/constants';
-import { MapDispatch, OnDispatch, Props, PossibleTrain, IdFunc, Func } from '../../../common/props';
+import { MapDispatch, OnDispatch, Props, PossibleTrain, IdFunc, Func, MapState } from '../../../common/props';
 import { 
     NardisAction, AddRouteToQueue, GetPossibleTrains, GetPotentialRoutes, GetStartCity 
 } from '../../../common/actions';
@@ -59,6 +59,7 @@ interface BaseProps {
     routes            : Route[],
     upgrades          : Upgrade[],
     gold              : number,
+    gameStatus        : GameStatus,
     getStartCity      : GetStartCity,
     getPotentialRoutes: GetPotentialRoutes,
     getPossibleTrains : GetPossibleTrains
@@ -67,12 +68,13 @@ interface BaseProps {
 interface NewRouteProps extends BaseProps, MappedProps, Props {};
 
 
-const mapStateToProps = (
+const mapStateToProps: MapState<NardisState, BaseProps> = (
     state: NardisState
 ): BaseProps => ({
     routes            : state.routes,
     upgrades          : state.upgrades,
     gold              : state.money,
+    gameStatus        : state.getGameStatus(),
     getStartCity      : state.getStartCity,
     getPotentialRoutes: state.getPotentialRoutes,
     getPossibleTrains : state.getPossibleTrains,
@@ -333,7 +335,7 @@ class NewRoute extends Component<NewRouteProps, NewRouteState> {
                 first={{...cards.first}}
                 second={{...cards.second}}
                 changeTrainButton={{disabled: false, whenClicked: this.onSetTrainChange, buttonType: ButtonType.SetTrain}}
-                buyRouteButton={{disabled: invalid, whenClicked: this.onRouteBuy, buttonType: ButtonType.BuyRoute}}
+                buyRouteButton={{disabled: invalid || this.props.gameStatus.gameOver, whenClicked: this.onRouteBuy, buttonType: ButtonType.BuyRoute}}
             />
         }
         return jsx;

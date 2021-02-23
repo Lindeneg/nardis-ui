@@ -1,7 +1,7 @@
 import { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import { Resource, Route, RoutePlanCargo, Train, Upgrade } from "nardis-game";
+import { GameStatus, Resource, Route, RoutePlanCargo, Train, Upgrade } from "nardis-game";
 
 import NardisState from "../../../common/state";
 import EditRoute from './EditRoute/EditRoute';
@@ -9,7 +9,7 @@ import DeleteModal from './Helpers/DeleteModal/DeleteModal';
 import getMetaRoute from "./Helpers/getMetaRoute";
 import Styles from './ManageRoute.module.css';
 import { EditActiveRoute, GetPossibleTrains, NardisAction } from "../../../common/actions";
-import { IdFunc, MapDispatch, OnDispatch, PossibleTrain, Props } from "../../../common/props";
+import { IdFunc, MapDispatch, MapState, OnDispatch, PossibleTrain, Props } from "../../../common/props";
 import { CargoChange } from "../NewRoute/NewRoute";
 import { RouteRevolution } from "../../../common/constants";
 import { addCargo, removeCargo } from './Helpers/manipulateCargo';
@@ -31,6 +31,7 @@ interface ManageRouteState {
 interface BuildRouteMappedProps {
     routes: Route[],
     upgrades: Upgrade[],
+    gameStatus: GameStatus,
     getPossibleTrains : GetPossibleTrains
 };
 
@@ -42,11 +43,12 @@ interface BuildRouteDispatchedProps {
 interface ManageRouteProps extends Props, BuildRouteMappedProps, BuildRouteDispatchedProps {}
 
 
-const mapStateToProps = (
+const mapStateToProps: MapState<NardisState, BuildRouteMappedProps> = (
     state: NardisState
 ): BuildRouteMappedProps => ({
     routes: state.routes.sort((a: Route, b: Route): number => b.getProfit() - a.getProfit()),
     upgrades: state.upgrades,
+    gameStatus: state.getGameStatus(),
     getPossibleTrains: state.getPossibleTrains
 });
 
@@ -231,8 +233,8 @@ class ManageRoute extends Component<ManageRouteProps, ManageRouteState> {
                     {this.props.routes.map((route: Route, index: number): JSX.Element => getMetaRoute({
                         route,
                         index,
-                        editDisabled: false,
-                        deleteDisabled: false,
+                        editDisabled: this.props.gameStatus.gameOver,
+                        deleteDisabled: this.props.gameStatus.gameOver,
                         onEdit: this.onEdit,
                         onDelete: this.onDelete
                     }))}
