@@ -12,6 +12,7 @@
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "chart.js": "^2.9.4",
+    "chartjs-plugin-datalabels": "^0.7.0",
     "immer": "^8.0.1",
     "nardis-game": "./nardis-game",
     "react": "^17.0.1",
