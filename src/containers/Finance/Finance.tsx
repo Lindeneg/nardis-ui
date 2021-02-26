@@ -1,4 +1,7 @@
+import { Fragment } from "react";
 import { connect } from "react-redux";
+import { ChartData } from "chart.js";
+import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
 
 import { 
     FinanceHistory, 
@@ -7,39 +10,49 @@ import {
     FinanceTotal, 
     FinanceType,
     Resource, 
-    localKeys 
+    localKeys, 
+    isDefined
 } from "nardis-game";
 
+import Chart from '../../components/Information/Chart/Chart';
 import Table from '../../components/Utility/Table/Table';
 import NardisState from "../../common/state";
-import Card from '../../components/Information/Cards/Card/Card';
 import Styles from './Finance.module.css';
-import { cardDefaultStyle, FinanceExpenseRows } from "../../common/constants";
-import { Func, Functional, Props } from "../../common/props";
+import { defaultChartColors, FinanceExpenseRows } from "../../common/constants";
+import { Func, Functional, MapState, Props } from "../../common/props";
 import { 
     GetAllResources, GetFinanceHistory, 
     GetFinanceTotal, GetTotalProfits 
 } from "../../common/actions";
-import { Fragment } from "react";
 
 
 type Compare = Func<FinanceTurnItem, boolean>;
 
+interface FinanceTotalIdName {
+    id               : string,
+    name             : string
+};
+
 interface FinanceMappedProps {
     turn             : number,
-    avgRevenue       : number,
     getFinanceHistory: GetFinanceHistory,
     getAllResources  : GetAllResources,
     getFinanceTotal  : GetFinanceTotal
     getTotalProfits  : GetTotalProfits
-}
+};
 
-interface FinanceProps extends Props, FinanceMappedProps {}
+interface FinanceProps extends Props, FinanceMappedProps {
+    alt             ?: {
+        history      : FinanceHistory,
+        total        : FinanceTotal,
+        totalProfits : number
+
+    }
+};
 
 
-const mapStateToProps = (state: NardisState): FinanceMappedProps => ({
+const mapStateToProps: MapState<FinanceMappedProps> = (state: NardisState): FinanceMappedProps => ({
     turn             : state.turn,
-    avgRevenue       : state.avgRevenue,
     getFinanceHistory: state.getFinanceHistory,
     getAllResources  : state.getAllResources,
     getFinanceTotal  : state.getFinanceTotal,
@@ -71,6 +84,69 @@ const getTotalProfitsPerTurn = (history: FinanceHistory) => (
     ))
 );
 
+const getDistributionEntries = (resources?: Resource[]): FinanceTotalIdName[] => {
+    if (typeof resources !== 'undefined') {
+        return [
+            ...resources.map((e: Resource): FinanceTotalIdName => ({id: e.id, name: e.name})), 
+            {id: localKeys[FinanceType.Recoup], name: 'RECOUP'}, 
+            {id: localKeys[FinanceType.StockSell], name: 'STOCKS'}
+        ];
+    } else {
+        return [
+            ...FinanceExpenseRows.map((row: [string, FinanceType]): FinanceTotalIdName => ({
+                id: localKeys[row[1]],
+                name: row[0]
+            })),
+            {id: localKeys[FinanceType.StockBuy], name: 'STOCKS'}
+        ];
+    }
+}
+
+const getDistribution = (total: FinanceTotal, resources?: Resource[]): ChartData | null => {
+    const data: Array<[string, number]> = getDistributionEntries(resources)
+    .map((item: FinanceTotalIdName): [string, number] => (isDefined(total[item.id]) ? [item.name, total[item.id]] : ['', 0]))
+    .filter((tuple: [string, number]): boolean => tuple[0].length > 0 && tuple[1] > 0);
+    if (data.length > 0) {
+        const colors: string[] = [...defaultChartColors];
+        return {
+            labels: data.map(e => e[0].toUpperCase()).reverse(),
+            datasets: [{data: [...data.map(e => e[1])].reverse(), backgroundColor: colors, borderColor: '#ccc'}]
+        }
+    }
+    return null;
+}
+
+const getDistributionChart = (total: FinanceTotal, resources?: Resource[]): JSX.Element | null => {
+    const isRevenue: boolean = typeof resources !== 'undefined';
+    const distribution: ChartData | null = getDistribution(total, resources);
+    if (distribution !== null) {
+        return (
+            <Chart 
+                type='pie'
+                id={isRevenue ? 'revenueChart' : 'expenseChart'}
+                data={{
+                    ...distribution
+                }}
+                plugins={[ChartDataLabels]}
+                options={{
+                    title: {text: (isRevenue ? 'REVENUE' : 'EXPENSE') + ' DISTRIBUTION', display: true, fontColor: 'white'},
+                    legend: {labels: {fontColor: 'white'}},
+                    responsive: true,
+                    plugins: {datalabels: {formatter: (val, ctx) => {
+                        if (ctx.dataset.data) {
+                            //@ts-expect-error
+                            return (val / ctx.dataset.data.reduce((a: number, b: number): number => a + b, 0) * 100).toFixed(2) + '%';
+                        }
+                        return '';
+                    }, color: '#ccc', backgroundColor: 'navy', font: {size: 15}, anchor: 'end', align: 'start', display: (context: Context): boolean => context.active}}
+                }}  
+                style={{width: '100%', height: '600px'}}
+            />
+        );
+    }
+    return null;
+}
+
 
 // perhaps create css classes in the table component and simply pass the desired class-name as a prop
 
@@ -96,9 +172,11 @@ const propStyles = {
  * Component to display financial information from the current 
  * and last two turns as well as the overall total for all turns.
  */
-const finance: Functional<FinanceProps> = (props: FinanceProps): JSX.Element => {
-    const history    : FinanceHistory = props.getFinanceHistory()[0];
-    const total      : FinanceTotal   = props.getFinanceTotal()[0];
+const finance: Functional<FinanceProps> = (
+    props: FinanceProps
+): JSX.Element => {
+    const history    : FinanceHistory = props.alt ? props.alt.history : props.getFinanceHistory()[0];
+    const total      : FinanceTotal   = props.alt ? props.alt.total : props.getFinanceTotal()[0];
     const revenueRows: Resource[]     = props.getAllResources();
 
     const mGetHeaders                 = getHeaders.bind(null, props.turn);
@@ -107,20 +185,39 @@ const finance: Functional<FinanceProps> = (props: FinanceProps): JSX.Element => 
     const mGetTotal                   = (key: string | number)                      : string  => (
         (total[(typeof key === 'number' ? localKeys[key] : key)] || 0).toLocaleString() + 'G'
     );
-
     return (
         <Fragment>
+            <hr/>
+            {typeof props.alt === 'undefined' ? 
+                <div style={{display: 'flex', flexDirection: 'row'}}>
+                    {getDistributionChart(total, revenueRows)}
+                    {getDistributionChart(total)}
+                </div> 
+            : null}
             <div className={Styles.Finance}>
                 <hr/>
                 <div className={Styles.Tables}>
                     <div className={Styles.FinanceTable}>
                         <Table
                             headers={mGetHeaders('REVENUE')}
-                            rows={revenueRows.map((e: Resource): string[] => ([
-                                e.name, 
-                                ...getRow(history.income, (j: FinanceTurnItem) => e.id === j.id), 
-                                mGetTotal(e.id)
-                            ]))}
+                            rows={[
+                                ...revenueRows.map((e: Resource): string[] => ([
+                                    e.name, 
+                                    ...getRow(history.income, (j: FinanceTurnItem): boolean => e.id === j.id), 
+                                    mGetTotal(e.id)
+                                ])),
+                                [
+                                    'RECOUPS',
+                                    ...getRow(history.income, (j: FinanceTurnItem): boolean => j.id === localKeys[FinanceType.Recoup]),
+                                    mGetTotal(localKeys[FinanceType.Recoup])
+                                ],
+                                [
+                                    'STOCKS',
+                                    ...getRow(history.income, (j: FinanceTurnItem): boolean => j.id === localKeys[FinanceType.StockSell]),
+                                    mGetTotal(localKeys[FinanceType.StockSell])
+                                ]
+                            
+                            ]}
                             rowStyles={propStyles.rowStyles}
                             headerStyles={propStyles.headerStyles}
                         />
@@ -129,11 +226,19 @@ const finance: Functional<FinanceProps> = (props: FinanceProps): JSX.Element => 
                     <div className={Styles.FinanceTable} >
                         <Table
                             headers={mGetHeaders('EXPENSE')}
-                            rows={FinanceExpenseRows.map((row: [string, FinanceType]): string[] => [
-                                row[0],
-                                ...mGetRow(mCmp.bind(null, row[1])),
-                                mGetTotal(row[1])
-                            ])}
+                            rows={[
+                                ...FinanceExpenseRows.map((row: [string, FinanceType]): string[] => [
+                                    row[0],
+                                    ...mGetRow(mCmp.bind(null, row[1])),
+                                    mGetTotal(row[1])
+                                    ]
+                                ),
+                                [
+                                    'STOCKS',
+                                    ...getRow(history.expense, (j: FinanceTurnItem): boolean => j.id === localKeys[FinanceType.StockBuy]),
+                                    mGetTotal(localKeys[FinanceType.StockBuy])
+                                ]
+                            ]}
                             {...propStyles}
                         />
                     </div>
@@ -141,25 +246,14 @@ const finance: Functional<FinanceProps> = (props: FinanceProps): JSX.Element => 
                     <div className={Styles.FinanceTable}>
                         <Table
                             headers={mGetHeaders('PROFITS')}
-                            rows={[['TOTAL PROFITS', ...getTotalProfitsPerTurn(history), props.getTotalProfits().toLocaleString() + 'G']]}
+                            rows={[['TOTAL PROFITS', ...getTotalProfitsPerTurn(history), (props.alt ? props.alt.totalProfits : props.getTotalProfits()).toLocaleString() + 'G']]}
                             {...propStyles}
                         />
                     </div>
                     <hr/>
                 </div>
             </div>
-            {/*
-            <h1>RESOURCE REVENUE DISTRIBUTION</h1>
-                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                    <Card 
-                        label='AVG. REVENUE'
-                        value={props.avgRevenue.toLocaleString() + 'G/TURN'}
-                        style={{...cardDefaultStyle, width: '50%', backgroundColor: '#212fa2'}}
-                    />
-                </div>
-                * pie chart: resources/profit *
-                * line chart: avg revenue / turn *
-            */}
+            <hr/>
         </Fragment>
     );
 }

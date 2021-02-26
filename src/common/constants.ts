@@ -1,8 +1,9 @@
-import { FinanceType } from 'nardis-game';
+import { FinanceType, Indexable } from 'nardis-game';
 
 import { NIndexable } from './props';
 import { NavigationEntriesProps } from '../components/Navigation/NavigationEntries/NavigationEntries';
 import { CSSProperties } from 'react';
+import { ChartOptions } from 'chart.js';
 
 
 /**
@@ -70,7 +71,9 @@ export enum ButtonType {
     BuyRoute,
     ManipulateRoute,
     EditRouteConfirm,
-    EditRouteCancel
+    EditRouteCancel,
+    StockAction,
+    StandardView
 };
 
 /**
@@ -87,7 +90,9 @@ export const buttonTypeToClassName: NIndexable<string> = {
     [ButtonType.BuyRoute]         : 'BuyRoute',
     [ButtonType.ManipulateRoute]  : 'ManipulateRoute',
     [ButtonType.EditRouteConfirm] : 'EditRouteConfirm',
-    [ButtonType.EditRouteCancel]  : 'EditRouteCancel'
+    [ButtonType.EditRouteCancel]  : 'EditRouteCancel',
+    [ButtonType.StockAction]      : 'StockAction',
+    [ButtonType.StandardView]     : 'StandardView',
 };
 
 export const mainNavigationBarEntries: NavigationEntriesProps = {
@@ -173,6 +178,44 @@ export const metaRouteEditHeaderNames: string[] = [
     'BOUGHT ON TURN'
 ];
 
+export const defaultChartOptions: ChartOptions = {
+    legend: {
+        labels: {
+            fontColor: 'white'
+        }
+    },
+    elements: {
+        point: {
+            radius: 2
+        }
+    },
+    scales: {
+        xAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: 'TURN',
+                fontColor: '#eee'
+            },
+            ticks: {
+                fontColor: 'white',
+                autoSkip: true,
+                maxTicksLimit: 15
+            }
+        }],
+        yAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: 'VALUE',
+                fontColor: '#eee'
+            },
+            ticks: {
+                fontColor: 'white'
+            }
+        }]
+    },
+    responsive: true
+}
+
 export const layoutCardLabels: [string, string][] = [
     ['money', 'g'],
     ['level', ''],
@@ -189,10 +232,18 @@ export const FinanceExpenseRows: Array<[string, FinanceType]> = [
     ['UPKEEP', FinanceType.Upkeep],
 ];
 
+export const yieldMap: Indexable<[number, number]> = {
+    low: [5, 16],
+    med: [15, 86],
+};
+
 export const cardDefaultStyle: CSSProperties = {margin: '0', backgroundColor: '#2d3a9c'};
 
 export const defaultChartColors: string[] = [
-    '#aaffc3',
+    '#CC0000',
+    '#01579B',
+    '#911eb4',
+    '#4363d8',
     '#9a6324',
     '#808000',
     '#469990',
@@ -201,7 +252,6 @@ export const defaultChartColors: string[] = [
     '#f58231',
     '#ffe119',
     '#bfef45',
-    '#42d4f4',
-    '#4363d8',
-    '#911eb4'
+    '#4D5656',
+    '#1B5E20'
 ];

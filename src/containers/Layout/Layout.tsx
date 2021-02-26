@@ -1,23 +1,42 @@
 import { Component, CSSProperties, Fragment, ReactNode } from 'react';
 import { connect } from 'react-redux';
 
+import { GameStatus, Player, PlayerType } from 'nardis-game';
+
+import Footer from '../../components/Information/Footer/Footer';
+import Button from '../../components/Utility/Button/Button';
+import Modal from '../../components/Utility/Modal/Modal';
 import Navigation from '../../components/Navigation/Navigation';
 import SideBar from '../../components/Navigation/SideBar/SideBar';
 import Cards from '../../components/Information/Cards/Cards';
-import CreateGame from '../CreateGame/CreateGame';
+import CreateGame from '../GameNonActive/CreateGame/CreateGame';
+import EndedGame from '../GameNonActive/EndedGame/EndedGame';
 import Spinner from '../../components/Utility/Spinner/Spinner';
 import Styles from './Layout.module.css';
 import { NardisState } from '../../common/state';
-import { layoutCardLabels } from '../../common/constants';
+import { NardisAction } from '../../common/actions';
+import { getPlayerIndexFromPlayerId } from '../Opponents/Opponents';
+import { 
+    ButtonType, 
+    layoutCardLabels 
+} from '../../common/constants';
 import { 
     Indexable, 
+    MapDispatch, 
     MapState, 
+    OnDispatch, 
     Props 
 } from '../../common/props';
 
 
 interface LayoutState {
-    showSideBar: boolean
+    showSideBar: boolean,
+    examineEndedGame: boolean,
+    showModal: boolean
+};
+
+interface LayoutDispatchedProps {
+    endGame: () => void
 };
 
 interface LayoutMappedProps {
@@ -29,15 +48,17 @@ interface LayoutMappedProps {
     range      : number,
     routes     : number,
     queue      : number,
-    opponents  : number
+    opponents  : number,
+    gameStatus : GameStatus,
+    players    : Player[]
 };
 
-type Union = number | string | CSSProperties | ReactNode;
+type Union = string | CSSProperties | ReactNode | LayoutDispatchedProps | LayoutMappedProps;
 
-interface LayoutProps extends Props, LayoutMappedProps, Indexable<Union> {};
+interface LayoutProps extends Props, LayoutMappedProps, LayoutDispatchedProps, Indexable<Union> {};
 
 
-const mapStateToProps: MapState<NardisState, LayoutMappedProps> = (
+const mapStateToProps: MapState<LayoutMappedProps> = (
     state: NardisState
 ): LayoutMappedProps => ({
     gameCreated: state.gameCreated,
@@ -49,7 +70,20 @@ const mapStateToProps: MapState<NardisState, LayoutMappedProps> = (
     routes     : state.routes.length,
     queue      : state.queue.length,
     opponents  : state.opponents.length,
+    gameStatus : state.getGameStatus(),
+    players    : state.getAllPlayers()
 });
+
+const mapDispatchToProps: MapDispatch<LayoutDispatchedProps> = (
+    dispatch: OnDispatch
+): LayoutDispatchedProps => (
+    {
+        endGame: () => dispatch({
+            type: NardisAction.END_CURRENT_GAME,
+            payload: {}
+        })
+    }
+);
 
 
 /**
@@ -60,7 +94,9 @@ const mapStateToProps: MapState<NardisState, LayoutMappedProps> = (
 class Layout extends Component<LayoutProps, LayoutState> {
 
     state: LayoutState = {
-        showSideBar: false
+        showSideBar: false,
+        examineEndedGame: false,
+        showModal: true
     };
 
     closeSideBarHandler = (): void => {
@@ -78,8 +114,26 @@ class Layout extends Component<LayoutProps, LayoutState> {
         });
     };
 
-    render (): JSX.Element {
+    onExamineEndedGame = (): void => {
+        this.setState({
+            ...this.state,
+            examineEndedGame: true
+        });
+    }
 
+    onEndGame = (): void => {
+        this.props.endGame();
+        window.document.location.pathname = '';
+    }
+
+    onModalClose = (): void => {
+        this.setState({
+            ...this.state,
+            showModal: false
+        });
+    }
+
+    render (): JSX.Element {
         let jsx: JSX.Element = <CreateGame />
 
         if (this.props.gameCreated) {
@@ -93,15 +147,44 @@ class Layout extends Component<LayoutProps, LayoutState> {
             jsx = (
                 <Fragment>
                     {!this.props.isLoading ?
-                    <div>
-                        <Navigation whenClicked={this.toggleSideBarHandler} />
-                        <SideBar show={this.state.showSideBar} whenClicked={this.closeSideBarHandler} />
-                        <Cards cards={playerCards} />
-                        <main className={Styles.Content}>
-                            {this.props.children}
-                        </main>
-                        <footer>Footer</footer>
-                    </div> : <Spinner redirectTo="/finance"/>}
+                        <div>
+                            <Modal 
+                                show={this.props.players.length > 0 && this.props.players[0].playerType === PlayerType.Human && !this.props.players[0].isActive() && !this.props.gameStatus.gameOver && this.state.showModal}
+                                whenClicked={this.onModalClose}
+                                style={{overflowY: 'unset', textAlign: 'center', backgroundColor: 'navy', color: 'white'}}
+                            > 
+                                YOU HAVE BEEN BOUGHT OUT. GAME OVER.
+                                <Button
+                                    disabled={false}
+                                    whenClicked={this.onModalClose}
+                                    buttonType={ButtonType.StandardView}
+                                    style={{margin: '15px 0 15px 0'}}
+                                >
+                                    CONTINUE GAME
+                                </Button>
+                                <Button
+                                    disabled={false}
+                                    whenClicked={this.onEndGame}
+                                    buttonType={ButtonType.StandardView}
+                                >
+                                    NEW GAME
+                                </Button>
+                            </Modal>
+                            <Navigation whenClicked={this.toggleSideBarHandler} />
+                            <SideBar show={this.state.showSideBar} whenClicked={this.closeSideBarHandler} />
+                            <Cards cards={playerCards} />
+                            <main className={Styles.Content}>
+                                {this.props.gameStatus.gameOver && !this.state.examineEndedGame ? (
+                                    <EndedGame 
+                                        examineCallback={this.onExamineEndedGame}
+                                        newGameCallback={this.onEndGame}
+                                        winningPlayer={this.props.players[getPlayerIndexFromPlayerId(this.props.gameStatus.id, this.props.players)]}
+                                    />
+                                ) : this.props.children}
+                            </main>
+                            <Footer onResetGame={this.onEndGame} />
+                        </div> 
+                    : <Spinner />}
                 </Fragment>
             );
         }
@@ -110,4 +193,4 @@ class Layout extends Component<LayoutProps, LayoutState> {
 }
 
 
-export default connect(mapStateToProps)(Layout);
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

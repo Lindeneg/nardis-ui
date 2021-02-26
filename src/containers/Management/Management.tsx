@@ -1,26 +1,27 @@
+import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
+
+import { Route as nRoute, QueuedRouteItem} from 'nardis-game';
 
 import NewRoute from './NewRoute/NewRoute';
 import BuildQueue from './BuildQueue/BuildQueue';
 import ManageRoute from './ManageRoute/ManageRoute';
+import NardisState from '../../common/state';
 import NavigationEntries from '../../components/Navigation/NavigationEntries/NavigationEntries';
 import Styles from './Management.module.css';
 import { managementNavigationBarEntries } from '../../common/constants';
-import { Functional, Props } from '../../common/props';
-import * as Nardis from 'nardis-game';
-import NardisState from '../../common/state';
-import { connect } from 'react-redux';
+import { Functional, MapState, Props } from '../../common/props';
 
 
 interface ManagementMappedProps {
-    routes: Nardis.Route[],
-    queue: Nardis.QueuedRouteItem[]
+    routes: nRoute[],
+    queue: QueuedRouteItem[]
 }
 
 interface ManagementProps extends Props, ManagementMappedProps {}
 
 
-const mapStateToProps = (state: NardisState): ManagementMappedProps => ({
+const mapStateToProps: MapState<ManagementMappedProps> = (state: NardisState): ManagementMappedProps => ({
     routes: state.routes,
     queue: state.queue
 });

@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 
 import { LocalKey, localKeys } from 'nardis-game';
 
-import Button from '../../components/Utility/Button/Button';
+import Button from '../../../components/Utility/Button/Button';
 import Styles from './CreateGame.module.css';
-import Input, { InputConfig } from '../../components/Utility/Input/Input';
-import { NardisAction } from '../../common/actions';
-import { ButtonType } from '../../common/constants';
+import Input, { InputConfig } from '../../../components/Utility/Input/Input';
+import { NardisAction } from '../../../common/actions';
+import { ButtonType } from '../../../common/constants';
 import {  
     Func, 
     Props,
@@ -18,7 +18,7 @@ import {
     OnFormEventFunc,
     ChangedEventElement,
     OnFormChangeFunc, 
-} from '../../common/props';
+} from '../../../common/props';
 
 
 export type InitGameFunc = (name: string, money: number, opponents: number) => void;
@@ -100,26 +100,26 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
                     const value: number = parseInt(inp);
                     return !Number.isNaN(value) && value >= 800 && value < 3501;
                 },
-                valid: false,
+                valid: true,
                 touched: false,
-                value: ''
+                value: '800'
             },
             opponents: {
                 inputConfig: {
                     type: 'number',
-                    label: 'Opponents (TODO does nothing atm)',
-                    placeholder: '3'
+                    label: 'Opponents',
+                    placeholder: '2'
                 },
                 validation: (inp: string): boolean => {
                     const value: number = parseInt(inp);
                     return !Number.isNaN(value) && value >= 1 && value < 5;
                 },
-                valid: false,
+                valid: true,
                 touched: false,
-                value: ''
+                value: '2'
             }
         },
-        isValid: false
+        isValid: true
     };
 
     componentDidMount = (): void => {
@@ -162,6 +162,12 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
     render (): JSX.Element {
         return (
             <Fragment>
+                {/* TODO write introduction
+                <div>
+                    <h3>Nardis</h3>
+                    <p>Hello there</p>
+                </div>
+                */}
                 <div className={Styles.CreateGame}>
                     <form onSubmit={this.initGame}>
                         {Object.keys(this.state.base)
@@ -186,7 +192,6 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
                         </Button>
                     </form>
                 </div>
-                <footer>Footer</footer>
             </Fragment>
         );
     }

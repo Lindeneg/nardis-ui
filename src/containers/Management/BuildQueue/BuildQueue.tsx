@@ -1,13 +1,13 @@
 import { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import { QueuedRouteItem, Route, Train, Upgrade } from "nardis-game";
+import { GameStatus, QueuedRouteItem, Route, Train, Upgrade } from "nardis-game";
 
 import NardisState from "../../../common/state";
 import Styles from './BuildQueue.module.css';
 import MetaRoute from '../../../components/Information/MetaRoute/MetaRoute';
 import getTrainUpgradeContext, { TrainUpgradeContext } from "../../Helpers/getUpgradeContext";
-import { MapDispatch, OnDispatch, Props } from "../../../common/props";
+import { MapDispatch, MapState, OnDispatch, Props } from "../../../common/props";
 import { metaRouteHeaderNames } from "../../../common/constants";
 import { NardisAction, RemoveRouteFromQueue } from "../../../common/actions";
 
@@ -18,7 +18,8 @@ interface BuildQueueState {
 
 interface BuildQueueMappedProps {
     queue: QueuedRouteItem[],
-    upgrades: Upgrade[]
+    upgrades: Upgrade[],
+    gameStatus: GameStatus
 };
 
 interface BuildQueueDispatchedProps {
@@ -28,11 +29,12 @@ interface BuildQueueDispatchedProps {
 interface BuildQueueProps extends Props, BuildQueueMappedProps, BuildQueueDispatchedProps {}
 
 
-const mapStateToProps = (
+const mapStateToProps: MapState<BuildQueueMappedProps> = (
     state: NardisState
 ): BuildQueueMappedProps => ({
     queue: state.queue,
-    upgrades: state.upgrades
+    upgrades: state.upgrades,
+    gameStatus: state.getGameStatus()
 });
 
 const mapDispatchToProps: MapDispatch<BuildQueueDispatchedProps> = (
@@ -83,7 +85,7 @@ class BuildQueue extends Component<BuildQueueProps, BuildQueueState> {
                     cityOne={{city: item.route.getCityOne(), color: 'yellow'}}
                     cityTwo={{city: item.route.getCityTwo(), color: 'lightgreen'}}
                     editRouteFunc={() => null}
-                    deleteRouteDisabled={!(item.turnCost > 0)}
+                    deleteRouteDisabled={!(item.turnCost > 0) || this.props.gameStatus.gameOver}
                     deleteRouteFunc={() => this.deleteRouteFunc(item.route)}
                     id={item.route.id}
                     headers={metaRouteHeaderNames}

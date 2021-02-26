@@ -1,4 +1,4 @@
-import { Player } from 'nardis-game';
+import { Finance, Player } from 'nardis-game';
 import { NardisState } from '../../common/state';
 import { ActionFunc, ActionFuncArgs } from '../../common/actions';
 
@@ -9,13 +9,16 @@ const update: ActionFunc = (
 ): NardisState => {
     if (args.state.gameCreated && args.state._game) {
         const player: Player = args.state._game.getCurrentPlayer();
+        const finance: Finance = player.getFinance();
         return {
             ...args.state,
-            money     : player.getFinance().getGold(),
+            money     : finance.getGold(),
             turn      : args.state._game.getCurrentTurn(),
             level     : player.getLevel(),
             range     : player.getRange(),
-            avgRevenue: player.getFinance().getAverageRevenue(),
+            avgRevenue: finance.getAverageRevenue(),
+            avgExpense: finance.getAverageExpense(),
+            netWorth  : finance.getNetWorth(),
             routes    : player.getRoutes(),
             queue     : player.getQueue(),
             upgrades  : player.getUpgrades(),

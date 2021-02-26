@@ -1,0 +1,19 @@
+.Opponent {
+    width: 500px;
+    margin-bottom: 35px;
+}
+
+.Buttons {
+    width: 100%;
+}
+
+.CardContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.Disabled, .Disabled span {
+    text-decoration: 4px line-through;
+    text-decoration-color: darkgray;
+}

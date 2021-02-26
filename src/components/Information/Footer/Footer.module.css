@@ -1,0 +1,26 @@
+.Footer {
+    background-color: #242582;
+    text-align: center;
+    color: rgb(108, 143, 36);
+    position: fixed;
+    width: 100%;
+    right: 0;
+    bottom: 0;
+}
+
+.Footer span {
+    margin: 0 10px 0 10px;
+}
+
+.Footer a {
+    color: unset;
+    text-decoration: unset;
+}
+
+.Clickable {
+    cursor: pointer;
+}
+
+.Clickable:hover {
+    color: #ccc;
+}

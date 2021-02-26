@@ -40,6 +40,22 @@
     margin: unset;
 }
 
+.StockAction, .StandardView {
+    width: 50%;
+    background-color: #212fa2;
+    height: 35px;
+    border: 1px solid white;
+    color: white;
+    border-radius: 10px;
+    margin: 5px 0 0 0;
+    padding-left: 10px !important;
+    cursor: pointer;
+}
+
+.StandardView {
+    width: 100%;
+}
+
 .SetTrain, .ChangeDestination, .ChangeOrigin, .BuyRoute {
     background-color: #3e5fc2;
     margin: 0;
@@ -76,6 +92,15 @@
 
 .BuyRoute:disabled {
     background-color: #3e5fc2;
+}
+
+.StandardView:hover {
+    background-color: green;
+    color: white !important;
+}
+
+.StandardView:disabled:hover {
+    background-color: #212fa2;
 }
 
 .SetTrain:hover, .ChangeOrigin:hover, .ChangeDestination:hover, .BuyRoute:hover {

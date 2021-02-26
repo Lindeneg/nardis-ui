@@ -6,11 +6,16 @@ import {
     OnClickFunc, 
     Props 
 } from '../../../common/props';
+import { Fragment } from 'react';
 
 
 export interface ButtonProps extends Props, Clickable<OnClickFunc> {
     disabled  : boolean,
     buttonType: ButtonType,
+    altText?: {
+        left: string,
+        right: string
+    }
 };
 
 
@@ -26,7 +31,12 @@ const button: Functional<ButtonProps> = (
         className={[Styles.Button, Styles[buttonTypeToClassName[props.buttonType]]].join(' ')}
         style={props.style}
     >
-        {props.children}
+        {props.altText ? (
+            <Fragment>
+                <span style={{float: 'left'}}>{props.altText.left}</span>
+                <span style={{float: 'right'}}>{props.altText.right}</span>
+            </Fragment>
+        ) : props.children}
     </button>
 );
 

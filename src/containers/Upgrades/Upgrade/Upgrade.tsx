@@ -18,7 +18,7 @@ const upgrade: Functional<UpgradeProps> = (
     props: UpgradeProps
 ): JSX.Element => (
     <div 
-        className={[Styles.Upgrade, props.purchaseable ? '' : Styles.Unpurchaseable, props.purchased ? Styles.Purchased : ''].join(' ')}
+        className={[Styles.Upgrade, props.purchaseable || props.purchased ? '' : Styles.Unpurchaseable, props.purchased ? Styles.Purchased : ''].join(' ')}
         onClick={props.purchaseable && !props.purchased ? () => props.purchase() : () => null}
     >
         <p>{props.description}</p>

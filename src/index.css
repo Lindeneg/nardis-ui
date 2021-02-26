@@ -15,23 +15,13 @@ code {
 div p {
   width: 100%;
   text-transform: uppercase;
-  color: white;
+  color: #eee;
 }
 
 div p span {
   float: right;
   font-weight: 500;
-  color: white;
-}
-
-footer {
-  background-color: #242582;
-  text-align: center;
-  color: #3e5fc2;
-  position: fixed;
-  width: 100%;
-  right: 0;
-  bottom: 0;
+  color: #eee;
 }
 
 hr {
