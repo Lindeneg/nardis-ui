@@ -240,7 +240,10 @@ export const yieldMap: Indexable<[number, number]> = {
 export const cardDefaultStyle: CSSProperties = {margin: '0', backgroundColor: '#2d3a9c'};
 
 export const defaultChartColors: string[] = [
-    '#aaffc3',
+    '#CC0000',
+    '#01579B',
+    '#911eb4',
+    '#4363d8',
     '#9a6324',
     '#808000',
     '#469990',
@@ -249,7 +252,6 @@ export const defaultChartColors: string[] = [
     '#f58231',
     '#ffe119',
     '#bfef45',
-    '#42d4f4',
-    '#4363d8',
-    '#911eb4'
+    '#4D5656',
+    '#1B5E20'
 ];
