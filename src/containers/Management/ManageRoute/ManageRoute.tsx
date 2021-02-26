@@ -43,7 +43,7 @@ interface BuildRouteDispatchedProps {
 interface ManageRouteProps extends Props, BuildRouteMappedProps, BuildRouteDispatchedProps {}
 
 
-const mapStateToProps: MapState<NardisState, BuildRouteMappedProps> = (
+const mapStateToProps: MapState<BuildRouteMappedProps> = (
     state: NardisState
 ): BuildRouteMappedProps => ({
     routes: state.routes.sort((a: Route, b: Route): number => b.getProfit() - a.getProfit()),

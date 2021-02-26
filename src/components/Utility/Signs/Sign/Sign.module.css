@@ -1,18 +1,11 @@
 .Sign {
     border-left: 1px solid #3e5fc2;
     background-color: inherit;
-    width: 49%;
-    height: unset;
     color: white;
-    font-size: 22px;
+    font-size: 25px;
     font-weight: 500;
-}
-
-.Minus {
-    margin-top: 0;
-    border-right: 1px solid #3e5fc2;
-    position: absolute;
-    right: 8px;
+    margin: 0 5px 0 5px;
+    width: 50%;
 }
 
 .Sign div {
@@ -36,13 +29,8 @@
 
 @media (min-width: 800px) {
     .Sign {
+        width: auto;
+        height: auto;
         border-radius: 50%;
-        width: 32px;
-        height: 32px;
-    }
-
-    .Minus {
-        position: relative;
-        right: unset;
     }
 }

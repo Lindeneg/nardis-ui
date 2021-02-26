@@ -38,12 +38,17 @@ export interface NavigationEntriesProps extends Props, MappedProps, DispatchedPr
 };
 
 
+const onEndGame = (callback: () => void): void => {
+    callback();
+    window.document.location.pathname = '';
+}
+
 const sleep = (ms: number): Promise<any> => {
     if (ms <= 0) { new Promise(() => null); }
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const mapStateToProps: MapState<NardisState, MappedProps> = (
+const mapStateToProps: MapState<MappedProps> = (
     state: NardisState
 ): MappedProps => ({
     gameStatus: state.getGameStatus()
@@ -71,7 +76,6 @@ const mapDispatchToProps: MapDispatch<DispatchedProps> = (
         })
     }
 );
-
 
 /**
  * Wrapper to capture a list of NavigationEntry components.
@@ -105,7 +109,7 @@ const navigationEntries: Functional<NavigationEntriesProps> = (
             {props.showEndTurnButton ?
                 <Button 
                     style={{paddingTop: "5px"}} 
-                    whenClicked={gameOver && props.endGame ? props.endGame : btnFunc} 
+                    whenClicked={gameOver && props.endGame ? onEndGame.bind(null, props.endGame) : btnFunc} 
                     disabled={false} 
                     buttonType={ButtonType.EndTurn}
                 > 

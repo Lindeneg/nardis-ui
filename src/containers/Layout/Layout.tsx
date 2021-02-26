@@ -1,19 +1,25 @@
 import { Component, CSSProperties, Fragment, ReactNode } from 'react';
 import { connect } from 'react-redux';
 
-import { GameStatus, Player } from 'nardis-game';
+import { GameStatus, Player, PlayerType } from 'nardis-game';
 
+import Footer from '../../components/Information/Footer/Footer';
+import Button from '../../components/Utility/Button/Button';
+import Modal from '../../components/Utility/Modal/Modal';
 import Navigation from '../../components/Navigation/Navigation';
 import SideBar from '../../components/Navigation/SideBar/SideBar';
 import Cards from '../../components/Information/Cards/Cards';
-import CreateGame from '../CreateGame/CreateGame';
-import EndedGame from '../CreateGame/EndedGame/EndedGame';
+import CreateGame from '../GameNonActive/CreateGame/CreateGame';
+import EndedGame from '../GameNonActive/EndedGame/EndedGame';
 import Spinner from '../../components/Utility/Spinner/Spinner';
 import Styles from './Layout.module.css';
 import { NardisState } from '../../common/state';
 import { NardisAction } from '../../common/actions';
 import { getPlayerIndexFromPlayerId } from '../Opponents/Opponents';
-import { layoutCardLabels } from '../../common/constants';
+import { 
+    ButtonType, 
+    layoutCardLabels 
+} from '../../common/constants';
 import { 
     Indexable, 
     MapDispatch, 
@@ -25,7 +31,8 @@ import {
 
 interface LayoutState {
     showSideBar: boolean,
-    examineEndedGame: boolean
+    examineEndedGame: boolean,
+    showModal: boolean
 };
 
 interface LayoutDispatchedProps {
@@ -51,7 +58,7 @@ type Union = string | CSSProperties | ReactNode | LayoutDispatchedProps | Layout
 interface LayoutProps extends Props, LayoutMappedProps, LayoutDispatchedProps, Indexable<Union> {};
 
 
-const mapStateToProps: MapState<NardisState, LayoutMappedProps> = (
+const mapStateToProps: MapState<LayoutMappedProps> = (
     state: NardisState
 ): LayoutMappedProps => ({
     gameCreated: state.gameCreated,
@@ -88,7 +95,8 @@ class Layout extends Component<LayoutProps, LayoutState> {
 
     state: LayoutState = {
         showSideBar: false,
-        examineEndedGame: false // false
+        examineEndedGame: false,
+        showModal: true
     };
 
     closeSideBarHandler = (): void => {
@@ -113,8 +121,19 @@ class Layout extends Component<LayoutProps, LayoutState> {
         });
     }
 
-    render (): JSX.Element {
+    onEndGame = (): void => {
+        this.props.endGame();
+        window.document.location.pathname = '';
+    }
 
+    onModalClose = (): void => {
+        this.setState({
+            ...this.state,
+            showModal: false
+        });
+    }
+
+    render (): JSX.Element {
         let jsx: JSX.Element = <CreateGame />
 
         if (this.props.gameCreated) {
@@ -128,21 +147,44 @@ class Layout extends Component<LayoutProps, LayoutState> {
             jsx = (
                 <Fragment>
                     {!this.props.isLoading ?
-                    <div>
-                        <Navigation whenClicked={this.toggleSideBarHandler} />
-                        <SideBar show={this.state.showSideBar} whenClicked={this.closeSideBarHandler} />
-                        <Cards cards={playerCards} />
-                        <main className={Styles.Content}>
-                            {this.props.gameStatus.gameOver && !this.state.examineEndedGame ? (
-                                <EndedGame 
-                                    examineCallback={this.onExamineEndedGame}
-                                    newGameCallback={this.props.endGame}
-                                    winningPlayer={this.props.players[getPlayerIndexFromPlayerId(this.props.gameStatus.id, this.props.players)]}
-                                />
-                            ) : this.props.children}
-                        </main>
-                        <footer>Footer</footer>
-                    </div> : <Spinner />}
+                        <div>
+                            <Modal 
+                                show={this.props.players.length > 0 && this.props.players[0].playerType === PlayerType.Human && !this.props.players[0].isActive() && !this.props.gameStatus.gameOver && this.state.showModal}
+                                whenClicked={this.onModalClose}
+                                style={{overflowY: 'unset', textAlign: 'center', backgroundColor: 'navy', color: 'white'}}
+                            > 
+                                YOU HAVE BEEN BOUGHT OUT. GAME OVER.
+                                <Button
+                                    disabled={false}
+                                    whenClicked={this.onModalClose}
+                                    buttonType={ButtonType.StandardView}
+                                    style={{margin: '15px 0 15px 0'}}
+                                >
+                                    CONTINUE GAME
+                                </Button>
+                                <Button
+                                    disabled={false}
+                                    whenClicked={this.onEndGame}
+                                    buttonType={ButtonType.StandardView}
+                                >
+                                    NEW GAME
+                                </Button>
+                            </Modal>
+                            <Navigation whenClicked={this.toggleSideBarHandler} />
+                            <SideBar show={this.state.showSideBar} whenClicked={this.closeSideBarHandler} />
+                            <Cards cards={playerCards} />
+                            <main className={Styles.Content}>
+                                {this.props.gameStatus.gameOver && !this.state.examineEndedGame ? (
+                                    <EndedGame 
+                                        examineCallback={this.onExamineEndedGame}
+                                        newGameCallback={this.onEndGame}
+                                        winningPlayer={this.props.players[getPlayerIndexFromPlayerId(this.props.gameStatus.id, this.props.players)]}
+                                    />
+                                ) : this.props.children}
+                            </main>
+                            <Footer onResetGame={this.onEndGame} />
+                        </div> 
+                    : <Spinner />}
                 </Fragment>
             );
         }

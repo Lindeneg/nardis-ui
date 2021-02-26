@@ -1,5 +1,7 @@
 import { Fragment } from "react";
 import { connect } from "react-redux";
+import { ChartData } from "chart.js";
+import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
 
 import { 
     FinanceHistory, 
@@ -8,14 +10,16 @@ import {
     FinanceTotal, 
     FinanceType,
     Resource, 
-    localKeys 
+    localKeys, 
+    isDefined
 } from "nardis-game";
 
+import Chart from '../../components/Information/Chart/Chart';
 import Table from '../../components/Utility/Table/Table';
 import NardisState from "../../common/state";
 import Styles from './Finance.module.css';
-import { FinanceExpenseRows } from "../../common/constants";
-import { Func, Functional, Props } from "../../common/props";
+import { defaultChartColors, FinanceExpenseRows } from "../../common/constants";
+import { Func, Functional, MapState, Props } from "../../common/props";
 import { 
     GetAllResources, GetFinanceHistory, 
     GetFinanceTotal, GetTotalProfits 
@@ -23,6 +27,11 @@ import {
 
 
 type Compare = Func<FinanceTurnItem, boolean>;
+
+interface FinanceTotalIdName {
+    id               : string,
+    name             : string
+};
 
 interface FinanceMappedProps {
     turn             : number,
@@ -42,7 +51,7 @@ interface FinanceProps extends Props, FinanceMappedProps {
 };
 
 
-const mapStateToProps = (state: NardisState): FinanceMappedProps => ({
+const mapStateToProps: MapState<FinanceMappedProps> = (state: NardisState): FinanceMappedProps => ({
     turn             : state.turn,
     getFinanceHistory: state.getFinanceHistory,
     getAllResources  : state.getAllResources,
@@ -74,6 +83,69 @@ const getTotalProfitsPerTurn = (history: FinanceHistory) => (
         (reduceFinance(history.income[key]) - reduceFinance(history.expense[key])).toLocaleString() + 'G'
     ))
 );
+
+const getDistributionEntries = (resources?: Resource[]): FinanceTotalIdName[] => {
+    if (typeof resources !== 'undefined') {
+        return [
+            ...resources.map((e: Resource): FinanceTotalIdName => ({id: e.id, name: e.name})), 
+            {id: localKeys[FinanceType.Recoup], name: 'RECOUP'}, 
+            {id: localKeys[FinanceType.StockSell], name: 'STOCKS'}
+        ];
+    } else {
+        return [
+            ...FinanceExpenseRows.map((row: [string, FinanceType]): FinanceTotalIdName => ({
+                id: localKeys[row[1]],
+                name: row[0]
+            })),
+            {id: localKeys[FinanceType.StockBuy], name: 'STOCKS'}
+        ];
+    }
+}
+
+const getDistribution = (total: FinanceTotal, resources?: Resource[]): ChartData | null => {
+    const data: Array<[string, number]> = getDistributionEntries(resources)
+    .map((item: FinanceTotalIdName): [string, number] => (isDefined(total[item.id]) ? [item.name, total[item.id]] : ['', 0]))
+    .filter((tuple: [string, number]): boolean => tuple[0].length > 0 && tuple[1] > 0);
+    if (data.length > 0) {
+        const colors: string[] = [...defaultChartColors];
+        return {
+            labels: data.map(e => e[0].toUpperCase()).reverse(),
+            datasets: [{data: [...data.map(e => e[1])].reverse(), backgroundColor: colors, borderColor: '#ccc'}]
+        }
+    }
+    return null;
+}
+
+const getDistributionChart = (total: FinanceTotal, resources?: Resource[]): JSX.Element | null => {
+    const isRevenue: boolean = typeof resources !== 'undefined';
+    const distribution: ChartData | null = getDistribution(total, resources);
+    if (distribution !== null) {
+        return (
+            <Chart 
+                type='pie'
+                id={isRevenue ? 'revenueChart' : 'expenseChart'}
+                data={{
+                    ...distribution
+                }}
+                plugins={[ChartDataLabels]}
+                options={{
+                    title: {text: (isRevenue ? 'REVENUE' : 'EXPENSE') + ' DISTRIBUTION', display: true, fontColor: 'white'},
+                    legend: {labels: {fontColor: 'white'}},
+                    responsive: true,
+                    plugins: {datalabels: {formatter: (val, ctx) => {
+                        if (ctx.dataset.data) {
+                            //@ts-expect-error
+                            return (val / ctx.dataset.data.reduce((a: number, b: number): number => a + b, 0) * 100).toFixed(2) + '%';
+                        }
+                        return '';
+                    }, color: '#ccc', backgroundColor: 'navy', font: {size: 15}, anchor: 'end', align: 'start', display: (context: Context): boolean => context.active}}
+                }}  
+                style={{width: '100%', height: '600px'}}
+            />
+        );
+    }
+    return null;
+}
 
 
 // perhaps create css classes in the table component and simply pass the desired class-name as a prop
@@ -113,9 +185,15 @@ const finance: Functional<FinanceProps> = (
     const mGetTotal                   = (key: string | number)                      : string  => (
         (total[(typeof key === 'number' ? localKeys[key] : key)] || 0).toLocaleString() + 'G'
     );
-    
     return (
         <Fragment>
+            <hr/>
+            {typeof props.alt === 'undefined' ? 
+                <div style={{display: 'flex', flexDirection: 'row'}}>
+                    {getDistributionChart(total, revenueRows)}
+                    {getDistributionChart(total)}
+                </div> 
+            : null}
             <div className={Styles.Finance}>
                 <hr/>
                 <div className={Styles.Tables}>
@@ -175,6 +253,7 @@ const finance: Functional<FinanceProps> = (
                     <hr/>
                 </div>
             </div>
+            <hr/>
         </Fragment>
     );
 }

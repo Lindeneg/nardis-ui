@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import { Train } from 'nardis-game';
 
 import { ReducerAction } from './actions';
+import NardisState from './state';
 
 
 /**
@@ -21,7 +22,7 @@ export type OnFormEventFunc                = Func<FormEvent, void>;
 export type OnFormChangeFunc<K>            = (e: ChangedEventElement, k: K) => void;
 export type OnDispatch                     = Dispatch<ReducerAction>;
 export type MapDispatch<T>                 = Func<OnDispatch, T>;
-export type MapState<S, P>                 = Func<S, P>;
+export type MapState<P>                    = Func<NardisState, P>;
 export type OnClickFunc<
     H = HTMLElement, 
     E = MouseEvent

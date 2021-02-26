@@ -29,7 +29,7 @@ interface BuildQueueDispatchedProps {
 interface BuildQueueProps extends Props, BuildQueueMappedProps, BuildQueueDispatchedProps {}
 
 
-const mapStateToProps: MapState<NardisState, BuildQueueMappedProps> = (
+const mapStateToProps: MapState<BuildQueueMappedProps> = (
     state: NardisState
 ): BuildQueueMappedProps => ({
     queue: state.queue,

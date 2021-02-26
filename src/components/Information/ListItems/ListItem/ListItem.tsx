@@ -6,7 +6,7 @@ import Styles from './ListItem.module.css';
 import NardisState from '../../../../common/state';
 import getTrainUpgradeContext, { TrainUpgradeContext } from '../../../../containers/Helpers/getUpgradeContext';
 import { ListType } from '../../../../common/constants';
-import { Clickable, Functional, Props, IdFunc, Func, PossibleTrain } from '../../../../common/props';
+import { Clickable, Functional, Props, IdFunc, PossibleTrain, MapState } from '../../../../common/props';
 
 
 interface MapStateToProps {
@@ -41,7 +41,7 @@ const getContent: Functional<[string, any][]> = (
 );
 
 
-const mapStateToProps: Func<NardisState, MapStateToProps> = (
+const mapStateToProps: MapState<MapStateToProps> = (
     state: NardisState
 ): MapStateToProps => ({
     money: state.money,

@@ -45,7 +45,7 @@ interface UpgradesDispatchedProps {
 interface UpgradesProps extends Props, UpgradesMappedProps, UpgradesDispatchedProps {}
 
 
-const mapStateToProps: MapState<NardisState, UpgradesMappedProps> = (
+const mapStateToProps: MapState<UpgradesMappedProps> = (
     state: NardisState
 ): UpgradesMappedProps => ({
     playerRoutes: state.routes,

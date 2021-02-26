@@ -6,7 +6,7 @@ import { Resource } from "nardis-game";
 
 import Button from '../../components/Utility/Button/Button';
 import NardisState from "../../common/state";
-import { Props } from "../../common/props";
+import { MapState, Props } from "../../common/props";
 import { GetAllResources } from "../../common/actions";
 import { newLineChartInstance, getLabels, normalizeArrayLength } from '../../components/Information/Chart/Chart';
 import { ButtonType, defaultChartColors, yieldMap } from '../../common/constants';
@@ -44,7 +44,7 @@ interface ResourcesMappedProps {
 interface ResourcesProps extends Props, ResourcesMappedProps {}
 
 
-const mapStateToProps = (state: NardisState): ResourcesMappedProps => ({
+const mapStateToProps: MapState<ResourcesMappedProps> = (state: NardisState): ResourcesMappedProps => ({
     turn           : state.turn,
     getAllResources: state.getAllResources
 });

@@ -68,7 +68,7 @@ interface BaseProps {
 interface NewRouteProps extends BaseProps, MappedProps, Props {};
 
 
-const mapStateToProps: MapState<NardisState, BaseProps> = (
+const mapStateToProps: MapState<BaseProps> = (
     state: NardisState
 ): BaseProps => ({
     routes            : state.routes,

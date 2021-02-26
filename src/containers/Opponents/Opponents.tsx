@@ -2,6 +2,7 @@ import { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import { 
+    BuyOutValue,
     Finance, 
     GameStatus, 
     OpponentInformation, 
@@ -188,17 +189,13 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
         if (player.length > 0) {
             const finance: Finance = player[0].getFinance();
             return (    
-                <Fragment>
-                    <hr/>
-                    <CFinance 
-                        alt={{
-                            history: finance.getHistory(),
-                            total: finance.getTotalHistory(),
-                            totalProfits: finance.getTotalProfits()
-                        }}
-                    />
-                     <hr/>
-                </Fragment>
+                <CFinance 
+                    alt={{
+                        history: finance.getHistory(),
+                        total: finance.getTotalHistory(),
+                        totalProfits: finance.getTotalProfits()
+                    }}
+                />  
             );
         }
         return <div></div>;
@@ -255,14 +252,21 @@ class Opponents extends Component<OpponentsProps, OpponentsState> {
                          let buyFunc       : BuyOutFunc          = this.onStockBuy;
 
                          if (maxStock) {
-                             const supply = stock.getBuyOutValues();
+                             const supply: BuyOutValue[] = stock.getBuyOutValues();
+                             let didFindHuman: boolean = false;
                              for (let i: number = 0; i < supply.length; i++) {
                                  if (supply[i].id === human.id) {
-                                     buyValue = isHumanStock && fullOwner ? buyValue : Math.floor(stock.getSellValue() * stockConstant.maxStockAmount) - supply[i].totalValue;
-                                     buyText  = isHumanStock && fullOwner ? buyText : 'BUY OUT';
-                                     buyFunc  = isHumanStock && fullOwner ? buyFunc : this.onBuyout;
+                                     buyValue     = Math.floor(stock.getSellValue() * stockConstant.maxStockAmount) - (!fullOwner ? supply[i].totalValue : 0);
+                                     buyText      = 'BUY OUT';
+                                     buyFunc      = this.onBuyout;
+                                     didFindHuman = true;
                                      break;
                                  }
+                             }
+                             if (!didFindHuman) {
+                                 buyValue = Math.floor(stock.getSellValue() * stockConstant.maxStockAmount);
+                                 buyText = 'BUY OUT';
+                                 buyFunc = this.onBuyout;
                              }
                          }
                          return (
