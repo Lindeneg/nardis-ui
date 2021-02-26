@@ -24,16 +24,6 @@ div p span {
   color: #eee;
 }
 
-footer {
-  background-color: #242582;
-  text-align: center;
-  color: #3e5fc2;
-  position: fixed;
-  width: 100%;
-  right: 0;
-  bottom: 0;
-}
-
 hr {
   border: 1px solid #3e5fc2;
   ;
