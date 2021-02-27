@@ -8,6 +8,14 @@
     box-sizing: border-box;
 }
 
+.Intro {
+    margin-top: 150px;
+    color: #ccc;
+    width: 100%;
+    text-align: center;
+}
+
+
 @media (min-width: 800px) {
     .CreateGame {
         box-shadow: 0 2px 3px #ccc;

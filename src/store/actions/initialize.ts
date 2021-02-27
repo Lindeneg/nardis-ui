@@ -42,6 +42,7 @@ const initialize: ActionFunc = (
             avgRevenue        : finance.getAverageRevenue(),
             avgExpense        : finance.getAverageExpense(),
             netWorth          : finance.getNetWorth(),
+            startGold         : player.startGold,
             routes            : player.getRoutes(),
             queue             : player.getQueue(),
             upgrades          : player.getUpgrades(),
