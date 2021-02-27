@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import { GameStatus, Player, PlayerType } from 'nardis-game';
 
 import Footer from '../../components/Information/Footer/Footer';
-import Button from '../../components/Utility/Button/Button';
-import Modal from '../../components/Utility/Modal/Modal';
+import BoughtOutModal from '../GameNonActive/BoughtOutModal/BoughtOutModal';
 import Navigation from '../../components/Navigation/Navigation';
 import SideBar from '../../components/Navigation/SideBar/SideBar';
 import Cards from '../../components/Information/Cards/Cards';
@@ -16,10 +15,7 @@ import Styles from './Layout.module.css';
 import { NardisState } from '../../common/state';
 import { NardisAction } from '../../common/actions';
 import { getPlayerIndexFromPlayerId } from '../Opponents/Opponents';
-import { 
-    ButtonType, 
-    layoutCardLabels 
-} from '../../common/constants';
+import { layoutCardLabels } from '../../common/constants';
 import { 
     Indexable, 
     MapDispatch, 
@@ -148,28 +144,17 @@ class Layout extends Component<LayoutProps, LayoutState> {
                 <Fragment>
                     {!this.props.isLoading ?
                         <div>
-                            <Modal 
-                                show={this.props.players.length > 0 && this.props.players[0].playerType === PlayerType.Human && !this.props.players[0].isActive() && !this.props.gameStatus.gameOver && this.state.showModal}
+                            <BoughtOutModal 
+                                show={
+                                    this.props.players.length > 0 && 
+                                    this.props.players[0].playerType === PlayerType.Human && 
+                                    !this.props.players[0].isActive() && 
+                                    !this.props.gameStatus.gameOver && 
+                                    this.state.showModal
+                                }
                                 whenClicked={this.onModalClose}
-                                style={{overflowY: 'unset', textAlign: 'center', backgroundColor: 'navy', color: 'white'}}
-                            > 
-                                YOU HAVE BEEN BOUGHT OUT. GAME OVER.
-                                <Button
-                                    disabled={false}
-                                    whenClicked={this.onModalClose}
-                                    buttonType={ButtonType.StandardView}
-                                    style={{margin: '15px 0 15px 0'}}
-                                >
-                                    CONTINUE GAME
-                                </Button>
-                                <Button
-                                    disabled={false}
-                                    whenClicked={this.onEndGame}
-                                    buttonType={ButtonType.StandardView}
-                                >
-                                    NEW GAME
-                                </Button>
-                            </Modal>
+                                onEndGame={this.onEndGame}
+                            />                           
                             <Navigation whenClicked={this.toggleSideBarHandler} />
                             <SideBar show={this.state.showSideBar} whenClicked={this.closeSideBarHandler} />
                             <Cards cards={playerCards} />
