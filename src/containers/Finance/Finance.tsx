@@ -11,7 +11,7 @@ import {
     FinanceType,
     Resource, 
     localKeys, 
-    isDefined
+    isDefined,
 } from "nardis-game";
 
 import Chart from '../../components/Information/Chart/Chart';
@@ -35,6 +35,7 @@ interface FinanceTotalIdName {
 
 interface FinanceMappedProps {
     turn             : number,
+    startGold        : number,
     getFinanceHistory: GetFinanceHistory,
     getAllResources  : GetAllResources,
     getFinanceTotal  : GetFinanceTotal
@@ -53,6 +54,7 @@ interface FinanceProps extends Props, FinanceMappedProps {
 
 const mapStateToProps: MapState<FinanceMappedProps> = (state: NardisState): FinanceMappedProps => ({
     turn             : state.turn,
+    startGold        : state.startGold,
     getFinanceHistory: state.getFinanceHistory,
     getAllResources  : state.getAllResources,
     getFinanceTotal  : state.getFinanceTotal,
@@ -246,7 +248,10 @@ const finance: Functional<FinanceProps> = (
                     <div className={Styles.FinanceTable}>
                         <Table
                             headers={mGetHeaders('PROFITS')}
-                            rows={[['TOTAL PROFITS', ...getTotalProfitsPerTurn(history), (props.alt ? props.alt.totalProfits : props.getTotalProfits()).toLocaleString() + 'G']]}
+                            rows={[
+                                ['START GOLD', '~', '~', '~', props.startGold.toLocaleString() + 'G'],
+                                ['TOTAL PROFITS', ...getTotalProfitsPerTurn(history), (props.alt ? props.alt.totalProfits : props.getTotalProfits()).toLocaleString() + 'G']
+                            ]}
                             {...propStyles}
                         />
                     </div>
