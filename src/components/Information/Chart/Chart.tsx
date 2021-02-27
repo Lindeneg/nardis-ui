@@ -1,6 +1,6 @@
 import { Component } from 'react';
 
-import * as ChartJS from 'chart.js';
+import ChartJS, { ChartConfiguration} from 'chart.js';
 
 import Styles from './Chart.module.css';
 import { Props } from '../../../common/props';
@@ -8,20 +8,39 @@ import { ValueHistory } from 'nardis-game';
 import { defaultChartOptions } from '../../../common/constants';
 
 
-interface ChartProps extends Props, ChartJS.ChartConfiguration {
+interface ChartState {
+    chart: ChartJS | null
+};
+
+interface ChartProps extends Props, ChartConfiguration {
     id?: string
-}
+};
+
 
 /**
  * Chart component using Chart.js
  */
-class Chart extends Component<ChartProps> {
+class Chart extends Component<ChartProps, ChartState> {
+
+    state: ChartState = {
+        chart: null
+    };
 
     componentDidMount = (): void => {
-        new ChartJS.Chart(
-            this.props.id || 'someChart',
-            {...this.props}
-        )
+        if (this.state.chart === null) {
+            this.setState({
+                chart: new ChartJS.Chart(
+                    this.props.id || 'someChart',
+                    {...this.props}
+                )
+            });
+        }
+    }
+
+    componentWillUnmount = (): void => {
+        if (this.state.chart !== null) {
+            this.state.chart.destroy();
+        }
     }
 
     render () {
