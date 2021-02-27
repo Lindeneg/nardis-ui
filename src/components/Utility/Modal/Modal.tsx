@@ -5,7 +5,7 @@ import Styles from './Modal.module.css';
 import { Clickable, Functional, OnClickFunc, Props } from '../../../common/props';
 
 
-interface ModalProps extends Props, Clickable<OnClickFunc> {
+export interface ModalProps extends Props, Clickable<OnClickFunc> {
     show: boolean,
 };
 

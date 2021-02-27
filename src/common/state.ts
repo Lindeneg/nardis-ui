@@ -26,10 +26,11 @@ export interface NardisState {
     avgRevenue        : number,
     avgExpense        : number,
     netWorth          : number,
+    startGold         : number,
     routes            : Route[],
     queue             : QueuedRouteItem[],
     upgrades          : Upgrade[],
-    opponents         : Player[],
+    opponents         : Player[]
 
     getStartCity      : GetStartCity
     getPotentialRoutes: GetPotentialRoutes,
@@ -54,6 +55,7 @@ export const getDefaultState = (): NardisState => ({
     avgRevenue        : 0,
     avgExpense        : 0,
     netWorth          : 0,
+    startGold         : 0,
     routes            : [],
     queue             : [],
     upgrades          : [],

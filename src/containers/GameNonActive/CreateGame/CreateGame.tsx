@@ -94,7 +94,7 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
                 inputConfig: {
                     type: 'number',
                     label: 'Money',
-                    placeholder: '800'
+                    placeholder: '1000'
                 },
                 validation: (inp: string): boolean => {
                     const value: number = parseInt(inp);
@@ -102,7 +102,7 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
                 },
                 valid: true,
                 touched: false,
-                value: '800'
+                value: '1000'
             },
             opponents: {
                 inputConfig: {
@@ -162,12 +162,14 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
     render (): JSX.Element {
         return (
             <Fragment>
-                {/* TODO write introduction
-                <div>
-                    <h3>Nardis</h3>
-                    <p>Hello there</p>
+                <div className={Styles.Intro}>
+                    <h1>
+                        NARDIS
+                    </h1>
+                    <h3>
+                        A TURN-BASED TRADING GAME
+                    </h3>
                 </div>
-                */}
                 <div className={Styles.CreateGame}>
                     <form onSubmit={this.initGame}>
                         {Object.keys(this.state.base)
@@ -188,7 +190,7 @@ class CreateGame extends Component<CreateGameProps, CreateGameState> {
                             whenClicked={() => null} 
                             disabled={!this.state.isValid} 
                             buttonType={ButtonType.CreateGame} >
-                                Start Game
+                                START GAME
                         </Button>
                     </form>
                 </div>
