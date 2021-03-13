@@ -119,7 +119,7 @@ class Layout extends Component<LayoutProps, LayoutState> {
 
     onEndGame = (): void => {
         this.props.endGame();
-        window.document.location.pathname = '';
+        window.document.location.reload();
     }
 
     onModalClose = (): void => {

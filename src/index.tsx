@@ -12,9 +12,10 @@ import reducer from './store/reducer';
 
 const store: Store = createStore(reducer);
 
+
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <BrowserRouter basename='/nardis'>
       <React.StrictMode>
         <App />
       </React.StrictMode>

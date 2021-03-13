@@ -40,7 +40,7 @@ export interface NavigationEntriesProps extends Props, MappedProps, DispatchedPr
 
 const onEndGame = (callback: () => void): void => {
     callback();
-    window.document.location.pathname = '';
+    window.document.location.reload();
 }
 
 const sleep = (ms: number): Promise<any> => {

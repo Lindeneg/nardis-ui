@@ -19,7 +19,7 @@ Start server.
 
 `yarn start`
 
-Or try it [here](https://christianlindeneg.pythonanywhere.com/).
+Or try it [here](https://www.lindeneg.org/nardis).
 ___
 
 Todo:
