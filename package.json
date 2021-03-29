@@ -2,7 +2,7 @@
   "name": "nardis-ui",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://lindeneg.org/nardis",
+  "homepage": "https://nardis.lindeneg.org",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -15,7 +15,7 @@
     "chart.js": "^2.9.4",
     "chartjs-plugin-datalabels": "^0.7.0",
     "immer": "^8.0.1",
-    "nardis-game": "./nardis-game",
+    "nardis-game": "https://github.com/Lindeneg/nardis-game",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
