@@ -30,7 +30,7 @@ class Footer extends Component<FooterProps, FooterState> {
         return (
             <footer className={Styles.Footer}>
                 <span>christian lindeneg @ 2021</span> -
-                <span className={Styles.Clickable}><a href='https://github.com/lindeneg/nardis-ui' target='_blank' rel='noreferrer' >source</a></span> -
+                <span className={Styles.Clickable}><a href='https://github.com/lindeneg/nardis' target='_blank' rel='noreferrer' >source</a></span> -
                 {this.state.resetInitiated ? (
                     <Fragment>
                         <span>are you sure?</span> -
