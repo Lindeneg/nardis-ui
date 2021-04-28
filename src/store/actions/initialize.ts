@@ -18,13 +18,24 @@ function getArr<T>(t: T): T[] {
     return [t];
 }
 
+const hasLocal = (): boolean => {
+    let result: boolean;
+    try {
+        result = !!window.localStorage[localKeys[LocalKey.HasActiveGame]];
+    } catch (err) {
+        process.env.NODE_ENV !== "production" && console.error(err);
+        result = false;
+    }
+    return result;
+}
+
 
 const initialize: ActionFunc = (
     args: ActionFuncArgs
 ): NardisState => {
     if (args.payload.initGame) {
         let game: Nardis;
-        if (!!window.localStorage[localKeys[LocalKey.HasActiveGame]]) {
+        if (hasLocal()) {
             game = Nardis.createFromLocalStorage();
         } else {
             game = Nardis.createFromPlayer(args.payload.initGame.name, args.payload.initGame.money, args.payload.initGame.opponents);
