@@ -249,8 +249,7 @@ const finance: Functional<FinanceProps> = (
                         <Table
                             headers={mGetHeaders('PROFITS')}
                             rows={[
-                                ['START GOLD', '~', '~', '~', props.startGold.toLocaleString() + 'G'],
-                                ['TOTAL PROFITS', ...getTotalProfitsPerTurn(history), (props.alt ? props.alt.totalProfits : props.getTotalProfits()).toLocaleString() + 'G']
+                                ['TOTAL PROFITS', ...getTotalProfitsPerTurn(history), ((props.alt ? props.alt.totalProfits : props.getTotalProfits()) - props.startGold).toLocaleString() + 'G']
                             ]}
                             {...propStyles}
                         />
